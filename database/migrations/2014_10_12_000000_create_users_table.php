@@ -18,6 +18,7 @@ return new class extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->string('gender')->nullable();
+            $table->string('avatar', 2000)->nullable();
             $table->string('goal', 2000)->nullable();
             $table->string('daily_activity_level', 2000)->nullable();
             $table->double('current_weight', 20,2)->default(0);
@@ -30,7 +31,6 @@ return new class extends Migration
             $table->longText('measurements')->nullable();
             $table->enum('measurements_unit', ['in','cm'])->default('in');
             $table->rememberToken();
-            $table->integer('suspended')->default(0);
             $table->timestamps();
         });
     }
