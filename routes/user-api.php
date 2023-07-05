@@ -9,8 +9,8 @@ Route::post('v1/login', [AuthenticationController::class, 'login']);
 
 //Authenticated user
 Route::group(['middleware' => ['jwtUser:user-api', 'jwt.auth'], 'prefix' => 'v1/user'], function () {
-    // Route::post('logout', [UserAuthenticationController::class, 'userLogout']);
+    Route::post('logout', [AuthenticationController::class, 'userLogout']);
 
     //User Profile
-    Route::get('profile', [DashboardController::class, 'userInfo']);
+    Route::get('profile', [AuthenticationController::class, 'userProfile']);
 });
