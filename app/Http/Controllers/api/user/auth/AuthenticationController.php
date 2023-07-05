@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers\api\user\auth;
 
+use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
@@ -69,16 +69,16 @@ class AuthenticationController extends Controller
         if ($user) {
             // $userStatus = User::find($user->id)->suspended;
             // if ($userStatus == 0) {
-                //Login Attempt
-                $credentials = $request->only('email', 'password');
-                $ttl = 1440;
-                if ($request->remember_me == 1) {
-                    $ttl = 1051200;
-                }
-                if ($token = $this->guard()->setTTL($ttl)->attempt($credentials)) {
-                    return $this->respondWithToken($token, $ttl);
-                }
-                return response()->json(['error' => ['These credentials do not match our records.']], 401);
+            //Login Attempt
+            $credentials = $request->only('email', 'password');
+            $ttl = 1440;
+            if ($request->remember_me == 1) {
+                $ttl = 1051200;
+            }
+            if ($token = $this->guard()->setTTL($ttl)->attempt($credentials)) {
+                return $this->respondWithToken($token, $ttl);
+            }
+            return response()->json(['error' => ['These credentials do not match our records.']], 401);
             // } else {
             //     return response()->json(['result' => 'false', 'message' => 'Your account has been suspended']);
             // }
@@ -87,12 +87,10 @@ class AuthenticationController extends Controller
         }
     }
 
-
     public function userProfile()
     {
         return response()->json($this->guard()->user());
     }
-
 
     public function userLogout()
     {
@@ -106,7 +104,6 @@ class AuthenticationController extends Controller
         return $this->respondWithToken($this->guard()->refresh());
     }
 
-
     protected function respondWithToken($token, $ttl)
     {
         return response()->json([
@@ -116,7 +113,6 @@ class AuthenticationController extends Controller
             'user' => $this->guard()->user(),
         ]);
     }
-
 
     public function guard()
     {
