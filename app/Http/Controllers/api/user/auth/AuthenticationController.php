@@ -2,55 +2,51 @@
 
 namespace App\Http\Controllers\api\user\auth;
 
-use App\Http\Controllers\Controller;
+use Exception;
 use App\Models\User;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 
 class AuthenticationController extends Controller
 {
-    // public function userRegistration(Request $request)
-    // {
-    //     //Validation
-    //     $rules = [
-    //         'first_name' => 'required',
-    //         'last_name' => 'required',
-    //         'email' => 'required|email|unique:users',
-    //         'password' => 'required|min:8',
-    //         'confirm_password' => 'required|min:8|same:password',
-    //     ];
-    //     $validator = Validator::make($request->all(), $rules);
-    //     if ($validator->fails()) {
-    //         return response()->json($validator->errors(), 400);
-    //     }
+    public function register(Request $request)
+    {
+        //Validation
+        $rules = [
+            'name' => 'required',
+            'email' => 'required|email|unique:users',
+            'password' => 'required|min:8',
+            'confirm_password' => 'required|min:8|same:password',
+        ];
+        $validator = Validator::make($request->all(), $rules);
+        if ($validator->fails()) {
+            return response()->json($validator->errors(), 400);
+        }
 
-    //     try {
-    //         $user = new User();
-    //         $user->first_name = $request->first_name;
-    //         $user->last_name = $request->last_name;
-    //         $user->email = $request->email;
-    //         $user->password = Hash::make($request->password);
-    //         $user->save();
+        try {
+            $user = new User();
+            $user->name = $request->name;
+            $user->email = $request->email;
+            $user->password = Hash::make($request->password);
+            $user->save();
 
-    //         if ($user) {
-    //             $wallet = new CustomerWallet();
-    //             $wallet->user_id = $user->id;
-    //             $wallet->save();
-
-    //             //Login Attempt
-    //             $ttl = 1440;
-    //             $credentials = $request->only('email', 'password');
-    //             if ($token = $this->guard()->attempt($credentials)) {
-    //                 return $this->respondWithToken($token, $ttl);
-    //             }
-    //         } else {
-    //             return response()->json(['status' => 'false']);
-    //         }
-    //     } catch (Exception $ex) {
-    //         return response($ex->getMessage());
-    //     }
-    // }
+            if ($user) {
+                //Login Attempt
+                $ttl = 1440;
+                $credentials = $request->only('email', 'password');
+                if ($token = $this->guard()->attempt($credentials)) {
+                    return $this->respondWithToken($token, $ttl);
+                }
+            } else {
+                return response()->json(['status' => 'false']);
+            }
+        } catch (Exception $ex) {
+            return response($ex->getMessage());
+        }
+    }
 
     public function login(Request $request)
     {
@@ -101,7 +97,7 @@ class AuthenticationController extends Controller
 
     public function refresh()
     {
-        return $this->respondWithToken($this->guard()->refresh());
+        return $this->respondWithToken($this->guard()->refresh(), 1440);
     }
 
     protected function respondWithToken($token, $ttl)

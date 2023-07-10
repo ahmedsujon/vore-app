@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Route;
 
 
 Route::post('v1/login', [AuthenticationController::class, 'login']);
+Route::post('v1/register', [AuthenticationController::class, 'register']);
 
 //Authenticated user
 Route::group(['middleware' => ['jwtUser:user-api', 'jwt.auth'], 'prefix' => 'v1/user'], function () {
