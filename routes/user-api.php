@@ -13,5 +13,6 @@ Route::group(['middleware' => ['jwtUser:user-api', 'jwt.auth'], 'prefix' => 'v1/
     Route::post('logout', [AuthenticationController::class, 'userLogout']);
 
     //User Profile
+    Route::post('make-profile', [AuthenticationController::class, 'makeProfile']);
     Route::get('profile', [AuthenticationController::class, 'userProfile']);
 });

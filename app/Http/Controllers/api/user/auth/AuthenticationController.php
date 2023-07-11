@@ -48,6 +48,27 @@ class AuthenticationController extends Controller
         }
     }
 
+    public function makeProfile(Request $request)
+    {
+        $user = User::find(Auth::guard('user-api')->user()->id);
+        $user->gender = $request->get('gender');
+        $user->goal = $request->get('goal');
+        $user->daily_activity_level = $request->get('daily_activity_level');
+        $user->current_weight = $request->get('current_weight');
+        $user->current_weight_unit = $request->get('current_weight_unit');
+        $user->target_weight = $request->get('target_weight');
+        $user->target_weight_unit = $request->get('target_weight_unit');
+        $user->height = $request->get('height');
+        $user->height_unit = $request->get('height_unit');
+        $user->birth_date = $request->get('birth_date');
+        $user->measurements = $request->get('measurements');
+        $user->measurements_unit = $request->get('measurements_unit');
+        $user->save();
+
+        return response($user);
+        return response()->json(['success' => ['These credentials do not match our records.']], 401);
+    }
+
     public function login(Request $request)
     {
         //Validation
