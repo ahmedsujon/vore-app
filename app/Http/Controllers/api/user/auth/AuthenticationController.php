@@ -65,8 +65,7 @@ class AuthenticationController extends Controller
         $user->measurements_unit = $request->get('measurements_unit');
         $user->save();
 
-        return response($user);
-        return response()->json(['success' => ['These credentials do not match our records.']], 401);
+        return response()->json(['result'=>'true', 'message' => 'Data updated successfully']);
     }
 
     public function login(Request $request)
