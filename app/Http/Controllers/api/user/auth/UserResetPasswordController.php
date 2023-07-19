@@ -50,9 +50,14 @@ class UserResetPasswordController extends Controller
         $oldToken = DB::table('password_reset_tokens')->where('email', $email)->first();
 
         if ($oldToken) {
+            $otp = rand(10000000, 99999999);
+            DB::table('password_reset_tokens')->update([
+                'otp' => $otp,
+                'created_at' => Carbon::now()
+            ]);
             return [
                 'token' => $oldToken->token,
-                'otp' => $oldToken->otp
+                'otp' => $otp
             ];
         } else {
             $token = Str::random(40);
@@ -99,13 +104,13 @@ class UserResetPasswordController extends Controller
             return response()->json($validator->errors(), 400);
         }
 
-        $getRequest = DB::table('password_reset_tokens')->where('email', $request->email)->where('token', $request->token)->first();
+        $getRequest = DB::table('password_reset_tokens')->where('email', $request->email)->where('otp', $request->otp)->first();
         if ($getRequest) {
             $user = User::where('email', $request->email)->first();
             $user->password = Hash::make($request->password);
             $user->save();
 
-            DB::table('password_reset_tokens')->where('email', $request->email)->where('token', $request->token)->delete();
+            DB::table('password_reset_tokens')->where('email', $request->email)->where('otp', $request->otp)->delete();
 
             return response()->json(['success' => 'Password updated successfully']);
         } else {
