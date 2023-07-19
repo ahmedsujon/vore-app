@@ -96,6 +96,7 @@ class UserResetPasswordController extends Controller
     {
         $rules = [
             'email' => 'required|email',
+            'otp' => 'required',
             'password' => 'required|min:8',
             'confirm_password' => 'required|min:8|same:password',
         ];
@@ -115,7 +116,8 @@ class UserResetPasswordController extends Controller
             return response()->json(['success' => 'Password updated successfully']);
         } else {
             return response()->json([
-                'error' => 'Either your email or token is wrong.'
+                'result' => false,
+                'message' => 'Incorrect OTP'
             ], Response::HTTP_UNPROCESSABLE_ENTITY);
         }
     }
