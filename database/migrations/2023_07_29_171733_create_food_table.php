@@ -25,6 +25,7 @@ return new class extends Migration
             $table->double('protein')->default(0)->comment('g');
             $table->string('barcode')->nullable();
             $table->string('image', 2048)->nullable();
+            $table->tinyInteger('status')->default(1);
             $table->timestamps();
         });
     }
