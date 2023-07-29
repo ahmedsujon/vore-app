@@ -112,7 +112,7 @@ class AuthenticationController extends Controller
     {
         $this->guard()->logout();
 
-        return response()->json(['message' => ['Successfully logged out']]);
+        return response()->json(['result'=>'true', 'message' => 'Successfully logged out']);
     }
 
     public function refresh()
