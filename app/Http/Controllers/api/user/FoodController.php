@@ -11,7 +11,7 @@ class FoodController extends Controller
     public function foods(Request $request)
     {
         $pagination_value = $request->per_page ? $request->per_page : 10;
-        $foods = Food::where('status', 1)->paginate($pagination_value);
+        $foods = Food::where('name', 'like', '%'.$request->search_term.'%')->where('status', 1)->paginate($pagination_value);
 
         return response()->json($foods);
     }
