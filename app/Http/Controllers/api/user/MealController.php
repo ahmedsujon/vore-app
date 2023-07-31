@@ -12,8 +12,9 @@ class MealController extends Controller
 {
     public function breakfastIndex(Request $request)
     {
+        $breakfast = Breakfast::where('user_id', api_user()->id)->first();
 
-        return response()->json('data');
+        return response()->json($breakfast);
     }
 
     public function addBreakfast(Request $request)
@@ -33,6 +34,7 @@ class MealController extends Controller
 
         try {
             $breakfast = new Breakfast();
+            $breakfast->user_id = api_user()->id;
             $breakfast->foods = $request->foods;
             $breakfast->total_calories = $request->total_calories;
             $breakfast->total_protein = $request->total_protein;
