@@ -27,8 +27,6 @@ class FoodTableSeeder extends Seeder
             $food->user_id = $user_id;
             $food->name = ucwords($name);
             $food->slug = Str::slug($name);
-            $food->quantity = rand(3,5);
-            $food->serving_size = rand(3,5);
             $food->calories = rand(20,100);
             $food->crabs = rand(20,100);
             $food->fat = rand(20,100);

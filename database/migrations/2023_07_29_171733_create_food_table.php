@@ -17,8 +17,6 @@ return new class extends Migration
             $table->bigInteger('user_id')->unsigned()->nullable();
             $table->string('name')->nullable();
             $table->string('slug')->nullable();
-            $table->integer('quantity')->default(0);
-            $table->string('serving_size')->nullable();
             $table->double('calories')->default(0)->comment('cal');
             $table->double('crabs')->default(0)->comment('g');
             $table->double('fat')->default(0)->comment('g');
