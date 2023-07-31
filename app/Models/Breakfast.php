@@ -10,4 +10,8 @@ class Breakfast extends Model
     use HasFactory;
 
     protected $table = 'breakfasts';
+
+    protected $casts = [
+        'foods' => 'array',
+    ];
 }
