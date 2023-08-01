@@ -25,6 +25,7 @@ class MealController extends Controller
             'total_protein' => 'required',
             'total_crabs' => 'required',
             'total_fat' => 'required',
+            'date' => 'required',
 
         ];
         $validator = Validator::make($request->all(), $rules);
@@ -40,6 +41,7 @@ class MealController extends Controller
             $breakfast->total_protein = $request->total_protein;
             $breakfast->total_crabs = $request->total_crabs;
             $breakfast->total_fat = $request->total_fat;
+            $breakfast->date = $request->date;
             $breakfast->status = 1;
             $breakfast->save();
 
