@@ -2,16 +2,18 @@
 
 namespace App\Http\Controllers\api\user;
 
-use App\Http\Controllers\Controller;
-use App\Models\Breakfast;
 use Exception;
+use App\Models\Lunch;
+use App\Models\Breakfast;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Validator;
 
 class MealController extends Controller
 {
     // Breakfast
-    public function breakfastIndex(Request $request)
+    public function getBreakfast(Request $request)
     {
         try {
             $breakfast = Breakfast::where('id', $request->breakfast_id)->where('user_id', api_user()->id)->first();
@@ -43,25 +45,30 @@ class MealController extends Controller
         }
 
         try {
-            $breakfast = new Breakfast();
-            $breakfast->user_id = api_user()->id;
-            $breakfast->foods = $request->foods;
-            $breakfast->total_calories = $request->total_calories;
-            $breakfast->total_protein = $request->total_protein;
-            $breakfast->total_crabs = $request->total_crabs;
-            $breakfast->total_fat = $request->total_fat;
-            $breakfast->date = $request->date;
-            $breakfast->status = 1;
-            $breakfast->save();
+            $getBreakfast = Breakfast::where('date', Carbon::parse($request->date)->format('Y-m-d'))->where('user_id', api_user()->id)->first();
+            if (!$getBreakfast) {
+                $breakfast = new Breakfast();
+                $breakfast->user_id = api_user()->id;
+                $breakfast->foods = $request->foods;
+                $breakfast->total_calories = $request->total_calories;
+                $breakfast->total_protein = $request->total_protein;
+                $breakfast->total_crabs = $request->total_crabs;
+                $breakfast->total_fat = $request->total_fat;
+                $breakfast->date = $request->date;
+                $breakfast->status = 1;
+                $breakfast->save();
 
-            return response()->json(['result' => 'true', 'message' => 'Breakfast added successfully']);
+                return response()->json(['result' => 'true', 'message' => 'Breakfast added successfully']);
+            } else {
+                return response()->json(['result' => 'false', 'message' => 'Breakfast already added for this date']);
+            }
         } catch (Exception $ex) {
             return response($ex->getMessage());
         }
     }
 
     // Lunch
-    public function lunchIndex(Request $request)
+    public function getLunch(Request $request)
     {
         try {
             $lunch = Lunch::where('id', $request->lunch_id)->where('user_id', api_user()->id)->first();
@@ -93,18 +100,23 @@ class MealController extends Controller
         }
 
         try {
-            $lunch = new Lunch();
-            $lunch->user_id = api_user()->id;
-            $lunch->foods = $request->foods;
-            $lunch->total_calories = $request->total_calories;
-            $lunch->total_protein = $request->total_protein;
-            $lunch->total_crabs = $request->total_crabs;
-            $lunch->total_fat = $request->total_fat;
-            $lunch->date = $request->date;
-            $lunch->status = 1;
-            $lunch->save();
+            $getLunch = Lunch::where('date', Carbon::parse($request->date)->format('Y-m-d'))->where('user_id', api_user()->id)->first();
+            if (!$getLunch) {
+                $lunch = new Lunch();
+                $lunch->user_id = api_user()->id;
+                $lunch->foods = $request->foods;
+                $lunch->total_calories = $request->total_calories;
+                $lunch->total_protein = $request->total_protein;
+                $lunch->total_crabs = $request->total_crabs;
+                $lunch->total_fat = $request->total_fat;
+                $lunch->date = $request->date;
+                $lunch->status = 1;
+                $lunch->save();
 
-            return response()->json(['result' => 'true', 'message' => 'Lunch added successfully']);
+                return response()->json(['result' => 'true', 'message' => 'Lunch added successfully']);
+            } else {
+                return response()->json(['result' => 'false', 'message' => 'Lunch already added for this date']);
+            }
         } catch (Exception $ex) {
             return response($ex->getMessage());
         }
