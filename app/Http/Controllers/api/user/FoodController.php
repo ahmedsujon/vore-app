@@ -11,10 +11,15 @@ use Illuminate\Support\Facades\Validator;
 
 class FoodController extends Controller
 {
-    public function foods(Request $request)
+    public function getFoods(Request $request)
     {
-        $pagination_value = $request->per_page ? $request->per_page : 10;
-        $foods = Food::where('name', 'like', '%'.$request->search_term.'%')->where('status', 1)->paginate($pagination_value);
+        // $pagination_value = $request->per_page ? $request->per_page : 10;
+        $foods = Food::select('id', 'name', 'slug', 'calories', 'protein', 'crabs', 'fat', 'barcode', 'image', 'created_at')->where('name', 'like', '%'.$request->search_term.'%')->where('status', 1)->get();
+
+        foreach ($foods as $food)
+        {
+            $food->image = url('/').'/'.$food->image;
+        }
 
         return response()->json($foods);
     }

@@ -10,4 +10,9 @@ class Food extends Model
     use HasFactory;
 
     protected $table = 'foods';
+
+    protected $casts = [
+        'created_at' => 'datetime:Y-m-d H:i:s',
+        'updated_at' => 'datetime:Y-m-d H:i:s',
+    ];
 }
