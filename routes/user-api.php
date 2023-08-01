@@ -21,10 +21,17 @@ Route::group(['middleware' => ['jwtUser:user-api', 'jwt.auth'], 'prefix' => 'v1/
     Route::get('profile', [AuthenticationController::class, 'userProfile']);
 
     //breakfast
-    Route::get('breakfast', [MealController::class, 'breakfastIndex']);
+    Route::get('all-breakfasts', [MealController::class, 'breakfastIndex']);
+    Route::get('breakfast', [MealController::class, 'getBreakfast']);
     Route::post('breakfast/add', [MealController::class, 'addBreakfast']);
+
+    //lunch
+    Route::get('all-lunches', [MealController::class, 'lunchIndex']);
+    Route::get('lunch', [MealController::class, 'getLunch']);
+    Route::post('lunch/add', [MealController::class, 'addLunch']);
 
 
     //foods api
-    Route::get('foods', [FoodController::class, 'foods']);
+    Route::get('foods', [FoodController::class, 'getFoods']);
+    Route::post('foods/add', [FoodController::class, 'addFood']);
 });
