@@ -33,4 +33,5 @@ Route::group(['middleware' => ['jwtUser:user-api', 'jwt.auth'], 'prefix' => 'v1/
 
     //foods api
     Route::get('foods', [FoodController::class, 'foods']);
+    Route::post('foods/add', [FoodController::class, 'addFood']);
 });
