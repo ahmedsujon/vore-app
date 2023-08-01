@@ -107,10 +107,49 @@ class MealController extends Controller
     }
 
     // Lunch
+    public function lunchIndex(Request $request)
+    {
+        try {
+            $lunches = Lunch::select('id', 'foods', 'total_calories', 'total_protein', 'total_crabs', 'total_fat', 'date', 'created_at')->where('user_id', api_user()->id);
+
+            if ($request->filter_date) {
+                $date = Carbon::parse($request->filter_date);
+                $lunches = $lunches->whereYear('date', $date->year)->whereMonth('date', $date->month)->whereDay('date', $date->day);
+            }
+
+            $lunches = $lunches->get();
+
+            if ($lunches->count() > 0) {
+                foreach ($lunches as $lunch)
+                {
+                    $foods = [];
+                    foreach($lunch->foods as $food){
+                        $foods[] = get_meals_food($food);
+                    }
+
+                    $lunch->foods = $foods;
+                }
+
+                return response()->json($lunches);
+            } else {
+                return response()->json(['result' => 'false', 'message' => 'No data found!']);
+            }
+        } catch (Exception $ex) {
+            return response($ex->getMessage());
+        }
+    }
+
     public function getLunch(Request $request)
     {
         try {
-            $lunch = Lunch::where('id', $request->lunch_id)->where('user_id', api_user()->id)->first();
+            $lunch = Lunch::select('id', 'foods', 'total_calories', 'total_protein', 'total_crabs', 'total_fat', 'date', 'created_at')->where('id', $request->lunch_id)->where('user_id', api_user()->id)->first();
+
+            $foods = [];
+            foreach($lunch->foods as $food){
+                $foods[] = get_meals_food($food);
+            }
+
+            $lunch->foods = $foods;
 
             if ($lunch) {
                 return response()->json($lunch);
