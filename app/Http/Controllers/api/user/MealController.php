@@ -2,19 +2,27 @@
 
 namespace App\Http\Controllers\api\user;
 
-use Exception;
-use App\Models\Breakfast;
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\Breakfast;
+use Exception;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
 class MealController extends Controller
 {
     public function breakfastIndex(Request $request)
     {
-        $breakfast = Breakfast::where('user_id', api_user()->id)->first();
+        try {
+            $breakfast = Breakfast::where('id', $request->breakfast_id)->where('user_id', api_user()->id)->first();
 
-        return response()->json($breakfast);
+            if ($breakfast) {
+                return response()->json($breakfast);
+            } else {
+                return response()->json(['result' => 'false', 'message' => 'No data found!']);
+            }
+        } catch (Exception $ex) {
+            return response($ex->getMessage());
+        }
     }
 
     public function addBreakfast(Request $request)
@@ -45,7 +53,7 @@ class MealController extends Controller
             $breakfast->status = 1;
             $breakfast->save();
 
-            return response()->json(['result'=>'true', 'message' => 'Breakfast added successfully']);
+            return response()->json(['result' => 'true', 'message' => 'Breakfast added successfully']);
         } catch (Exception $ex) {
             return response($ex->getMessage());
         }
