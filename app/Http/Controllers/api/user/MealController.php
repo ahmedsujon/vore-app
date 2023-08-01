@@ -13,6 +13,38 @@ use Illuminate\Support\Facades\Validator;
 class MealController extends Controller
 {
     // Breakfast
+    public function breakfastIndex(Request $request)
+    {
+        try {
+            $breakfasts = Breakfast::select('id', 'foods', 'total_calories', 'total_protein', 'total_crabs', 'total_fat', 'date', 'created_at')->where('user_id', api_user()->id);
+
+            if ($request->filter_date) {
+                $date = Carbon::parse($request->filter_date);
+                $breakfasts = $breakfasts->whereYear('date', $date->year)->whereMonth('date', $date->month)->whereDay('date', $date->day);
+            }
+
+            $breakfasts = $breakfasts->get();
+
+            if ($breakfasts->count() > 0) {
+                foreach ($breakfasts as $breakfast)
+                {
+                    $foods = [];
+                    foreach($breakfast->foods as $food){
+                        $foods[] = get_meals_food($food);
+                    }
+
+                    $breakfast->foods = $foods;
+                }
+
+                return response()->json($breakfasts);
+            } else {
+                return response()->json(['result' => 'false', 'message' => 'No data found!']);
+            }
+        } catch (Exception $ex) {
+            return response($ex->getMessage());
+        }
+    }
+
     public function getBreakfast(Request $request)
     {
         try {
