@@ -48,7 +48,14 @@ class MealController extends Controller
     public function getBreakfast(Request $request)
     {
         try {
-            $breakfast = Breakfast::where('id', $request->breakfast_id)->where('user_id', api_user()->id)->first();
+            $breakfast = Breakfast::select('id', 'foods', 'total_calories', 'total_protein', 'total_crabs', 'total_fat', 'date', 'created_at')->where('id', $request->breakfast_id)->where('user_id', api_user()->id)->first();
+
+            $foods = [];
+            foreach($breakfast->foods as $food){
+                $foods[] = get_meals_food($food);
+            }
+
+            $breakfast->foods = $foods;
 
             if ($breakfast) {
                 return response()->json($breakfast);
