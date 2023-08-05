@@ -6,6 +6,7 @@ use App\Http\Controllers\api\user\auth\AuthenticationController;
 use App\Http\Controllers\api\user\auth\UserResetPasswordController;
 use App\Http\Controllers\api\user\FoodController;
 use App\Http\Controllers\api\user\MealController;
+use App\Http\Controllers\api\user\WaterController;
 
 Route::post('v1/login', [AuthenticationController::class, 'login']);
 Route::post('v1/register', [AuthenticationController::class, 'register']);
@@ -45,4 +46,10 @@ Route::group(['middleware' => ['jwtUser:user-api', 'jwt.auth'], 'prefix' => 'v1/
     //foods api
     Route::get('foods', [FoodController::class, 'getFoods']);
     Route::post('foods/add', [FoodController::class, 'addFood']);
+
+    //Water apis
+    Route::get('water/setting', [WaterController::class, 'getWaterSetting']);
+    Route::post('water/setting/update', [WaterController::class, 'waterSetting']);
+    Route::get('water', [WaterController::class, 'getWater']);
+    Route::post('water/add', [WaterController::class, 'addWater']);
 });
