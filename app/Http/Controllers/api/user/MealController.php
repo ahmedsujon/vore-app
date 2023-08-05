@@ -16,7 +16,7 @@ class MealController extends Controller
     public function breakfastIndex(Request $request)
     {
         try {
-            $breakfasts = Breakfast::select('id', 'foods', 'calories', 'protein', 'crabs', 'fat', 'date', 'created_at')->where('user_id', api_user()->id);
+            $breakfasts = Breakfast::select('id', 'foods', 'total_calories', 'total_protein', 'total_crabs', 'total_fat', 'date', 'created_at')->where('user_id', api_user()->id);
 
             if ($request->filter_date) {
                 $date = Carbon::parse($request->filter_date);
@@ -48,7 +48,7 @@ class MealController extends Controller
     public function getBreakfast(Request $request)
     {
         try {
-            $breakfast = Breakfast::select('id', 'foods', 'calories', 'protein', 'crabs', 'fat', 'date', 'created_at')->where('id', $request->breakfast_id)->where('user_id', api_user()->id)->first();
+            $breakfast = Breakfast::select('id', 'foods', 'total_calories', 'total_protein', 'total_crabs', 'total_fat', 'date', 'created_at')->where('id', $request->breakfast_id)->where('user_id', api_user()->id)->first();
 
             $foods = [];
             foreach($breakfast->foods as $food){
@@ -71,10 +71,10 @@ class MealController extends Controller
     {
         $rules = [
             'foods' => 'required',
-            'calories' => 'required',
-            'protein' => 'required',
-            'crabs' => 'required',
-            'fat' => 'required',
+            'total_calories' => 'required',
+            'total_protein' => 'required',
+            'total_crabs' => 'required',
+            'total_fat' => 'required',
             'date' => 'required',
 
         ];
@@ -88,11 +88,11 @@ class MealController extends Controller
             if (!$getBreakfast) {
                 $breakfast = new Breakfast();
                 $breakfast->user_id = api_user()->id;
-                $breakfast->food = $request->food;
-                $breakfast->calories = $request->calories;
-                $breakfast->protein = $request->protein;
-                $breakfast->crabs = $request->crabs;
-                $breakfast->fat = $request->fat;
+                $breakfast->foods = $request->foods;
+                $breakfast->total_calories = $request->total_calories;
+                $breakfast->total_protein = $request->total_protein;
+                $breakfast->total_crabs = $request->total_crabs;
+                $breakfast->total_fat = $request->total_fat;
                 $breakfast->date = $request->date;
                 $breakfast->status = 1;
                 $breakfast->save();
@@ -110,7 +110,7 @@ class MealController extends Controller
     public function lunchIndex(Request $request)
     {
         try {
-            $lunches = Lunch::select('id', 'foods', 'calories', 'protein', 'crabs', 'fat', 'date', 'created_at')->where('user_id', api_user()->id);
+            $lunches = Lunch::select('id', 'foods', 'total_calories', 'total_protein', 'total_crabs', 'total_fat', 'date', 'created_at')->where('user_id', api_user()->id);
 
             if ($request->filter_date) {
                 $date = Carbon::parse($request->filter_date);
@@ -142,7 +142,7 @@ class MealController extends Controller
     public function getLunch(Request $request)
     {
         try {
-            $lunch = Lunch::select('id', 'foods', 'calories', 'protein', 'crabs', 'fat', 'date', 'created_at')->where('id', $request->lunch_id)->where('user_id', api_user()->id)->first();
+            $lunch = Lunch::select('id', 'foods', 'total_calories', 'total_protein', 'total_crabs', 'total_fat', 'date', 'created_at')->where('id', $request->lunch_id)->where('user_id', api_user()->id)->first();
 
             $foods = [];
             foreach($lunch->foods as $food){
@@ -165,10 +165,10 @@ class MealController extends Controller
     {
         $rules = [
             'foods' => 'required',
-            'calories' => 'required',
-            'protein' => 'required',
-            'crabs' => 'required',
-            'fat' => 'required',
+            'total_calories' => 'required',
+            'total_protein' => 'required',
+            'total_crabs' => 'required',
+            'total_fat' => 'required',
             'date' => 'required',
 
         ];
@@ -183,10 +183,10 @@ class MealController extends Controller
                 $lunch = new Lunch();
                 $lunch->user_id = api_user()->id;
                 $lunch->foods = $request->foods;
-                $lunch->calories = $request->calories;
-                $lunch->protein = $request->protein;
-                $lunch->crabs = $request->crabs;
-                $lunch->fat = $request->fat;
+                $lunch->total_calories = $request->total_calories;
+                $lunch->total_protein = $request->total_protein;
+                $lunch->total_crabs = $request->total_crabs;
+                $lunch->total_fat = $request->total_fat;
                 $lunch->date = $request->date;
                 $lunch->status = 1;
                 $lunch->save();
