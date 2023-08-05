@@ -14,11 +14,11 @@ return new class extends Migration
         Schema::create('lunches', function (Blueprint $table) {
             $table->id();
             $table->bigInteger('user_id')->unsigned()->nullable();
-            $table->string('foods')->nullable();
-            $table->double('total_calories', 20,2)->default(0);
-            $table->double('total_protein', 20,2)->default(0);
-            $table->double('total_crabs', 20,2)->default(0);
-            $table->double('total_fat', 20,2)->default(0);
+            $table->string('food')->nullable();
+            $table->double('calories', 20,2)->default(0);
+            $table->double('protein', 20,2)->default(0);
+            $table->double('crabs', 20,2)->default(0);
+            $table->double('fat', 20,2)->default(0);
             $table->date('date')->nullable();
             $table->tinyInteger('status')->default(1);
             $table->timestamps();
