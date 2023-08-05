@@ -9,8 +9,16 @@ function api_user(){
 }
 
 function get_meals_food($food){
-    $getFood = Food::select('id', 'name', 'slug', 'calories', 'protein', 'crabs', 'fat', 'barcode', 'image')->find($food['id']);
-    $getFood->image = url('/').'/'.$getFood->image;
+    $getFood = Food::select('id', 'name', 'slug', 'calories', 'protein', 'crabs', 'fat', 'nutrations', 'barcode', 'images')->find($food['id']);
+
+    $imgs = [];
+
+    foreach ($getFood->images as $image) {
+        $imgs[] = url('/').'/'.$image;
+    }
+
+
+    $getFood->images = $imgs;
     $getFood->quantity = $food['quantity'];
     $getFood->serving_size = $food['serving_size'];
     return $getFood;
