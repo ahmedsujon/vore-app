@@ -21,6 +21,7 @@ return new class extends Migration
             $table->double('crabs')->default(0)->comment('g');
             $table->double('fat')->default(0)->comment('g');
             $table->double('protein')->default(0)->comment('g');
+            $table->longText('nutrations')->nullable();
             $table->string('barcode')->nullable();
             $table->longText('images')->nullable();
             $table->tinyInteger('status')->default(1);
