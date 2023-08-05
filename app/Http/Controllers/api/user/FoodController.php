@@ -18,7 +18,11 @@ class FoodController extends Controller
 
         foreach ($foods as $food)
         {
-            $food->image = url('/').'/'.$food->image;
+            $imgs = [];
+            foreach ($food->images as $image) {
+                $imgs[] = url('/').'/'.$image;
+            }
+            $food->images = $imgs;
         }
 
         return response()->json($foods);

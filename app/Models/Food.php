@@ -12,6 +12,7 @@ class Food extends Model
     protected $table = 'foods';
 
     protected $casts = [
+        'images' => 'array',
         'created_at' => 'datetime:Y-m-d H:i:s',
         'updated_at' => 'datetime:Y-m-d H:i:s',
     ];
