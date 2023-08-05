@@ -32,7 +32,7 @@ class FoodTableSeeder extends Seeder
             $food->fat = rand(20,100);
             $food->protein = rand(20,100);
             $food->barcode = rand(10000000000,99999999999);
-            $food->image = 'assets/images/placeholder.jpg';
+            $food->images = ["assets/images/placeholder.jpg", "assets/images/placeholder.jpg"];
             $food->save();
         }
     }

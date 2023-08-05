@@ -5,15 +5,13 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Food extends Model
+class Water extends Model
 {
     use HasFactory;
 
-    protected $table = 'foods';
+    protected $table = 'waters';
 
     protected $casts = [
-        'images' => 'array',
-        'nutrations' => 'array',
         'created_at' => 'datetime:Y-m-d H:i:s',
         'updated_at' => 'datetime:Y-m-d H:i:s',
     ];

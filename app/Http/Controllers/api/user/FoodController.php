@@ -14,11 +14,15 @@ class FoodController extends Controller
     public function getFoods(Request $request)
     {
         // $pagination_value = $request->per_page ? $request->per_page : 10;
-        $foods = Food::select('id', 'name', 'slug', 'calories', 'protein', 'crabs', 'fat', 'barcode', 'image', 'created_at')->where('name', 'like', '%'.$request->search_term.'%')->where('status', 1)->get();
+        $foods = Food::select('id', 'name', 'slug', 'calories', 'protein', 'crabs', 'fat', 'nutrations', 'barcode', 'images', 'created_at')->where('name', 'like', '%'.$request->search_term.'%')->where('status', 1)->get();
 
         foreach ($foods as $food)
         {
-            $food->image = url('/').'/'.$food->image;
+            $imgs = [];
+            foreach ($food->images as $image) {
+                $imgs[] = url('/').'/'.$image;
+            }
+            $food->images = $imgs;
         }
 
         return response()->json($foods);
@@ -34,7 +38,7 @@ class FoodController extends Controller
             'crabs' => 'required',
             'fat' => 'required',
             'protein' => 'required',
-            'image' => 'required',
+            'images' => 'required',
         ];
         $validator = Validator::make($request->all(), $rules);
         if ($validator->fails()) {
@@ -51,8 +55,15 @@ class FoodController extends Controller
             $food->crabs = $request->crabs;
             $food->fat = $request->fat;
             $food->protein = $request->protein;
+            $food->nutrations = $request->nutrations;
             $food->barcode = $request->barcode;
-            $food->image = uploadFile($request->image, 'foods');
+
+            $uploaded_images = [];
+            foreach ($request->file('images') as $image) {
+                $uploaded_images[] = uploadFile($image, 'foods');
+            }
+
+            $food->images = $uploaded_images;
             $food->save();
 
             return response()->json(['result' => 'true', 'message' => 'Food added successfully']);

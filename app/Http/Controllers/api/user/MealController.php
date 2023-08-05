@@ -7,6 +7,8 @@ use App\Models\Lunch;
 use App\Models\Breakfast;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\Dinner;
+use App\Models\Snacks;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Validator;
 
@@ -194,6 +196,194 @@ class MealController extends Controller
                 return response()->json(['result' => 'true', 'message' => 'Lunch added successfully']);
             } else {
                 return response()->json(['result' => 'false', 'message' => 'Lunch already added for this date']);
+            }
+        } catch (Exception $ex) {
+            return response($ex->getMessage());
+        }
+    }
+
+    // Snacks
+    public function snackIndex(Request $request)
+    {
+        try {
+            $snacks = Snacks::select('id', 'foods', 'total_calories', 'total_protein', 'total_crabs', 'total_fat', 'date', 'created_at')->where('user_id', api_user()->id);
+
+            if ($request->filter_date) {
+                $date = Carbon::parse($request->filter_date);
+                $snacks = $snacks->whereYear('date', $date->year)->whereMonth('date', $date->month)->whereDay('date', $date->day);
+            }
+
+            $snacks = $snacks->get();
+
+            if ($snacks->count() > 0) {
+                foreach ($snacks as $snack)
+                {
+                    $foods = [];
+                    foreach($snack->foods as $food){
+                        $foods[] = get_meals_food($food);
+                    }
+
+                    $snack->foods = $foods;
+                }
+
+                return response()->json($snacks);
+            } else {
+                return response()->json(['result' => 'false', 'message' => 'No data found!']);
+            }
+        } catch (Exception $ex) {
+            return response($ex->getMessage());
+        }
+    }
+
+    public function getSnack(Request $request)
+    {
+        try {
+            $snack = Snacks::select('id', 'foods', 'total_calories', 'total_protein', 'total_crabs', 'total_fat', 'date', 'created_at')->where('id', $request->snack_id)->where('user_id', api_user()->id)->first();
+
+            $foods = [];
+            foreach($snack->foods as $food){
+                $foods[] = get_meals_food($food);
+            }
+
+            $snack->foods = $foods;
+
+            if ($snack) {
+                return response()->json($snack);
+            } else {
+                return response()->json(['result' => 'false', 'message' => 'No data found!']);
+            }
+        } catch (Exception $ex) {
+            return response($ex->getMessage());
+        }
+    }
+
+    public function addSnack(Request $request)
+    {
+        $rules = [
+            'foods' => 'required',
+            'total_calories' => 'required',
+            'total_protein' => 'required',
+            'total_crabs' => 'required',
+            'total_fat' => 'required',
+            'date' => 'required',
+
+        ];
+        $validator = Validator::make($request->all(), $rules);
+        if ($validator->fails()) {
+            return response()->json($validator->errors(), 400);
+        }
+
+        try {
+            $getSnacks = Snacks::where('date', Carbon::parse($request->date)->format('Y-m-d'))->where('user_id', api_user()->id)->first();
+            if (!$getSnacks) {
+                $snack = new Snacks();
+                $snack->user_id = api_user()->id;
+                $snack->foods = $request->foods;
+                $snack->total_calories = $request->total_calories;
+                $snack->total_protein = $request->total_protein;
+                $snack->total_crabs = $request->total_crabs;
+                $snack->total_fat = $request->total_fat;
+                $snack->date = $request->date;
+                $snack->status = 1;
+                $snack->save();
+
+                return response()->json(['result' => 'true', 'message' => 'Snack added successfully']);
+            } else {
+                return response()->json(['result' => 'false', 'message' => 'Snack already added for this date']);
+            }
+        } catch (Exception $ex) {
+            return response($ex->getMessage());
+        }
+    }
+
+    // Dinners
+    public function dinnerIndex(Request $request)
+    {
+        try {
+            $dinners = Dinner::select('id', 'foods', 'total_calories', 'total_protein', 'total_crabs', 'total_fat', 'date', 'created_at')->where('user_id', api_user()->id);
+
+            if ($request->filter_date) {
+                $date = Carbon::parse($request->filter_date);
+                $dinners = $dinners->whereYear('date', $date->year)->whereMonth('date', $date->month)->whereDay('date', $date->day);
+            }
+
+            $dinners = $dinners->get();
+
+            if ($dinners->count() > 0) {
+                foreach ($dinners as $dinner)
+                {
+                    $foods = [];
+                    foreach($dinner->foods as $food){
+                        $foods[] = get_meals_food($food);
+                    }
+
+                    $dinner->foods = $foods;
+                }
+
+                return response()->json($dinners);
+            } else {
+                return response()->json(['result' => 'false', 'message' => 'No data found!']);
+            }
+        } catch (Exception $ex) {
+            return response($ex->getMessage());
+        }
+    }
+
+    public function getDinner(Request $request)
+    {
+        try {
+            $dinner = Dinner::select('id', 'foods', 'total_calories', 'total_protein', 'total_crabs', 'total_fat', 'date', 'created_at')->where('id', $request->dinner_id)->where('user_id', api_user()->id)->first();
+
+            $foods = [];
+            foreach($dinner->foods as $food){
+                $foods[] = get_meals_food($food);
+            }
+
+            $dinner->foods = $foods;
+
+            if ($dinner) {
+                return response()->json($dinner);
+            } else {
+                return response()->json(['result' => 'false', 'message' => 'No data found!']);
+            }
+        } catch (Exception $ex) {
+            return response($ex->getMessage());
+        }
+    }
+
+    public function addDinner(Request $request)
+    {
+        $rules = [
+            'foods' => 'required',
+            'total_calories' => 'required',
+            'total_protein' => 'required',
+            'total_crabs' => 'required',
+            'total_fat' => 'required',
+            'date' => 'required',
+
+        ];
+        $validator = Validator::make($request->all(), $rules);
+        if ($validator->fails()) {
+            return response()->json($validator->errors(), 400);
+        }
+
+        try {
+            $getDinners = Dinner::where('date', Carbon::parse($request->date)->format('Y-m-d'))->where('user_id', api_user()->id)->first();
+            if (!$getDinners) {
+                $dinner = new Dinner();
+                $dinner->user_id = api_user()->id;
+                $dinner->foods = $request->foods;
+                $dinner->total_calories = $request->total_calories;
+                $dinner->total_protein = $request->total_protein;
+                $dinner->total_crabs = $request->total_crabs;
+                $dinner->total_fat = $request->total_fat;
+                $dinner->date = $request->date;
+                $dinner->status = 1;
+                $dinner->save();
+
+                return response()->json(['result' => 'true', 'message' => 'Dinner added successfully']);
+            } else {
+                return response()->json(['result' => 'false', 'message' => 'Dinner already added for this date']);
             }
         } catch (Exception $ex) {
             return response($ex->getMessage());
