@@ -38,7 +38,7 @@ class FoodController extends Controller
             'crabs' => 'required',
             'fat' => 'required',
             'protein' => 'required',
-            'image' => 'required',
+            'images' => 'required',
         ];
         $validator = Validator::make($request->all(), $rules);
         if ($validator->fails()) {
@@ -55,8 +55,15 @@ class FoodController extends Controller
             $food->crabs = $request->crabs;
             $food->fat = $request->fat;
             $food->protein = $request->protein;
+            $food->nutrations = $request->nutrations;
             $food->barcode = $request->barcode;
-            $food->image = uploadFile($request->image, 'foods');
+
+            $uploaded_images = [];
+            foreach ($request->file('images') as $image) {
+                $uploaded_images[] = uploadFile($image, 'foods');
+            }
+
+            $food->images = $uploaded_images;
             $food->save();
 
             return response()->json(['result' => 'true', 'message' => 'Food added successfully']);
