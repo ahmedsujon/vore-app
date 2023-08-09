@@ -7,6 +7,7 @@ use App\Models\Lunch;
 use App\Models\Breakfast;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\BreakfastFood;
 use App\Models\Dinner;
 use App\Models\Snacks;
 use Carbon\Carbon;
@@ -18,7 +19,7 @@ class MealController extends Controller
     public function breakfastIndex(Request $request)
     {
         try {
-            $breakfasts = Breakfast::select('id', 'foods', 'total_calories', 'total_protein', 'total_crabs', 'total_fat', 'date', 'created_at')->where('user_id', api_user()->id);
+            $breakfasts = Breakfast::select('id', 'date', 'created_at')->where('user_id', api_user()->id);
 
             if ($request->filter_date) {
                 $date = Carbon::parse($request->filter_date);
@@ -31,10 +32,16 @@ class MealController extends Controller
                 foreach ($breakfasts as $breakfast)
                 {
                     $foods = [];
-                    foreach($breakfast->foods as $food){
+                    $breakfast_foods = BreakfastFood::select('id', 'food_id', 'calories', 'protein', 'crabs', 'fat', 'quantity', 'serving_size')->where('breakfast_id', $breakfast->id)->get();
+
+                    foreach($breakfast_foods as $food){
                         $foods[] = get_meals_food($food);
                     }
 
+                    $breakfast->total_calories = $breakfast_foods->sum('calories');
+                    $breakfast->total_protein = $breakfast_foods->sum('protein');
+                    $breakfast->total_crabs = $breakfast_foods->sum('crabs');
+                    $breakfast->total_fat = $breakfast_foods->sum('fat');
                     $breakfast->foods = $foods;
                 }
 
@@ -47,38 +54,17 @@ class MealController extends Controller
         }
     }
 
-    public function getBreakfast(Request $request)
-    {
-        try {
-            $breakfast = Breakfast::select('id', 'foods', 'total_calories', 'total_protein', 'total_crabs', 'total_fat', 'date', 'created_at')->where('id', $request->breakfast_id)->where('user_id', api_user()->id)->first();
-
-            $foods = [];
-            foreach($breakfast->foods as $food){
-                $foods[] = get_meals_food($food);
-            }
-
-            $breakfast->foods = $foods;
-
-            if ($breakfast) {
-                return response()->json($breakfast);
-            } else {
-                return response()->json(['result' => 'false', 'message' => 'No data found!']);
-            }
-        } catch (Exception $ex) {
-            return response($ex->getMessage());
-        }
-    }
-
     public function addBreakfast(Request $request)
     {
         $rules = [
-            'foods' => 'required',
-            'total_calories' => 'required',
-            'total_protein' => 'required',
-            'total_crabs' => 'required',
-            'total_fat' => 'required',
+            'food_id' => 'required',
+            'calories' => 'required',
+            'protein' => 'required',
+            'crabs' => 'required',
+            'fat' => 'required',
+            'quantity' => 'required',
+            'serving_size' => 'required',
             'date' => 'required',
-
         ];
         $validator = Validator::make($request->all(), $rules);
         if ($validator->fails()) {
@@ -90,18 +76,58 @@ class MealController extends Controller
             if (!$getBreakfast) {
                 $breakfast = new Breakfast();
                 $breakfast->user_id = api_user()->id;
-                $breakfast->foods = $request->foods;
-                $breakfast->total_calories = $request->total_calories;
-                $breakfast->total_protein = $request->total_protein;
-                $breakfast->total_crabs = $request->total_crabs;
-                $breakfast->total_fat = $request->total_fat;
                 $breakfast->date = $request->date;
                 $breakfast->status = 1;
                 $breakfast->save();
-
-                return response()->json(['result' => 'true', 'message' => 'Breakfast added successfully']);
             } else {
-                return response()->json(['result' => 'false', 'message' => 'Breakfast already added for this date']);
+                $breakfast = $getBreakfast;
+            }
+
+            $getFood = BreakfastFood::where('breakfast_id', $breakfast->id)->where('food_id', $request->food_id)->first();
+            if(!$getFood){
+                $food = new BreakfastFood();
+                $food->breakfast_id = $breakfast->id;
+                $food->food_id = $request->food_id;
+                $food->calories = $request->calories;
+                $food->protein = $request->protein;
+                $food->crabs = $request->crabs;
+                $food->fat = $request->fat;
+                $food->quantity = $request->quantity;
+                $food->serving_size = $request->serving_size;
+                $food->save();
+            } else {
+                return response()->json(['result' => 'false', 'message' => 'Food already added']);
+            }
+
+            return response()->json(['result' => 'true', 'message' => 'Breakfast added successfully']);
+
+        } catch (Exception $ex) {
+            return response($ex->getMessage());
+        }
+    }
+
+    public function getBreakfast(Request $request)
+    {
+        try {
+            $breakfast = Breakfast::select('id', 'date', 'created_at')->where('id', $request->breakfast_id)->where('user_id', api_user()->id)->first();
+
+            if ($breakfast) {
+                $foods = [];
+                $breakfast_foods = BreakfastFood::select('id', 'food_id', 'calories', 'protein', 'crabs', 'fat', 'quantity', 'serving_size')->where('breakfast_id', $breakfast->id)->get();
+
+                foreach($breakfast_foods as $food){
+                    $foods[] = get_meals_food($food);
+                }
+
+                $breakfast->total_calories = $breakfast_foods->sum('calories');
+                $breakfast->total_protein = $breakfast_foods->sum('protein');
+                $breakfast->total_crabs = $breakfast_foods->sum('crabs');
+                $breakfast->total_fat = $breakfast_foods->sum('fat');
+                $breakfast->foods = $foods;
+
+                return response()->json($breakfast);
+            } else {
+                return response()->json(['result' => 'false', 'message' => 'No data found!']);
             }
         } catch (Exception $ex) {
             return response($ex->getMessage());
