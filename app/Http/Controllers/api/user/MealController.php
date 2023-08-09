@@ -19,7 +19,7 @@ class MealController extends Controller
     public function breakfastIndex(Request $request)
     {
         try {
-            $breakfasts = Breakfast::select('id', 'foods', 'total_calories', 'total_protein', 'total_crabs', 'total_fat', 'date', 'created_at')->where('user_id', api_user()->id);
+            $breakfasts = Breakfast::select('id', 'date', 'created_at')->where('user_id', api_user()->id);
 
             if ($request->filter_date) {
                 $date = Carbon::parse($request->filter_date);
@@ -32,10 +32,16 @@ class MealController extends Controller
                 foreach ($breakfasts as $breakfast)
                 {
                     $foods = [];
-                    foreach($breakfast->foods as $food){
+                    $breakfast_foods = BreakfastFood::select('id', 'food_id', 'calories', 'protein', 'crabs', 'fat', 'quantity', 'serving_size')->where('breakfast_id', $breakfast->id)->get();
+
+                    foreach($breakfast_foods as $food){
                         $foods[] = get_meals_food($food);
                     }
 
+                    $breakfast->total_calories = $breakfast_foods->sum('calories');
+                    $breakfast->total_protein = $breakfast_foods->sum('protein');
+                    $breakfast->total_crabs = $breakfast_foods->sum('crabs');
+                    $breakfast->total_fat = $breakfast_foods->sum('fat');
                     $breakfast->foods = $foods;
                 }
 
