@@ -30,6 +30,10 @@ return new class extends Migration
             $table->string('birth_date')->nullable();
             $table->longText('measurements')->nullable();
             $table->enum('measurements_unit', ['in','cm'])->default('in');
+            $table->double('calories', 20,2)->default(0);
+            $table->double('crabs', 20,2)->default(0);
+            $table->double('protein', 20,2)->default(0);
+            $table->double('fat', 20,2)->default(0);
             $table->rememberToken();
             $table->timestamps();
         });

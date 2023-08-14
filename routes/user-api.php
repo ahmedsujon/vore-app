@@ -21,8 +21,10 @@ Route::group(['middleware' => ['jwtUser:user-api', 'jwt.auth'], 'prefix' => 'v1/
     Route::post('make-profile', [AuthenticationController::class, 'makeProfile']);
     Route::get('profile', [AuthenticationController::class, 'userProfile']);
 
-    // Meals APIs
+    //Dashboard
+    Route::get('dashboard', [DashboardController::class, 'index']);
 
+    // Meals APIs
     //breakfast
     Route::get('all-breakfasts', [MealController::class, 'breakfastIndex']);
     Route::get('breakfast', [MealController::class, 'getBreakfast']);

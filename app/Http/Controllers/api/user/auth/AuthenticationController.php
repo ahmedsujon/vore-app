@@ -50,6 +50,15 @@ class AuthenticationController extends Controller
 
     public function makeProfile(Request $request)
     {
+
+        //Calorie Calculations
+        $total_calorie = 0;
+        if($request->get('gender') == 'male'){
+            $total_calorie = $request->get('current_weight') * 24 * 0.85 * 1.2;
+        } else {
+            $total_calorie = $request->get('current_weight') * 21.6 * 0.77 * 1.55;
+        }
+
         $user = User::find(Auth::guard('user-api')->user()->id);
         $user->gender = $request->get('gender');
         $user->goal = $request->get('goal');
@@ -63,6 +72,12 @@ class AuthenticationController extends Controller
         $user->birth_date = $request->get('birth_date');
         $user->measurements = $request->get('measurements');
         $user->measurements_unit = $request->get('measurements_unit');
+
+        $user->calories = $total_calorie;
+        $user->crabs = $total_calorie > 0 ? (($total_calorie * 50) / 100) : 0;
+        $user->fat = $total_calorie > 0 ? (($total_calorie * 30) / 100) : 0;
+        $user->protein = $total_calorie > 0 ? (($total_calorie * 20) / 100) : 0;
+
         $user->save();
 
         return response()->json(['result'=>'true', 'message' => 'Data updated successfully']);
