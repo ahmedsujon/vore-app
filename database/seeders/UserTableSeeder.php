@@ -49,8 +49,15 @@ class UserTableSeeder extends Seeder
                     'upper_arms' => 0,
                 ];
                 $user->measurements_unit = 'in';
+
+                $user->calories = $faker->randomElement(['2850', '2600', '2700', '2530']);
+                $user->crabs = ($user->calories * 50) / 100;
+                $user->fat = ($user->calories * 30) / 100;
+                $user->protein = ($user->calories * 20) / 100;
+
                 $user->save();
             }
         }
     }
+
 }
