@@ -4,13 +4,14 @@ namespace App\Http\Controllers\api\user;
 
 use Exception;
 use Carbon\Carbon;
-use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
-use App\Models\Breakfast;
-use App\Models\BreakfastFood;
-use App\Models\Dinner;
 use App\Models\Lunch;
+use App\Models\Water;
+use App\Models\Dinner;
 use App\Models\Snacks;
+use App\Models\Breakfast;
+use Illuminate\Http\Request;
+use App\Models\BreakfastFood;
+use App\Http\Controllers\Controller;
 
 class DashboardController extends Controller
 {
@@ -77,6 +78,9 @@ class DashboardController extends Controller
             }
 
 
+            //Water
+            $water = Water::whereYear('date', $date->year)->whereMonth('date', $date->month)->whereDay('date', $date->day)->where('user_id', api_user()->id)->first();
+
             return response()->json([
                 'calories_left' => $total_calories - $calories_eaten,
                 'calories_eaten' => $calories_eaten,
@@ -105,6 +109,11 @@ class DashboardController extends Controller
                         'calories' => $dinners->sum('calories'),
                         'foods' => $dinner_foods
                     ],
+                ],
+                'water' => [
+                    'total' => $water->drunk,
+                    'goal' => $water->goal,
+                    'glass' => $water->drunk / $water->pot_capacity,
                 ],
             ]);
         } catch (Exception $ex) {
