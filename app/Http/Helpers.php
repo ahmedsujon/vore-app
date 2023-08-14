@@ -29,6 +29,18 @@ function get_meals_food($food){
     return $getFood;
 }
 
+function get_dashboard_meals_food($food_id){
+    $getFood = Food::select('id', 'name', 'images')->find($food_id);
+
+    $imgs = [];
+    foreach ($getFood->images as $image) {
+        $imgs[] = url('/').'/'.$image;
+    }
+    $getFood->images = $imgs;
+
+    return $getFood;
+}
+
 
 function uploadFile($file, $folder)
 {
