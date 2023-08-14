@@ -139,7 +139,7 @@ class MealController extends Controller
     public function lunchIndex(Request $request)
     {
         try {
-            $lunches = Lunch::select('id', 'foods', 'total_calories', 'total_protein', 'total_crabs', 'total_fat', 'date', 'created_at')->where('user_id', api_user()->id);
+            $lunches = Lunch::select('id', 'date', 'created_at')->where('user_id', api_user()->id);
 
             if ($request->filter_date) {
                 $date = Carbon::parse($request->filter_date);
@@ -152,36 +152,20 @@ class MealController extends Controller
                 foreach ($lunches as $lunch)
                 {
                     $foods = [];
-                    foreach($lunch->foods as $food){
+                    $lunch_foods = LunchFood::select('id', 'food_id', 'calories', 'protein', 'crabs', 'fat', 'quantity', 'serving_size')->where('lunch_id', $lunch->id)->get();
+
+                    foreach($lunch_foods as $food){
                         $foods[] = get_meals_food($food);
                     }
 
+                    $lunch->total_calories = $lunch_foods->sum('calories');
+                    $lunch->total_protein = $lunch_foods->sum('protein');
+                    $lunch->total_crabs = $lunch_foods->sum('crabs');
+                    $lunch->total_fat = $lunch_foods->sum('fat');
                     $lunch->foods = $foods;
                 }
 
                 return response()->json($lunches);
-            } else {
-                return response()->json(['result' => 'false', 'message' => 'No data found!']);
-            }
-        } catch (Exception $ex) {
-            return response($ex->getMessage());
-        }
-    }
-
-    public function getLunch(Request $request)
-    {
-        try {
-            $lunch = Lunch::select('id', 'foods', 'total_calories', 'total_protein', 'total_crabs', 'total_fat', 'date', 'created_at')->where('id', $request->lunch_id)->where('user_id', api_user()->id)->first();
-
-            $foods = [];
-            foreach($lunch->foods as $food){
-                $foods[] = get_meals_food($food);
-            }
-
-            $lunch->foods = $foods;
-
-            if ($lunch) {
-                return response()->json($lunch);
             } else {
                 return response()->json(['result' => 'false', 'message' => 'No data found!']);
             }
@@ -237,6 +221,34 @@ class MealController extends Controller
 
             return response()->json(['result' => 'true', 'message' => 'Lunch added successfully']);
 
+        } catch (Exception $ex) {
+            return response($ex->getMessage());
+        }
+    }
+
+    public function getLunch(Request $request)
+    {
+        try {
+            $lunch = Lunch::select('id', 'date', 'created_at')->where('id', $request->lunch_id)->where('user_id', api_user()->id)->first();
+
+            if ($lunch) {
+                $foods = [];
+                $lunch_foods = LunchFood::select('id', 'food_id', 'calories', 'protein', 'crabs', 'fat', 'quantity', 'serving_size')->where('lunch_id', $lunch->id)->get();
+
+                foreach($lunch_foods as $food){
+                    $foods[] = get_meals_food($food);
+                }
+
+                $lunch->total_calories = $lunch_foods->sum('calories');
+                $lunch->total_protein = $lunch_foods->sum('protein');
+                $lunch->total_crabs = $lunch_foods->sum('crabs');
+                $lunch->total_fat = $lunch_foods->sum('fat');
+                $lunch->foods = $foods;
+
+                return response()->json($lunch);
+            } else {
+                return response()->json(['result' => 'false', 'message' => 'No data found!']);
+            }
         } catch (Exception $ex) {
             return response($ex->getMessage());
         }
