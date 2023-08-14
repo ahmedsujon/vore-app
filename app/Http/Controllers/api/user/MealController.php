@@ -3,14 +3,15 @@
 namespace App\Http\Controllers\api\user;
 
 use Exception;
+use Carbon\Carbon;
 use App\Models\Lunch;
-use App\Models\Breakfast;
-use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
-use App\Models\BreakfastFood;
 use App\Models\Dinner;
 use App\Models\Snacks;
-use Carbon\Carbon;
+use App\Models\Breakfast;
+use App\Models\LunchFood;
+use Illuminate\Http\Request;
+use App\Models\BreakfastFood;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
 
 class MealController extends Controller
@@ -192,13 +193,14 @@ class MealController extends Controller
     public function addlunch(Request $request)
     {
         $rules = [
-            'foods' => 'required',
-            'total_calories' => 'required',
-            'total_protein' => 'required',
-            'total_crabs' => 'required',
-            'total_fat' => 'required',
+            'food_id' => 'required',
+            'calories' => 'required',
+            'protein' => 'required',
+            'crabs' => 'required',
+            'fat' => 'required',
+            'quantity' => 'required',
+            'serving_size' => 'required',
             'date' => 'required',
-
         ];
         $validator = Validator::make($request->all(), $rules);
         if ($validator->fails()) {
@@ -210,19 +212,31 @@ class MealController extends Controller
             if (!$getLunch) {
                 $lunch = new Lunch();
                 $lunch->user_id = api_user()->id;
-                $lunch->foods = $request->foods;
-                $lunch->total_calories = $request->total_calories;
-                $lunch->total_protein = $request->total_protein;
-                $lunch->total_crabs = $request->total_crabs;
-                $lunch->total_fat = $request->total_fat;
                 $lunch->date = $request->date;
                 $lunch->status = 1;
                 $lunch->save();
-
-                return response()->json(['result' => 'true', 'message' => 'Lunch added successfully']);
             } else {
-                return response()->json(['result' => 'false', 'message' => 'Lunch already added for this date']);
+                $lunch = $getLunch;
             }
+
+            $getFood = LunchFood::where('lunch_id', $lunch->id)->where('food_id', $request->food_id)->first();
+            if(!$getFood){
+                $food = new LunchFood();
+                $food->lunch_id = $lunch->id;
+                $food->food_id = $request->food_id;
+                $food->calories = $request->calories;
+                $food->protein = $request->protein;
+                $food->crabs = $request->crabs;
+                $food->fat = $request->fat;
+                $food->quantity = $request->quantity;
+                $food->serving_size = $request->serving_size;
+                $food->save();
+            } else {
+                return response()->json(['result' => 'false', 'message' => 'Food already added']);
+            }
+
+            return response()->json(['result' => 'true', 'message' => 'Lunch added successfully']);
+
         } catch (Exception $ex) {
             return response($ex->getMessage());
         }
