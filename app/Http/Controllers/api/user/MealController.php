@@ -12,6 +12,7 @@ use App\Models\LunchFood;
 use Illuminate\Http\Request;
 use App\Models\BreakfastFood;
 use App\Http\Controllers\Controller;
+use App\Models\DinnerFood;
 use App\Models\SnackFood;
 use Illuminate\Support\Facades\Validator;
 
@@ -378,7 +379,7 @@ class MealController extends Controller
     public function dinnerIndex(Request $request)
     {
         try {
-            $dinners = Dinner::select('id', 'foods', 'total_calories', 'total_protein', 'total_crabs', 'total_fat', 'date', 'created_at')->where('user_id', api_user()->id);
+            $dinners = Dinner::select('id', 'date', 'created_at')->where('user_id', api_user()->id);
 
             if ($request->filter_date) {
                 $date = Carbon::parse($request->filter_date);
@@ -391,10 +392,16 @@ class MealController extends Controller
                 foreach ($dinners as $dinner)
                 {
                     $foods = [];
-                    foreach($dinner->foods as $food){
+                    $dinner_foods = DinnerFood::select('id', 'food_id', 'calories', 'protein', 'crabs', 'fat', 'quantity', 'serving_size')->where('dinner_id', $dinner->id)->get();
+
+                    foreach($dinner_foods as $food){
                         $foods[] = get_meals_food($food);
                     }
 
+                    $dinner->total_calories = $dinner_foods->sum('calories');
+                    $dinner->total_protein = $dinner_foods->sum('protein');
+                    $dinner->total_crabs = $dinner_foods->sum('crabs');
+                    $dinner->total_fat = $dinner_foods->sum('fat');
                     $dinner->foods = $foods;
                 }
 
@@ -407,38 +414,17 @@ class MealController extends Controller
         }
     }
 
-    public function getDinner(Request $request)
-    {
-        try {
-            $dinner = Dinner::select('id', 'foods', 'total_calories', 'total_protein', 'total_crabs', 'total_fat', 'date', 'created_at')->where('id', $request->dinner_id)->where('user_id', api_user()->id)->first();
-
-            $foods = [];
-            foreach($dinner->foods as $food){
-                $foods[] = get_meals_food($food);
-            }
-
-            $dinner->foods = $foods;
-
-            if ($dinner) {
-                return response()->json($dinner);
-            } else {
-                return response()->json(['result' => 'false', 'message' => 'No data found!']);
-            }
-        } catch (Exception $ex) {
-            return response($ex->getMessage());
-        }
-    }
-
     public function addDinner(Request $request)
     {
         $rules = [
-            'foods' => 'required',
-            'total_calories' => 'required',
-            'total_protein' => 'required',
-            'total_crabs' => 'required',
-            'total_fat' => 'required',
+            'food_id' => 'required',
+            'calories' => 'required',
+            'protein' => 'required',
+            'crabs' => 'required',
+            'fat' => 'required',
+            'quantity' => 'required',
+            'serving_size' => 'required',
             'date' => 'required',
-
         ];
         $validator = Validator::make($request->all(), $rules);
         if ($validator->fails()) {
@@ -446,22 +432,62 @@ class MealController extends Controller
         }
 
         try {
-            $getDinners = Dinner::where('date', Carbon::parse($request->date)->format('Y-m-d'))->where('user_id', api_user()->id)->first();
-            if (!$getDinners) {
+            $getdinner = Dinner::where('date', Carbon::parse($request->date)->format('Y-m-d'))->where('user_id', api_user()->id)->first();
+            if (!$getdinner) {
                 $dinner = new Dinner();
                 $dinner->user_id = api_user()->id;
-                $dinner->foods = $request->foods;
-                $dinner->total_calories = $request->total_calories;
-                $dinner->total_protein = $request->total_protein;
-                $dinner->total_crabs = $request->total_crabs;
-                $dinner->total_fat = $request->total_fat;
                 $dinner->date = $request->date;
                 $dinner->status = 1;
                 $dinner->save();
-
-                return response()->json(['result' => 'true', 'message' => 'Dinner added successfully']);
             } else {
-                return response()->json(['result' => 'false', 'message' => 'Dinner already added for this date']);
+                $dinner = $getdinner;
+            }
+
+            $getFood = DinnerFood::where('dinner_id', $dinner->id)->where('food_id', $request->food_id)->first();
+            if(!$getFood){
+                $food = new DinnerFood();
+                $food->dinner_id = $dinner->id;
+                $food->food_id = $request->food_id;
+                $food->calories = $request->calories;
+                $food->protein = $request->protein;
+                $food->crabs = $request->crabs;
+                $food->fat = $request->fat;
+                $food->quantity = $request->quantity;
+                $food->serving_size = $request->serving_size;
+                $food->save();
+            } else {
+                return response()->json(['result' => 'false', 'message' => 'Food already added']);
+            }
+
+            return response()->json(['result' => 'true', 'message' => 'Dinner added successfully']);
+
+        } catch (Exception $ex) {
+            return response($ex->getMessage());
+        }
+    }
+
+    public function getdinner(Request $request)
+    {
+        try {
+            $dinner = Dinner::select('id', 'date', 'created_at')->where('id', $request->dinner_id)->where('user_id', api_user()->id)->first();
+
+            if ($dinner) {
+                $foods = [];
+                $dinner_foods = DinnerFood::select('id', 'food_id', 'calories', 'protein', 'crabs', 'fat', 'quantity', 'serving_size')->where('dinner_id', $dinner->id)->get();
+
+                foreach($dinner_foods as $food){
+                    $foods[] = get_meals_food($food);
+                }
+
+                $dinner->total_calories = $dinner_foods->sum('calories');
+                $dinner->total_protein = $dinner_foods->sum('protein');
+                $dinner->total_crabs = $dinner_foods->sum('crabs');
+                $dinner->total_fat = $dinner_foods->sum('fat');
+                $dinner->foods = $foods;
+
+                return response()->json($dinner);
+            } else {
+                return response()->json(['result' => 'false', 'message' => 'No data found!']);
             }
         } catch (Exception $ex) {
             return response($ex->getMessage());
