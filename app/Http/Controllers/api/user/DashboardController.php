@@ -79,13 +79,15 @@ class DashboardController extends Controller
             //Water
             $water = Water::whereYear('date', $date->year)->whereMonth('date', $date->month)->whereDay('date', $date->day)->where('user_id', api_user()->id)->first();
 
+            $calories_left = $total_calories - $calories_eaten;
+
             return response()->json([
                 'target_calories' => $total_calories,
                 'target_crabs' => $total_crabs,
                 'target_protein' => $total_protein,
                 'target_fat' => $total_fat,
 
-                'calories_left' => $total_calories - $calories_eaten,
+                'calories_left' => $calories_left >= 0 ? $calories_left : 0,
                 'calories_eaten' => $calories_eaten,
                 'calories_burned' => $calories_burned,
 
