@@ -137,6 +137,21 @@ class MealController extends Controller
         }
     }
 
+    public function deleteBreakfast(Request $request){
+        try {
+            $item = BreakfastFood::where('id', $request->item_id)->first();
+
+            if ($item) {
+                $item->delete();
+                return response()->json(['result' => 'true','message' => 'Item deleted successfully']);
+            } else {
+                return response()->json(['result' => 'false','message' => 'No data found!']);
+            }
+        } catch (Exception $ex) {
+            return response($ex->getMessage());
+        }
+    }
+
     // Lunch
     public function lunchIndex(Request $request)
     {
@@ -250,6 +265,21 @@ class MealController extends Controller
                 return response()->json($lunch);
             } else {
                 return response()->json(['result' => 'false', 'message' => 'No data found!']);
+            }
+        } catch (Exception $ex) {
+            return response($ex->getMessage());
+        }
+    }
+
+    public function deleteLunch(Request $request){
+        try {
+            $item = LunchFood::where('id', $request->item_id)->first();
+
+            if ($item) {
+                $item->delete();
+                return response()->json(['result' => 'true','message' => 'Item deleted successfully']);
+            } else {
+                return response()->json(['result' => 'false','message' => 'No data found!']);
             }
         } catch (Exception $ex) {
             return response($ex->getMessage());
@@ -375,6 +405,21 @@ class MealController extends Controller
         }
     }
 
+    public function deleteSnack(Request $request){
+        try {
+            $item = SnackFood::where('id', $request->item_id)->first();
+
+            if ($item) {
+                $item->delete();
+                return response()->json(['result' => 'true','message' => 'Item deleted successfully']);
+            } else {
+                return response()->json(['result' => 'false','message' => 'No data found!']);
+            }
+        } catch (Exception $ex) {
+            return response($ex->getMessage());
+        }
+    }
+
     // Dinners
     public function dinnerIndex(Request $request)
     {
@@ -488,6 +533,21 @@ class MealController extends Controller
                 return response()->json($dinner);
             } else {
                 return response()->json(['result' => 'false', 'message' => 'No data found!']);
+            }
+        } catch (Exception $ex) {
+            return response($ex->getMessage());
+        }
+    }
+
+    public function deleteDinner(Request $request){
+        try {
+            $item = DinnerFood::where('id', $request->item_id)->first();
+
+            if ($item) {
+                $item->delete();
+                return response()->json(['result' => 'true','message' => 'Item deleted successfully']);
+            } else {
+                return response()->json(['result' => 'false','message' => 'No data found!']);
             }
         } catch (Exception $ex) {
             return response($ex->getMessage());
