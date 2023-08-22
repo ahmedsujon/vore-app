@@ -38,7 +38,6 @@ class FoodController extends Controller
             'crabs' => 'required',
             'fat' => 'required',
             'protein' => 'required',
-            'images' => 'required',
         ];
         $validator = Validator::make($request->all(), $rules);
         if ($validator->fails()) {
