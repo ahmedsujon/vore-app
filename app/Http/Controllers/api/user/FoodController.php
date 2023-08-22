@@ -66,7 +66,8 @@ class FoodController extends Controller
             $food->images = $uploaded_images;
             $food->save();
 
-            return response()->json(['result' => 'true', 'message' => 'Food added successfully']);
+
+            return response()->json(['result' => 'true', 'message' => 'Food added successfully', 'food_id'=>$food->id]);
         } catch (Exception $ex) {
             return response($ex->getMessage());
         }
