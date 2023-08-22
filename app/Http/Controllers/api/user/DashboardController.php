@@ -116,9 +116,9 @@ class DashboardController extends Controller
                     ],
                 ],
                 'water' => [
-                    'total' => $water->drunk,
-                    'goal' => $water->goal,
-                    'glass' => $water->drunk / $water->pot_capacity,
+                    'total' => $water ? $water->drunk : 0,
+                    'goal' => $water ? $water->goal : 0,
+                    'glass' => $water ? ($water->drunk / $water->pot_capacity) : 0,
                 ],
             ]);
         } catch (Exception $ex) {
