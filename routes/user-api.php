@@ -23,6 +23,7 @@ Route::group(['middleware' => ['jwtUser:user-api', 'jwt.auth'], 'prefix' => 'v1/
 
     //Dashboard
     Route::get('dashboard', [DashboardController::class, 'index']);
+    Route::get('todays-goal', [DashboardController::class, 'todaysGoal']);
 
     // Meals APIs
     //breakfast

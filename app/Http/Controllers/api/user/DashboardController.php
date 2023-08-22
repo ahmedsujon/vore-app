@@ -127,4 +127,98 @@ class DashboardController extends Controller
             return response($ex->getMessage());
         }
     }
+
+    public function todaysGoal(Request $request)
+    {
+        try {
+            $date = Carbon::parse($request->date);
+
+            $breakfasts = Breakfast::join('breakfast_foods', 'breakfast_foods.breakfast_id', 'breakfasts.id')->where('breakfasts.user_id', api_user()->id)->select('breakfasts.id as breakfast_id', 'breakfasts.date as date',  'breakfast_foods.calories as calories', 'breakfast_foods.crabs as crabs', 'breakfast_foods.protein as protein', 'breakfast_foods.fat as fat', 'breakfast_foods.food_id as food_id')->whereYear('date', $date->year)->whereMonth('date', $date->month)->whereDay('date', $date->day)->get();
+
+            $lunches = Lunch::join('lunch_foods', 'lunch_foods.lunch_id', 'lunches.id')->where('lunches.user_id', api_user()->id)->select('lunches.id as lunch_id', 'lunches.date as date',  'lunch_foods.calories as calories', 'lunch_foods.crabs as crabs', 'lunch_foods.protein as protein', 'lunch_foods.fat as fat', 'lunch_foods.food_id as food_id')->whereYear('date', $date->year)->whereMonth('date', $date->month)->whereDay('date', $date->day)->get();
+
+            $snacks = Snacks::join('snack_foods', 'snack_foods.snack_id', 'snacks.id')->where('snacks.user_id', api_user()->id)->select('snacks.id as snack_id', 'snacks.date as date',  'snack_foods.calories as calories', 'snack_foods.crabs as crabs', 'snack_foods.protein as protein', 'snack_foods.fat as fat', 'snack_foods.food_id as food_id')->whereYear('date', $date->year)->whereMonth('date', $date->month)->whereDay('date', $date->day)->get();
+
+            $dinners = Dinner::join('dinner_foods', 'dinner_foods.dinner_id', 'dinners.id')->where('dinners.user_id', api_user()->id)->select('dinners.id as dinner_id', 'dinners.date as date',  'dinner_foods.calories as calories', 'dinner_foods.crabs as crabs', 'dinner_foods.protein as protein', 'dinner_foods.fat as fat', 'dinner_foods.food_id as food_id')->whereYear('date', $date->year)->whereMonth('date', $date->month)->whereDay('date', $date->day)->get();
+
+            //Total Goals
+            $total_calories = api_user()->calories;
+            $total_crabs = api_user()->crabs;
+            $total_protein = api_user()->protein;
+            $total_fat = api_user()->fat;
+
+            $calories = $breakfasts->sum('calories') + $lunches->sum('calories') + $snacks->sum('calories') + $dinners->sum('calories');
+            $crabs = $breakfasts->sum('crabs') + $lunches->sum('crabs') + $snacks->sum('crabs') + $dinners->sum('crabs');
+            $protein = $breakfasts->sum('protein') + $lunches->sum('protein') + $snacks->sum('protein') + $dinners->sum('protein');
+            $fat = $breakfasts->sum('fat') + $lunches->sum('fat') + $snacks->sum('fat') + $dinners->sum('fat');
+
+            //Meal Goals
+
+            //breakfast
+            $breakfast_calories = $breakfasts->sum('calories');
+            $breakfast_crabs = $breakfasts->sum('crabs');
+            $breakfast_protein = $breakfasts->sum('protein');
+            $breakfast_fat = $breakfasts->sum('fat');
+
+            //lunch
+            $lunch_calories = $lunches->sum('calories');
+            $lunch_crabs = $lunches->sum('crabs');
+            $lunch_protein = $lunches->sum('protein');
+            $lunch_fat = $lunches->sum('fat');
+
+            //snack
+            $snack_calories = $snacks->sum('calories');
+            $snack_crabs = $snacks->sum('crabs');
+            $snack_protein = $snacks->sum('protein');
+            $snack_fat = $snacks->sum('fat');
+
+            //dinner
+            $dinner_calories = $dinners->sum('calories');
+            $dinner_crabs = $dinners->sum('crabs');
+            $dinner_protein = $dinners->sum('protein');
+            $dinner_fat = $dinners->sum('fat');
+
+
+            return response()->json([
+                'target_calories' => $total_calories,
+                'target_crabs' => $total_crabs,
+                'target_protein' => $total_protein,
+                'target_fat' => $total_fat,
+
+                'calories' => $calories,
+                'crabs' => $crabs,
+                'protein' => $protein,
+                'fat' => $fat,
+
+                'meals_goal' => [
+                    'breakfast' => [
+                        'calories' => $breakfast_calories,
+                        'crabs' => $breakfast_crabs,
+                        'protein' => $breakfast_protein,
+                        'fat' => $breakfast_fat,
+                    ],
+                    'snack' => [
+                        'calories' => $snack_calories,
+                        'crabs' => $snack_crabs,
+                        'protein' => $snack_protein,
+                        'fat' => $snack_fat,
+                    ],
+                    'lunch' => [
+                        'calories' => $lunch_calories,
+                        'crabs' => $lunch_crabs,
+                        'protein' => $lunch_protein,
+                        'fat' => $lunch_fat,
+                    ],
+                    'dinner' => [
+                        'calories' => $dinner_calories,
+                        'crabs' => $dinner_crabs,
+                        'protein' => $dinner_protein,
+                        'fat' => $dinner_fat,
+                    ],
+                ],
+            ]);
+        } catch (Exception $ex) {
+            return response($ex->getMessage());
+        }
+    }
 }
