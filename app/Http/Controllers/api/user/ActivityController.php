@@ -15,7 +15,18 @@ class ActivityController extends Controller
 {
     public function allActivities(Request $request)
     {
+        try {
+            $activities = Activity::select('id', 'name', 'calories')->orderBy('name', 'ASC')->get();
 
+            if($activities->count() > 0){
+                return response()->json($activities);
+            } else {
+                return response()->json(['result' => 'false', 'message' => 'No Activities Found']);
+            }
+
+        } catch (Exception $ex) {
+            return response($ex->getMessage());
+        }
     }
 
     public function addNewActivity(Request $request)
