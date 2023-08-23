@@ -62,45 +62,6 @@ class ActivityController extends Controller
         }
     }
 
-
-    // public function breakfastIndex(Request $request)
-    // {
-    //     try {
-    //         $breakfasts = Breakfast::select('id', 'date', 'created_at')->where('user_id', api_user()->id);
-
-    //         if ($request->filter_date) {
-    //             $date = Carbon::parse($request->filter_date);
-    //             $breakfasts = $breakfasts->whereYear('date', $date->year)->whereMonth('date', $date->month)->whereDay('date', $date->day);
-    //         }
-
-    //         $breakfasts = $breakfasts->get();
-
-    //         if ($breakfasts->count() > 0) {
-    //             foreach ($breakfasts as $breakfast)
-    //             {
-    //                 $foods = [];
-    //                 $breakfast_foods = BreakfastFood::select('id', 'food_id', 'calories', 'protein', 'crabs', 'fat', 'quantity', 'serving_size')->where('breakfast_id', $breakfast->id)->get();
-
-    //                 foreach($breakfast_foods as $food){
-    //                     $foods[] = get_meals_food($food);
-    //                 }
-
-    //                 $breakfast->total_calories = $breakfast_foods->sum('calories');
-    //                 $breakfast->total_protein = $breakfast_foods->sum('protein');
-    //                 $breakfast->total_crabs = $breakfast_foods->sum('crabs');
-    //                 $breakfast->total_fat = $breakfast_foods->sum('fat');
-    //                 $breakfast->foods = $foods;
-    //             }
-
-    //             return response()->json($breakfasts);
-    //         } else {
-    //             return response()->json(['result' => 'false', 'message' => 'No data found!']);
-    //         }
-    //     } catch (Exception $ex) {
-    //         return response($ex->getMessage());
-    //     }
-    // }
-
     public function addUserActivity(Request $request)
     {
         $rules = [
@@ -140,31 +101,26 @@ class ActivityController extends Controller
         }
     }
 
-    // public function getBreakfast(Request $request)
-    // {
-    //     try {
-    //         $breakfast = Breakfast::select('id', 'date', 'created_at')->where('id', $request->breakfast_id)->where('user_id', api_user()->id)->first();
+    public function userActivityDetails(Request $request)
+    {
+        try {
+            $user_activity = UserActivity::select('id', 'date', 'created_at')->where('id', $request->user_activity_id)->where('user_id', api_user()->id)->first();
 
-    //         if ($breakfast) {
-    //             $foods = [];
-    //             $breakfast_foods = BreakfastFood::select('id', 'food_id', 'calories', 'protein', 'crabs', 'fat', 'quantity', 'serving_size')->where('breakfast_id', $breakfast->id)->get();
+            if ($user_activity) {
+                $items = UserActivityItem::select('id', 'activity_id as activity', 'calories', 'duration')->where('user_activity_id', $user_activity->id)->get();
 
-    //             foreach($breakfast_foods as $food){
-    //                 $foods[] = get_meals_food($food);
-    //             }
+                foreach($items as $itm){
+                    $itm->activity = Activity::find($itm->activity)->name;
+                }
 
-    //             $breakfast->total_calories = $breakfast_foods->sum('calories');
-    //             $breakfast->total_protein = $breakfast_foods->sum('protein');
-    //             $breakfast->total_crabs = $breakfast_foods->sum('crabs');
-    //             $breakfast->total_fat = $breakfast_foods->sum('fat');
-    //             $breakfast->foods = $foods;
+                $user_activity->activities = $items;
 
-    //             return response()->json($breakfast);
-    //         } else {
-    //             return response()->json(['result' => 'false', 'message' => 'No data found!']);
-    //         }
-    //     } catch (Exception $ex) {
-    //         return response($ex->getMessage());
-    //     }
-    // }
+                return response()->json($user_activity);
+            } else {
+                return response()->json(['result' => 'false', 'message' => 'No data found!']);
+            }
+        } catch (Exception $ex) {
+            return response($ex->getMessage());
+        }
+    }
 }

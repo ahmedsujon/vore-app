@@ -65,6 +65,7 @@ Route::group(['middleware' => ['jwtUser:user-api', 'jwt.auth'], 'prefix' => 'v1/
     Route::get('all-activities', [ActivityController::class, 'allActivities']);
     Route::post('activity/add', [ActivityController::class, 'addNewActivity']);
 
+    Route::get('user-activity', [ActivityController::class, 'userActivityDetails']);
     Route::post('user-activity/add', [ActivityController::class, 'addUserActivity']);
     Route::get('user-activity/delete', [ActivityController::class, 'deleteUserActivity']);
 
