@@ -12,6 +12,8 @@ use App\Models\Breakfast;
 use Illuminate\Http\Request;
 use App\Models\BreakfastFood;
 use App\Http\Controllers\Controller;
+use App\Models\Activity;
+use App\Models\UserActivityItem;
 
 class DashboardController extends Controller
 {
@@ -76,6 +78,20 @@ class DashboardController extends Controller
             }
 
 
+            //exercise
+            $all_exercises = UserActivityItem::join('user_activities', 'user_activity_items.user_activity_id', 'user_activities.id' )
+                ->select('user_activities.date as date', 'user_activity_items.*')
+                ->whereYear('date', $date->year)->whereMonth('date', $date->month)->whereDay('date', $date->day)->where('user_activities.user_id', api_user()->id)->get();
+
+            $exercises = [];
+            foreach($all_exercises as $ex){
+                $exercises[] = [
+                    'id' => $ex->id,
+                    'name' => Activity::find($ex->activity_id)->name,
+                    'calories' => $ex->calories,
+                ];
+            }
+
             //Water
             $water = Water::whereYear('date', $date->year)->whereMonth('date', $date->month)->whereDay('date', $date->day)->where('user_id', api_user()->id)->first();
 
@@ -117,6 +133,7 @@ class DashboardController extends Controller
                         'foods' => $dinner_foods
                     ],
                 ],
+                'exercise' => $exercises,
                 'water' => [
                     'total' => $water ? $water->drunk : 0,
                     'goal' => $water ? $water->goal : 0,
