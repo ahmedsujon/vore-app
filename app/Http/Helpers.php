@@ -13,7 +13,7 @@ function get_meals_food($food){
 
     $imgs = [];
 
-    if($getFood->images->count() > 0){
+    if(count($getFood->images) > 0){
         foreach ($getFood->images as $image) {
             $imgs[] = url('/').'/'.$image;
         }
@@ -37,7 +37,7 @@ function get_dashboard_meals_food($food_id){
     $getFood = Food::select('id', 'name', 'images')->find($food_id);
 
     $imgs = [];
-    if($getFood->images->count() > 0){
+    if(count($getFood->images) > 0){
         foreach ($getFood->images as $image) {
             $imgs[] = url('/').'/'.$image;
         }
