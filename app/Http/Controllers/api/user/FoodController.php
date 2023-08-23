@@ -58,9 +58,12 @@ class FoodController extends Controller
             $food->barcode = $request->barcode;
 
             $uploaded_images = [];
-            foreach ($request->file('images') as $image) {
-                $uploaded_images[] = uploadFile($image, 'foods');
+            if($request->file('images')){
+                foreach ($request->file('images') as $image) {
+                    $uploaded_images[] = uploadFile($image, 'foods');
+                }
             }
+
 
             $food->images = $uploaded_images;
             $food->save();
