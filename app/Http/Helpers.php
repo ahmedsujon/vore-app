@@ -13,8 +13,12 @@ function get_meals_food($food){
 
     $imgs = [];
 
-    foreach ($getFood->images as $image) {
-        $imgs[] = url('/').'/'.$image;
+    if($getFood->images->count() > 0){
+        foreach ($getFood->images as $image) {
+            $imgs[] = url('/').'/'.$image;
+        }
+    } else {
+        $imgs[] = url('/').'/assets/images/placeholder.jpg';
     }
 
 
@@ -33,10 +37,16 @@ function get_dashboard_meals_food($food_id){
     $getFood = Food::select('id', 'name', 'images')->find($food_id);
 
     $imgs = [];
-    foreach ($getFood->images as $image) {
-        $imgs[] = url('/').'/'.$image;
+    if($getFood->images->count() > 0){
+        foreach ($getFood->images as $image) {
+            $imgs[] = url('/').'/'.$image;
+        }
+        $getFood->images = $imgs;
+    } else {
+        $imgs[] = url('/').'/assets/images/placeholder.jpg';
+        $getFood->images = $imgs;
     }
-    $getFood->images = $imgs;
+
 
     return $getFood;
 }
