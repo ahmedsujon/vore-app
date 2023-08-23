@@ -233,6 +233,49 @@ class DashboardController extends Controller
                         'fat' => $dinner_fat,
                     ],
                 ],
+                'nutrients' => [
+                    'crabs' => [
+                        'status' => round(($crabs / $total_crabs) * 100),
+                        'goal' => 100,
+                    ],
+                    'protein' => [
+                        'status' => round(($protein / $total_protein) * 100),
+                        'goal' => 100,
+                    ],
+                    'fat' => [
+                        'status' => round(($fat / $total_fat) * 100),
+                        'goal' => 100,
+                    ]
+                ],
+                'Dietary Fiber' => 0,
+                'Total Sugars' => 0,
+                'fats' => [
+                    'Saturated Fat' => 0,
+                    'Monounsaturated Fat' => 0,
+                    'Polyunsaturated Fat' => 0,
+                    'Trans Fat' => 0,
+                ],
+                'other' => [
+                    'Cholesterol' => 0,
+                    'Sodium' => 0,
+                    'Salt' => 0,
+                    'Water' => 0,
+                    'Alcohol' => 0,
+                ],
+                'vitamins' => [
+                    'Vitamin B7' => 0,
+                    'Vitamin C' => 0,
+                    'Vitamin D' => 0,
+                    'Vitamin E' => 0,
+                    'Vitamin K' => 0,
+                ],
+                'minerals'  => [
+                    'Calcium' => 0,
+                    'Iron' => 0,
+                    'Magnesium' => 0,
+                    'Potassium' => 0,
+                    'Zinc' => 0,
+                ]
             ]);
         } catch (Exception $ex) {
             return response($ex->getMessage());
