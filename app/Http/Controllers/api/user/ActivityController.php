@@ -8,10 +8,50 @@ use App\Models\UserActivity;
 use Illuminate\Http\Request;
 use App\Models\UserActivityItem;
 use App\Http\Controllers\Controller;
+use App\Models\Activity;
 use Illuminate\Support\Facades\Validator;
 
 class ActivityController extends Controller
 {
+    public function allActivities(Request $request)
+    {
+
+    }
+
+    public function addNewActivity(Request $request)
+    {
+        $rules = [
+            'name' => 'required',
+            'calories' => 'required',
+            'duration' => 'required',
+        ];
+        $validator = Validator::make($request->all(), $rules);
+        if ($validator->fails()) {
+            return response()->json($validator->errors(), 400);
+        }
+
+        try {
+            $getActivity = Activity::where('name', $request->name)->first();
+            if (!$getActivity) {
+                $activity = new Activity();
+                $activity->name = $request->name;
+                $activity->calories = ($request->calories / $request->duration);
+                $activity->status = 1;
+                $activity->save();
+
+                $activity_id = Activity::find($activity->id)->id;
+
+                return response()->json(['result' => 'true', 'message' => 'New activity added successfully', 'activity_id' => $activity_id]);
+            } else {
+                return response()->json(['result' => 'false', 'message' => 'Activity already exists', 'activity_id' => $getActivity->id]);
+            }
+
+        } catch (Exception $ex) {
+            return response($ex->getMessage());
+        }
+    }
+
+
     // public function breakfastIndex(Request $request)
     // {
     //     try {
