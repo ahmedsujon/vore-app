@@ -2,8 +2,13 @@
 
 namespace App\Http\Controllers\api\user;
 
-use App\Http\Controllers\Controller;
+use Exception;
+use Carbon\Carbon;
+use App\Models\UserActivity;
 use Illuminate\Http\Request;
+use App\Models\UserActivityItem;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Validator;
 
 class ActivityController extends Controller
 {
@@ -45,57 +50,44 @@ class ActivityController extends Controller
     //     }
     // }
 
-    // public function addActivity(Request $request)
-    // {
-    //     $rules = [
-    //         'food_id' => 'required',
-    //         'calories' => 'required',
-    //         'protein' => 'required',
-    //         'crabs' => 'required',
-    //         'fat' => 'required',
-    //         'quantity' => 'required',
-    //         'serving_size' => 'required',
-    //         'date' => 'required',
-    //     ];
-    //     $validator = Validator::make($request->all(), $rules);
-    //     if ($validator->fails()) {
-    //         return response()->json($validator->errors(), 400);
-    //     }
+    public function addUserActivity(Request $request)
+    {
+        $rules = [
+            'activity_id' => 'required',
+            'calories' => 'required',
+            'duration' => 'required',
+            'date' => 'required',
+        ];
+        $validator = Validator::make($request->all(), $rules);
+        if ($validator->fails()) {
+            return response()->json($validator->errors(), 400);
+        }
 
-    //     try {
-    //         $getBreakfast = Breakfast::where('date', Carbon::parse($request->date)->format('Y-m-d'))->where('user_id', api_user()->id)->first();
-    //         if (!$getBreakfast) {
-    //             $breakfast = new Breakfast();
-    //             $breakfast->user_id = api_user()->id;
-    //             $breakfast->date = $request->date;
-    //             $breakfast->status = 1;
-    //             $breakfast->save();
-    //         } else {
-    //             $breakfast = $getBreakfast;
-    //         }
+        try {
+            $getUserActivity = UserActivity::where('date', Carbon::parse($request->date)->format('Y-m-d'))->where('user_id', api_user()->id)->first();
+            if (!$getUserActivity) {
+                $user_activity = new UserActivity();
+                $user_activity->user_id = api_user()->id;
+                $user_activity->date = $request->date;
+                $user_activity->status = 1;
+                $user_activity->save();
+            } else {
+                $user_activity = $getUserActivity;
+            }
 
-    //         $getFood = BreakfastFood::where('breakfast_id', $breakfast->id)->where('food_id', $request->food_id)->first();
-    //         if(!$getFood){
-    //             $food = new BreakfastFood();
-    //             $food->breakfast_id = $breakfast->id;
-    //             $food->food_id = $request->food_id;
-    //             $food->calories = $request->calories;
-    //             $food->protein = $request->protein;
-    //             $food->crabs = $request->crabs;
-    //             $food->fat = $request->fat;
-    //             $food->quantity = $request->quantity;
-    //             $food->serving_size = $request->serving_size;
-    //             $food->save();
-    //         } else {
-    //             return response()->json(['result' => 'false', 'message' => 'Food already added']);
-    //         }
+            $act_item = new UserActivityItem();
+            $act_item->user_activity_id = $user_activity->id;
+            $act_item->activity_id = $request->activity_id;
+            $act_item->calories = $request->calories;
+            $act_item->duration = $request->duration;
+            $act_item->save();
 
-    //         return response()->json(['result' => 'true', 'message' => 'Breakfast added successfully']);
+            return response()->json(['result' => 'true', 'message' => 'Activity added successfully']);
 
-    //     } catch (Exception $ex) {
-    //         return response($ex->getMessage());
-    //     }
-    // }
+        } catch (Exception $ex) {
+            return response($ex->getMessage());
+        }
+    }
 
     // public function getBreakfast(Request $request)
     // {

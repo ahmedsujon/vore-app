@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\api\user\ActivityController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\api\user\DashboardController;
 use App\Http\Controllers\api\user\auth\AuthenticationController;
@@ -59,4 +60,12 @@ Route::group(['middleware' => ['jwtUser:user-api', 'jwt.auth'], 'prefix' => 'v1/
     Route::post('water/setting/update', [WaterController::class, 'waterSetting']);
     Route::get('water', [WaterController::class, 'getWater']);
     Route::post('water/add', [WaterController::class, 'addWater']);
+
+    //Activities
+    Route::get('all-activities', [ActivityController::class, 'allActivities']);
+    Route::post('activity/add', [ActivityController::class, 'addNewActivity']);
+
+    Route::post('user-activity/add', [ActivityController::class, 'addUserActivity']);
+    Route::get('user-activity/delete', [ActivityController::class, 'deleteUserActivity']);
+
 });
