@@ -123,4 +123,19 @@ class ActivityController extends Controller
             return response($ex->getMessage());
         }
     }
+
+    public function deleteUserActivity(Request $request){
+        try {
+            $item = UserActivityItem::where('id', $request->activity_id)->first();
+
+            if ($item) {
+                $item->delete();
+                return response()->json(['result' => 'true','message' => 'Activity deleted successfully']);
+            } else {
+                return response()->json(['result' => 'false','message' => 'No data found!']);
+            }
+        } catch (Exception $ex) {
+            return response($ex->getMessage());
+        }
+    }
 }
