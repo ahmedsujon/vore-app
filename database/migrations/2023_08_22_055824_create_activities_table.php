@@ -13,6 +13,9 @@ return new class extends Migration
     {
         Schema::create('activities', function (Blueprint $table) {
             $table->id();
+            $table->string('name')->nullable();
+            $table->double('calories', 20,2)->default(0)->comment('calories/min');
+            $table->tinyInteger('status')->default(0);
             $table->timestamps();
         });
     }
