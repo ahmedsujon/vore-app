@@ -11,11 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('waters', function (Blueprint $table) {
+        Schema::create('water_settings', function (Blueprint $table) {
             $table->id();
             $table->bigInteger('user_id')->unsigned()->nullable();
-            $table->double('drunk', 20,2)->default(0);
-            $table->string('date')->nullable();
+            $table->double('pot_capacity', 20,2)->default(8);
+            $table->string('pot_type')->nullable();
+            $table->double('goal', 20,2)->default(0);
+            $table->tinyInteger('status')->default(1);
             $table->timestamps();
         });
     }
@@ -25,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('waters');
+        Schema::dropIfExists('water_settings');
     }
 };

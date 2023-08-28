@@ -6,6 +6,7 @@ use Exception;
 use App\Models\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\WaterSetting;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
@@ -79,6 +80,13 @@ class AuthenticationController extends Controller
         $user->protein = $total_calorie > 0 ? (($total_calorie * 20) / 100) : 0;
 
         $user->save();
+
+        $water_setting = new WaterSetting();
+        $water_setting->user_id = $user->id;
+        $water_setting->pot_capacity = 8;
+        $water_setting->pot_type = 'glass';
+        $water_setting->goal = 80;
+        $water_setting->save();
 
         return response()->json(['result'=>'true', 'message' => 'Data updated successfully']);
     }
