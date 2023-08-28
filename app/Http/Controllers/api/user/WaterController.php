@@ -75,6 +75,7 @@ class WaterController extends Controller
             $getData = Water::where('date', Carbon::parse($request->date)->format('Y-m-d'))->where('user_id', api_user()->id)->first();
             if (!$getData) {
                 $water = new Water();
+                $water->user_id = api_user()->id;
                 $water->drunk = $request->water;
                 $water->date = Carbon::parse($request->date)->format('Y-m-d');
             } else {

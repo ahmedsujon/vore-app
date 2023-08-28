@@ -3,8 +3,9 @@
 namespace Database\Seeders;
 
 use App\Models\User;
-use Illuminate\Database\Seeder;
 use Faker\Factory as Faker;
+use App\Models\WaterSetting;
+use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
@@ -56,6 +57,13 @@ class UserTableSeeder extends Seeder
                 $user->protein = ($user->calories * 20) / 100;
 
                 $user->save();
+
+                $water_setting = new WaterSetting();
+                $water_setting->user_id = $user->id;
+                $water_setting->pot_capacity = 8;
+                $water_setting->pot_type = 'glass';
+                $water_setting->goal = 80;
+                $water_setting->save();
             }
         }
     }
