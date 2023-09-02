@@ -98,6 +98,7 @@ class DashboardController extends Controller
             $calories_left = $total_calories - $calories_eaten;
 
             return response()->json([
+                'total_calories' => $total_calories,
                 'target_calories' => $total_calories,
                 'target_crabs' => $total_crabs,
                 'target_protein' => $total_protein,

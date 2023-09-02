@@ -104,7 +104,9 @@ class ActivityController extends Controller
     public function userActivityDetails(Request $request)
     {
         try {
-            $user_activity = UserActivity::select('id', 'date', 'created_at')->where('id', $request->user_activity_id)->where('user_id', api_user()->id)->first();
+            $date = Carbon::parse($request->filter_date);
+
+            $user_activity = UserActivity::select('id', 'date', 'created_at')->whereYear('date', $date->year)->whereMonth('date', $date->month)->whereDay('date', $date->day)->where('user_id', api_user()->id)->first();
 
             if ($user_activity) {
                 $items = UserActivityItem::select('id', 'activity_id as activity', 'calories', 'duration')->where('user_activity_id', $user_activity->id)->get();
@@ -113,6 +115,8 @@ class ActivityController extends Controller
                     $itm->activity = Activity::find($itm->activity)->name;
                 }
 
+                $user_activity->total_activities = $items->count();
+                $user_activity->total_calories = $items->sum('calories');
                 $user_activity->activities = $items;
 
                 return response()->json($user_activity);
