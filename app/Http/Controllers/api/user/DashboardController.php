@@ -8,12 +8,14 @@ use App\Models\Lunch;
 use App\Models\Water;
 use App\Models\Dinner;
 use App\Models\Snacks;
+use App\Models\Activity;
 use App\Models\Breakfast;
 use Illuminate\Http\Request;
 use App\Models\BreakfastFood;
-use App\Http\Controllers\Controller;
-use App\Models\Activity;
 use App\Models\UserActivityItem;
+use App\Http\Controllers\Controller;
+use App\Models\User;
+use Illuminate\Support\Facades\Validator;
 
 class DashboardController extends Controller
 {
@@ -268,6 +270,33 @@ class DashboardController extends Controller
                 'Potassium' => 0,
                 'Zinc' => 0,
             ]);
+        } catch (Exception $ex) {
+            return response($ex->getMessage());
+        }
+    }
+
+    public function updateMeasurement(Request $request)
+    {
+        $rules = [
+            'weight' => 'required',
+        ];
+        $validator = Validator::make($request->all(), $rules);
+        if ($validator->fails()) {
+            return response()->json($validator->errors(), 400);
+        }
+
+        try {
+            $user = User::find(api_user()->id);
+            if ($user->current_weight_unit == 'kg') {
+                $weight = $request->weight / 2.20462;
+            } else {
+                $weight = $request->weight;
+            }
+            $user->current_weight = $weight;
+            $user->save();
+
+            return response()->json(['result' => 'true', 'message' => 'Data updated successfully']);
+
         } catch (Exception $ex) {
             return response($ex->getMessage());
         }

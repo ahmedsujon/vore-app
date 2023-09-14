@@ -25,6 +25,8 @@ Route::group(['middleware' => ['jwtUser:user-api', 'jwt.auth'], 'prefix' => 'v1/
     //Dashboard
     Route::get('dashboard', [DashboardController::class, 'index']);
     Route::get('todays-goal', [DashboardController::class, 'todaysGoal']);
+    Route::get('measurements', [DashboardController::class, 'getMeasurement']);
+    Route::post('update-measurements', [DashboardController::class, 'updateMeasurement']);
 
     // Meals APIs
     //breakfast
