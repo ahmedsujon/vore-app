@@ -333,12 +333,13 @@ class DashboardController extends Controller
     public function getWater(Request $request)
     {
         try {
-            $water = Water::where('date', Carbon::parse($request->date)->format('Y-m-d'))->where('user_id', api_user()->id)->first();
+            $water = Water::select('glass', 'drunk')->where('date', Carbon::parse($request->date)->format('Y-m-d'))->where('user_id', api_user()->id)->first();
+            $setting = WaterSetting::where('user_id', api_user()->id)->first();
 
-
+            $water->drunk = $water->drunk . ' fl oz';
+            $water->goal = $setting->goal . ' fl oz';
 
             return response()->json($water);
-
         } catch (Exception $ex) {
             return response($ex->getMessage());
         }
