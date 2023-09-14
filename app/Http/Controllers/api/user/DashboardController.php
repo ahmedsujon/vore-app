@@ -275,6 +275,32 @@ class DashboardController extends Controller
         }
     }
 
+    public function getMeasurement(Request $request)
+    {
+        try {
+            $user = User::find(api_user()->id);
+
+            $weight = $user->current_weight_unit == 'kg' ? ($user->current_weight * 2.20462) : $user->current_weight;
+            $target_weight = $user->target_weight_unit == 'kg' ? ($user->target_weight * 2.20462) : $user->target_weight;
+
+            $weight = round($weight, 1);
+            $target_weight = round($target_weight, 1);
+
+            $weight = is_numeric($weight) && floor($weight) == $weight ? $weight . '.0' : $weight;
+            $target_weight = is_numeric($target_weight) && floor($target_weight) == $target_weight ? $target_weight . '.0' : $target_weight;
+
+            $data = [
+                'weight' => $weight . ' lb',
+                'target_weight' => $target_weight . ' lb',
+            ];
+
+            return response()->json($data);
+
+        } catch (Exception $ex) {
+            return response($ex->getMessage());
+        }
+    }
+
     public function updateMeasurement(Request $request)
     {
         $rules = [
