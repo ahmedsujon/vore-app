@@ -15,6 +15,7 @@ use App\Models\BreakfastFood;
 use App\Models\UserActivityItem;
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Models\WaterSetting;
 use Illuminate\Support\Facades\Validator;
 
 class DashboardController extends Controller
@@ -323,6 +324,54 @@ class DashboardController extends Controller
 
             return response()->json(['result' => 'true', 'message' => 'Data updated successfully']);
 
+        } catch (Exception $ex) {
+            return response($ex->getMessage());
+        }
+    }
+
+    //Water
+    public function getWater(Request $request)
+    {
+        try {
+            $water = Water::where('date', Carbon::parse($request->date)->format('Y-m-d'))->where('user_id', api_user()->id)->first();
+
+
+
+            return response()->json($water);
+
+        } catch (Exception $ex) {
+            return response($ex->getMessage());
+        }
+    }
+
+    public function addWater(Request $request)
+    {
+        $rules = [
+            'date' => 'required',
+        ];
+        $validator = Validator::make($request->all(), $rules);
+        if ($validator->fails()) {
+            return response()->json($validator->errors(), 400);
+        }
+
+        try {
+            $setting = WaterSetting::where('user_id', api_user()->id)->first();
+
+            $getData = Water::where('date', Carbon::parse($request->date)->format('Y-m-d'))->where('user_id', api_user()->id)->first();
+            if (!$getData) {
+                $water = new Water();
+                $water->user_id = api_user()->id;
+                $water->glass = 1;
+                $water->drunk = $setting->pot_capacity;
+                $water->date = Carbon::parse($request->date)->format('Y-m-d');
+            } else {
+                $water = $getData;
+                $water->drunk += $setting->pot_capacity;
+                $water->glass += 1;
+            }
+            $water->save();
+
+            return response()->json(['result' => 'true', 'message' => 'Water added successfully']);
         } catch (Exception $ex) {
             return response($ex->getMessage());
         }
