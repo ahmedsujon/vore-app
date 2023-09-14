@@ -4,9 +4,10 @@ namespace App\Http\Controllers\api\user\auth;
 
 use Exception;
 use App\Models\User;
+use Illuminate\Support\Str;
+use App\Models\WaterSetting;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Models\WaterSetting;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
@@ -30,6 +31,7 @@ class AuthenticationController extends Controller
         try {
             $user = new User();
             $user->name = $request->name;
+            $user->username = Str::lower(str_replace(' ', '', $request->name));
             $user->email = $request->email;
             $user->password = Hash::make($request->password);
             $user->save();
@@ -51,13 +53,12 @@ class AuthenticationController extends Controller
 
     public function makeProfile(Request $request)
     {
-
         //Calorie Calculations
         $total_calorie = 0;
         if($request->get('gender') == 'male'){
-            $total_calorie = $request->get('current_weight') * 24 * 0.85 * 1.2;
+            $total_calorie = round($request->get('current_weight') * 24 * 0.85 * 1.2);
         } else {
-            $total_calorie = $request->get('current_weight') * 21.6 * 0.77 * 1.55;
+            $total_calorie = round($request->get('current_weight') * 21.6 * 0.77 * 1.55);
         }
 
         $user = User::find(Auth::guard('user-api')->user()->id);
@@ -75,9 +76,22 @@ class AuthenticationController extends Controller
         $user->measurements_unit = $request->get('measurements_unit');
 
         $user->calories = $total_calorie;
-        $user->crabs = $total_calorie > 0 ? (($total_calorie * 50) / 100) : 0;
-        $user->fat = $total_calorie > 0 ? (($total_calorie * 30) / 100) : 0;
-        $user->protein = $total_calorie > 0 ? (($total_calorie * 20) / 100) : 0;
+
+        if($request->get('goal') == 'Maintain weight'){
+            $user->crabs = $total_calorie > 0 ? round((($total_calorie * 0.5) / 4)) : 0;
+            $user->fat = $total_calorie > 0 ? round((($total_calorie * 0.2) / 4)) : 0;
+            $user->protein = $total_calorie > 0 ? round((($total_calorie * 0.3) / 9)) : 0;
+        }
+        if($request->get('goal') == 'Lose weight'){
+            $user->crabs = $total_calorie > 0 ? round(((($total_calorie - 1000) * 0.5) / 4)) : 0;
+            $user->fat = $total_calorie > 0 ? round(((($total_calorie - 1000) * 0.2) / 4)) : 0;
+            $user->protein = $total_calorie > 0 ? round(((($total_calorie - 1000) * 0.3) / 9)) : 0;
+        }
+        if($request->get('goal') == 'Build muscle'){
+            $user->crabs = $total_calorie > 0 ? round(((($total_calorie + 500) * 0.5) / 4)) : 0;
+            $user->fat = $total_calorie > 0 ? round(((($total_calorie + 500) * 0.2) / 4)) : 0;
+            $user->protein = $total_calorie > 0 ? round(((($total_calorie + 500) * 0.3) / 9)) : 0;
+        }
 
         $user->save();
 

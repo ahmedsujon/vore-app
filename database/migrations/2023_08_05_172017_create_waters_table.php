@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('waters', function (Blueprint $table) {
             $table->id();
             $table->bigInteger('user_id')->unsigned()->nullable();
+            $table->integer('glass')->default(0);
             $table->double('drunk', 20,2)->default(0);
             $table->string('date')->nullable();
             $table->timestamps();

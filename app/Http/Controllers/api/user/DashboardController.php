@@ -8,12 +8,15 @@ use App\Models\Lunch;
 use App\Models\Water;
 use App\Models\Dinner;
 use App\Models\Snacks;
+use App\Models\Activity;
 use App\Models\Breakfast;
 use Illuminate\Http\Request;
 use App\Models\BreakfastFood;
-use App\Http\Controllers\Controller;
-use App\Models\Activity;
 use App\Models\UserActivityItem;
+use App\Http\Controllers\Controller;
+use App\Models\User;
+use App\Models\WaterSetting;
+use Illuminate\Support\Facades\Validator;
 
 class DashboardController extends Controller
 {
@@ -49,7 +52,7 @@ class DashboardController extends Controller
             $breakfast_foods = [];
 
             foreach($breakfasts as $bFast){
-                $breakfast_foods[] = get_dashboard_meals_food($bFast->food_id);
+                $breakfast_foods[] = get_dashboard_meals_food($bFast->food_id, 'breakfast');
                 $breakfast_id = $bFast->breakfast_id;
             }
             //lunch
@@ -57,7 +60,7 @@ class DashboardController extends Controller
             $lunch_foods = [];
 
             foreach($lunches as $lun){
-                $lunch_foods[] = get_dashboard_meals_food($lun->food_id);
+                $lunch_foods[] = get_dashboard_meals_food($lun->food_id, 'lunch');
                 $lunch_id = $lun->lunch_id;
             }
             //Snacks
@@ -65,7 +68,7 @@ class DashboardController extends Controller
             $snack_foods = [];
 
             foreach($snacks as $snc){
-                $snack_foods[] = get_dashboard_meals_food($snc->food_id);
+                $snack_foods[] = get_dashboard_meals_food($snc->food_id, 'snacks');
                 $snack_id = $snc->snack_id;
             }
             //Dinner
@@ -73,7 +76,7 @@ class DashboardController extends Controller
             $dinner_foods = [];
 
             foreach($dinners as $dinr){
-                $dinner_foods[] = get_dashboard_meals_food($dinr->food_id);
+                $dinner_foods[] = get_dashboard_meals_food($dinr->food_id, 'dinner');
                 $dinner_id = $dinr->dinner_id;
             }
 
@@ -93,7 +96,16 @@ class DashboardController extends Controller
             }
 
             //Water
-            $water = Water::whereYear('date', $date->year)->whereMonth('date', $date->month)->whereDay('date', $date->day)->where('user_id', api_user()->id)->first();
+            $water = [];
+            $getWater = Water::whereYear('date', $date->year)->whereMonth('date', $date->month)->whereDay('date', $date->day)->where('user_id', api_user()->id)->first();
+            $waterSetting = WaterSetting::where('user_id', api_user()->id)->first();
+
+            $water = [
+                'glass' => $getWater ? $getWater->glass : 0,
+                'goal_glass' => round($waterSetting->goal / $waterSetting->pot_capacity),
+                'drunk' => $getWater ? $getWater->drunk . ' fl oz' : '0 fl oz',
+                'goal' => $waterSetting->goal . ' fl oz',
+            ];
 
             $calories_left = $total_calories - $calories_eaten;
 
@@ -135,11 +147,8 @@ class DashboardController extends Controller
                     ],
                 ],
                 'exercise' => $exercises,
-                'water' => [
-                    'total' => $water ? $water->drunk : 0,
-                    'goal' => $water ? $water->goal : 0,
-                    'glass' => $water ? ($water->drunk / $water->pot_capacity) : 0,
-                ],
+                'water' => $water,
+                'measurements' => $this->getMeasurement($request),
             ]);
         } catch (Exception $ex) {
             return response($ex->getMessage());
@@ -268,6 +277,109 @@ class DashboardController extends Controller
                 'Potassium' => 0,
                 'Zinc' => 0,
             ]);
+        } catch (Exception $ex) {
+            return response($ex->getMessage());
+        }
+    }
+
+    private function getMeasurement($request)
+    {
+        try {
+            $user = User::find(api_user()->id);
+
+            $weight = $user->current_weight_unit == 'kg' ? ($user->current_weight * 2.20462) : $user->current_weight;
+            $target_weight = $user->target_weight_unit == 'kg' ? ($user->target_weight * 2.20462) : $user->target_weight;
+
+            $weight = round($weight, 1);
+            $target_weight = round($target_weight, 1);
+
+            $weight = is_numeric($weight) && floor($weight) == $weight ? $weight . '.0' : $weight;
+            $target_weight = is_numeric($target_weight) && floor($target_weight) == $target_weight ? $target_weight . '.0' : $target_weight;
+
+            $data = [
+                'weight' => $weight . ' lb',
+                'target_weight' => $target_weight . ' lb',
+            ];
+
+            return $data;
+
+        } catch (Exception $ex) {
+            return response($ex->getMessage());
+        }
+    }
+
+    public function updateMeasurement(Request $request)
+    {
+        $rules = [
+            'weight' => 'required',
+        ];
+        $validator = Validator::make($request->all(), $rules);
+        if ($validator->fails()) {
+            return response()->json($validator->errors(), 400);
+        }
+
+        try {
+            $user = User::find(api_user()->id);
+            if ($user->current_weight_unit == 'kg') {
+                $weight = $request->weight / 2.20462;
+            } else {
+                $weight = $request->weight;
+            }
+            $user->current_weight = $weight;
+            $user->save();
+
+            return response()->json(['result' => 'true', 'message' => 'Data updated successfully']);
+
+        } catch (Exception $ex) {
+            return response($ex->getMessage());
+        }
+    }
+
+    //Water
+    private function getWater($request)
+    {
+        try {
+            $water = Water::select('glass', 'drunk')->where('date', Carbon::parse($request->date)->format('Y-m-d'))->where('user_id', api_user()->id)->first();
+            $setting = WaterSetting::where('user_id', api_user()->id)->first();
+
+            $water->drunk = $water->drunk . ' fl oz';
+            $water->goal = $setting->goal . ' fl oz';
+            $water->goal_glass = round($setting->goal / $setting->pot_capacity);
+
+            return $water;
+        } catch (Exception $ex) {
+            return response($ex->getMessage());
+        }
+    }
+
+    public function addWater(Request $request)
+    {
+        $rules = [
+            'date' => 'required',
+        ];
+        $validator = Validator::make($request->all(), $rules);
+        if ($validator->fails()) {
+            return response()->json($validator->errors(), 400);
+        }
+
+        try {
+            $setting = WaterSetting::where('user_id', api_user()->id)->first();
+
+            $getData = Water::where('date', Carbon::parse($request->date)->format('Y-m-d'))->where('user_id', api_user()->id)->first();
+            if (!$getData) {
+                $water = new Water();
+                $water->user_id = api_user()->id;
+                $water->glass = 1;
+                $water->drunk = $setting->pot_capacity;
+                $water->date = Carbon::parse($request->date)->format('Y-m-d');
+            } else {
+                $water = $getData;
+                $water->drunk += $setting->pot_capacity;
+                $water->glass += 1;
+            }
+            $water->save();
+
+            return response()->json(['result' => 'true', 'message' => 'Water added successfully']);
         } catch (Exception $ex) {
             return response($ex->getMessage());
         }

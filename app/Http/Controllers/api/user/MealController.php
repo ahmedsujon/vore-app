@@ -38,7 +38,7 @@ class MealController extends Controller
                     $breakfast_foods = BreakfastFood::select('id', 'food_id', 'calories', 'protein', 'crabs', 'fat', 'quantity', 'serving_size')->where('breakfast_id', $breakfast->id)->get();
 
                     foreach($breakfast_foods as $food){
-                        $foods[] = get_meals_food($food);
+                        $foods[] = get_meals_food($food, 'breakfast');
                     }
 
                     $breakfast->total_calories = $breakfast_foods->sum('calories');
@@ -119,7 +119,7 @@ class MealController extends Controller
                 $breakfast_foods = BreakfastFood::select('id', 'food_id', 'calories', 'protein', 'crabs', 'fat', 'quantity', 'serving_size')->where('breakfast_id', $breakfast->id)->get();
 
                 foreach($breakfast_foods as $food){
-                    $foods[] = get_meals_food($food);
+                    $foods[] = get_meals_food($food, 'breakfast');
                 }
 
                 $breakfast->total_calories = $breakfast_foods->sum('calories');
@@ -172,7 +172,7 @@ class MealController extends Controller
                     $lunch_foods = LunchFood::select('id', 'food_id', 'calories', 'protein', 'crabs', 'fat', 'quantity', 'serving_size')->where('lunch_id', $lunch->id)->get();
 
                     foreach($lunch_foods as $food){
-                        $foods[] = get_meals_food($food);
+                        $foods[] = get_meals_food($food, 'lunch');
                     }
 
                     $lunch->total_calories = $lunch_foods->sum('calories');
@@ -253,7 +253,7 @@ class MealController extends Controller
                 $lunch_foods = LunchFood::select('id', 'food_id', 'calories', 'protein', 'crabs', 'fat', 'quantity', 'serving_size')->where('lunch_id', $lunch->id)->get();
 
                 foreach($lunch_foods as $food){
-                    $foods[] = get_meals_food($food);
+                    $foods[] = get_meals_food($food, 'lunch');
                 }
 
                 $lunch->total_calories = $lunch_foods->sum('calories');
@@ -306,7 +306,7 @@ class MealController extends Controller
                     $snack_foods = SnackFood::select('id', 'food_id', 'calories', 'protein', 'crabs', 'fat', 'quantity', 'serving_size')->where('snack_id', $snack->id)->get();
 
                     foreach($snack_foods as $food){
-                        $foods[] = get_meals_food($food);
+                        $foods[] = get_meals_food($food, 'snacks');
                     }
 
                     $snack->total_calories = $snack_foods->sum('calories');
@@ -387,7 +387,7 @@ class MealController extends Controller
                 $snack_foods = SnackFood::select('id', 'food_id', 'calories', 'protein', 'crabs', 'fat', 'quantity', 'serving_size')->where('snack_id', $snack->id)->get();
 
                 foreach($snack_foods as $food){
-                    $foods[] = get_meals_food($food);
+                    $foods[] = get_meals_food($food, 'snacks');
                 }
 
                 $snack->total_calories = $snack_foods->sum('calories');
@@ -440,7 +440,7 @@ class MealController extends Controller
                     $dinner_foods = DinnerFood::select('id', 'food_id', 'calories', 'protein', 'crabs', 'fat', 'quantity', 'serving_size')->where('dinner_id', $dinner->id)->get();
 
                     foreach($dinner_foods as $food){
-                        $foods[] = get_meals_food($food);
+                        $foods[] = get_meals_food($food, 'dinner');
                     }
 
                     $dinner->total_calories = $dinner_foods->sum('calories');
@@ -521,7 +521,7 @@ class MealController extends Controller
                 $dinner_foods = DinnerFood::select('id', 'food_id', 'calories', 'protein', 'crabs', 'fat', 'quantity', 'serving_size')->where('dinner_id', $dinner->id)->get();
 
                 foreach($dinner_foods as $food){
-                    $foods[] = get_meals_food($food);
+                    $foods[] = get_meals_food($food, 'dinner');
                 }
 
                 $dinner->total_calories = $dinner_foods->sum('calories');
