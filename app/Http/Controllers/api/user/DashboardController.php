@@ -138,11 +138,8 @@ class DashboardController extends Controller
                     ],
                 ],
                 'exercise' => $exercises,
-                'water' => [
-                    'total' => $water ? $water->drunk : 0,
-                    'goal' => $water ? $water->goal : 0,
-                    'glass' => $water ? ($water->drunk / $water->pot_capacity) : 0,
-                ],
+                'water' => $this->getWater($request),
+                'measurements' => $this->getMeasurement($request),
             ]);
         } catch (Exception $ex) {
             return response($ex->getMessage());
@@ -276,7 +273,7 @@ class DashboardController extends Controller
         }
     }
 
-    public function getMeasurement(Request $request)
+    private function getMeasurement($request)
     {
         try {
             $user = User::find(api_user()->id);
@@ -295,7 +292,7 @@ class DashboardController extends Controller
                 'target_weight' => $target_weight . ' lb',
             ];
 
-            return response()->json($data);
+            return $data;
 
         } catch (Exception $ex) {
             return response($ex->getMessage());
@@ -330,7 +327,7 @@ class DashboardController extends Controller
     }
 
     //Water
-    public function getWater(Request $request)
+    private function getWater($request)
     {
         try {
             $water = Water::select('glass', 'drunk')->where('date', Carbon::parse($request->date)->format('Y-m-d'))->where('user_id', api_user()->id)->first();
@@ -338,8 +335,9 @@ class DashboardController extends Controller
 
             $water->drunk = $water->drunk . ' fl oz';
             $water->goal = $setting->goal . ' fl oz';
+            $water->goal_glass = round($setting->goal / $setting->pot_capacity);
 
-            return response()->json($water);
+            return $water;
         } catch (Exception $ex) {
             return response($ex->getMessage());
         }
