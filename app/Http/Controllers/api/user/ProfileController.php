@@ -6,6 +6,7 @@ use Exception;
 use App\Models\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Validator;
 
 class ProfileController extends Controller
 {
@@ -39,6 +40,47 @@ class ProfileController extends Controller
             ];
 
             return response()->json($data);
+        } catch (Exception $ex) {
+            return response($ex->getMessage());
+        }
+    }
+
+    public function updateProfile(Request $request)
+    {
+        $rules = [
+            'name' => 'required',
+            'goal' => 'required',
+            'gender' => 'required',
+            'target_weight' => 'required',
+            'target_weight_unit' => 'required',
+            'height' => 'required',
+            'birthdate' => 'required',
+            // 'avatar' => 'required',
+        ];
+        $validator = Validator::make($request->all(), $rules);
+        if ($validator->fails()) {
+            return response()->json($validator->errors(), 400);
+        }
+
+        try {
+            $user = User::find(api_user()->id);
+            $user->name = $request->name;
+            if ($request->username) {
+                $user->username = $request->username;
+            }
+            $user->goal = $request->goal;
+            $user->gender = $request->gender;
+            $user->target_weight = $request->target_weight;
+            $user->target_weight_unit = $request->target_weight_unit;
+            $user->height = $request->height;
+            $user->birth_date = $request->birthdate;
+            if($request->file('avatar')){
+                $user->avatar = uploadFile($request->file('avatar'), 'profile_images');
+            }
+            $user->save();
+
+            return response()->json(['result' => 'true', 'message' => 'Profile updated successfully']);
+
         } catch (Exception $ex) {
             return response($ex->getMessage());
         }

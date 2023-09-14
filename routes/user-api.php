@@ -78,5 +78,6 @@ Route::group(['middleware' => ['jwtUser:user-api', 'jwt.auth'], 'prefix' => 'v1/
     //profile
     Route::get('my-profile', [ProfileController::class, 'index']);
     Route::get('profile-details', [ProfileController::class, 'profileDetails']);
+    Route::post('update-profile', [ProfileController::class, 'updateProfile']);
 
 });
