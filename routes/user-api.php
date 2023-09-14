@@ -7,6 +7,7 @@ use App\Http\Controllers\api\user\auth\AuthenticationController;
 use App\Http\Controllers\api\user\auth\UserResetPasswordController;
 use App\Http\Controllers\api\user\FoodController;
 use App\Http\Controllers\api\user\MealController;
+use App\Http\Controllers\api\user\ProfileController;
 use App\Http\Controllers\api\user\WaterController;
 
 Route::post('v1/login', [AuthenticationController::class, 'login']);
@@ -73,5 +74,9 @@ Route::group(['middleware' => ['jwtUser:user-api', 'jwt.auth'], 'prefix' => 'v1/
     Route::get('user-activity', [ActivityController::class, 'userActivityDetails']);
     Route::post('user-activity/add', [ActivityController::class, 'addUserActivity']);
     Route::get('user-activity/delete', [ActivityController::class, 'deleteUserActivity']);
+
+    //profile
+    Route::get('my-profile', [ProfileController::class, 'index']);
+    Route::get('profile-details', [ProfileController::class, 'profileDetails']);
 
 });
