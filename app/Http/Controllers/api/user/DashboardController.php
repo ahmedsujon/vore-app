@@ -52,7 +52,7 @@ class DashboardController extends Controller
             $breakfast_foods = [];
 
             foreach($breakfasts as $bFast){
-                $breakfast_foods[] = get_dashboard_meals_food($bFast->food_id);
+                $breakfast_foods[] = get_dashboard_meals_food($bFast->food_id, 'breakfast');
                 $breakfast_id = $bFast->breakfast_id;
             }
             //lunch
@@ -60,7 +60,7 @@ class DashboardController extends Controller
             $lunch_foods = [];
 
             foreach($lunches as $lun){
-                $lunch_foods[] = get_dashboard_meals_food($lun->food_id);
+                $lunch_foods[] = get_dashboard_meals_food($lun->food_id, 'lunch');
                 $lunch_id = $lun->lunch_id;
             }
             //Snacks
@@ -68,7 +68,7 @@ class DashboardController extends Controller
             $snack_foods = [];
 
             foreach($snacks as $snc){
-                $snack_foods[] = get_dashboard_meals_food($snc->food_id);
+                $snack_foods[] = get_dashboard_meals_food($snc->food_id, 'snacks');
                 $snack_id = $snc->snack_id;
             }
             //Dinner
@@ -76,7 +76,7 @@ class DashboardController extends Controller
             $dinner_foods = [];
 
             foreach($dinners as $dinr){
-                $dinner_foods[] = get_dashboard_meals_food($dinr->food_id);
+                $dinner_foods[] = get_dashboard_meals_food($dinr->food_id, 'dinner');
                 $dinner_id = $dinr->dinner_id;
             }
 
@@ -96,7 +96,16 @@ class DashboardController extends Controller
             }
 
             //Water
-            $water = Water::whereYear('date', $date->year)->whereMonth('date', $date->month)->whereDay('date', $date->day)->where('user_id', api_user()->id)->first();
+            $water = [];
+            $getWater = Water::whereYear('date', $date->year)->whereMonth('date', $date->month)->whereDay('date', $date->day)->where('user_id', api_user()->id)->first();
+            $waterSetting = WaterSetting::where('user_id', api_user()->id)->first();
+
+            $water = [
+                'glass' => $getWater ? $getWater->glass : 0,
+                'goal_glass' => round($waterSetting->goal / $waterSetting->pot_capacity),
+                'drunk' => $getWater ? $getWater->drunk . ' fl oz' : '0 fl oz',
+                'goal' => $waterSetting->goal . ' fl oz',
+            ];
 
             $calories_left = $total_calories - $calories_eaten;
 
@@ -138,7 +147,7 @@ class DashboardController extends Controller
                     ],
                 ],
                 'exercise' => $exercises,
-                'water' => $this->getWater($request),
+                'water' => $water,
                 'measurements' => $this->getMeasurement($request),
             ]);
         } catch (Exception $ex) {
