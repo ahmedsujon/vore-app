@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers\api\user;
 
-use App\Http\Controllers\Controller;
-use App\Models\User;
 use Exception;
+use Carbon\Carbon;
+use App\Models\User;
+use App\Models\Measurement;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
 
 class ProfileController extends Controller
@@ -127,10 +129,20 @@ class ProfileController extends Controller
             $change = 0;
             if ($current_weight > $starting_weight) {
                 $progress = ($current_weight - $starting_weight) . 'kg gained';
-                $change =($current_weight / $starting_weight) * 100;
+                $change = round(($current_weight / $starting_weight) * 100);
             } elseif ($current_weight < $starting_weight) {
                 $progress = ($starting_weight - $current_weight) . 'kg lost';
-                $change =($current_weight / $starting_weight) * 100;
+                $change = round(($current_weight / $starting_weight) * 100);
+            }
+
+            $graph_value = [];
+            $date = Carbon::today()->subDays(30);
+            $measurements = Measurement::where('user_id', api_user()->id)->where('date', '>', $date)->orderBy('date', 'ASC')->get();
+            foreach ($measurements as $key => $measurement) {
+                $graph_value[] = [
+                    'date' => $measurement->date,
+                    'weight' => $measurement->weight,
+                ];
             }
 
             $data = [
@@ -138,6 +150,7 @@ class ProfileController extends Controller
                 'start' => $starting_weight,
                 'current' => $current_weight,
                 'change' => $change,
+                'graph' => $graph_value,
             ];
 
             return response()->json($data);

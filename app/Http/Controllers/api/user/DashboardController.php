@@ -323,7 +323,7 @@ class DashboardController extends Controller
         try {
             $user = User::find(api_user()->id);
             if ($user->current_weight_unit == 'kg') {
-                $weight = $request->weight / 2.20462;
+                $weight = round(($request->weight / 2.20462), 1);
             } else {
                 $weight = $request->weight;
             }
@@ -333,12 +333,12 @@ class DashboardController extends Controller
             $getMeasurement = Measurement::where('user_id', api_user()->id)->where('date', Carbon::parse($request->date)->format('Y-m-d'))->first();
             if($getMeasurement){
                 $mes = $getMeasurement;
-                $mes->weight = $request->weight / 2.20462;
+                $mes->weight = round(($request->weight / 2.20462), 1);
             } else {
                 $mes = new Measurement();
                 $mes->user_id = api_user()->id;
                 $mes->date = $request->date;
-                $mes->weight = $request->weight / 2.20462;
+                $mes->weight = round(($request->weight / 2.20462), 1);
             }
             $mes->save();
 
