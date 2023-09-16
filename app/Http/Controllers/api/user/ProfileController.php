@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers\api\user;
 
-use Exception;
-use App\Models\User;
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\User;
+use Exception;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
 class ProfileController extends Controller
@@ -28,6 +28,26 @@ class ProfileController extends Controller
         try {
             $user = User::where('id', api_user()->id)->first();
 
+            if($user->current_weight_unit == 'lbs'){
+                $current_weight = round(($user->current_weight / 2.20462), 1);
+            } else {
+                $current_weight = $user->current_weight;
+            }
+            if($user->starting_weight_unit == 'lbs'){
+                $starting_weight = round(($user->starting_weight / 2.20462), 1);
+            } else {
+                $starting_weight = $user->starting_weight;
+            }
+
+            $progress = 'No Change';
+            if ($current_weight > $starting_weight) {
+                $progress = ($current_weight - $starting_weight) . 'kg gained';
+            } elseif ($current_weight < $starting_weight) {
+                $progress = ($starting_weight - $current_weight) . 'kg lost';
+            }
+
+
+
             $data = [
                 'name' => $user->name,
                 'username' => $user->username,
@@ -37,6 +57,7 @@ class ProfileController extends Controller
                 'weight' => ucfirst($user->gender),
                 'goal' => $user->goal,
                 'measurements' => $user->measurements,
+                'progress' => $progress,
             ];
 
             return response()->json($data);
@@ -74,7 +95,7 @@ class ProfileController extends Controller
             $user->target_weight_unit = $request->target_weight_unit;
             $user->height = $request->height;
             $user->birth_date = $request->birthdate;
-            if($request->file('avatar')){
+            if ($request->file('avatar')) {
                 $user->avatar = uploadFile($request->file('avatar'), 'profile_images');
             }
             $user->save();

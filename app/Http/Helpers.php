@@ -86,3 +86,5 @@ function uploadFile($file, $folder)
     $file_name = 'uploads/'.$folder.'/'.$fileName;
     return $file_name;
 }
+
+
