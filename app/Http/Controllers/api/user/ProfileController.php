@@ -191,4 +191,32 @@ class ProfileController extends Controller
             return response($ex->getMessage());
         }
     }
+
+    public function nutrientGoals(Request $request)
+    {
+        try {
+            $user = User::where('id', api_user()->id)->first();
+            $data = [
+                'crabs' => [
+                    'cal' => $user->crabs,
+                    'gram' => round($user->crabs / 4),
+                    'value' => 50,
+                ],
+                'protein' => [
+                    'cal' => $user->protein,
+                    'gram' => round($user->protein / 4),
+                    'value' => 30,
+                ],
+                'fat' => [
+                    'cal' => $user->fat,
+                    'gram' => round($user->fat / 9),
+                    'value' => 20,
+                ],
+            ];
+
+            return response()->json($data);
+        } catch (Exception $ex) {
+            return response($ex->getMessage());
+        }
+    }
 }

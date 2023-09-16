@@ -81,5 +81,6 @@ Route::group(['middleware' => ['jwtUser:user-api', 'jwt.auth'], 'prefix' => 'v1/
     Route::post('update-profile', [ProfileController::class, 'updateProfile']);
     Route::get('progress', [ProfileController::class, 'progress']);
     Route::get('my-goals', [ProfileController::class, 'myGoals']);
+    Route::get('nutrient-goals', [ProfileController::class, 'nutrientGoals']);
 
 });
