@@ -106,4 +106,43 @@ class ProfileController extends Controller
             return response($ex->getMessage());
         }
     }
+
+    public function progress(Request $request)
+    {
+        try {
+            $user = User::where('id', api_user()->id)->first();
+
+            if($user->current_weight_unit == 'lbs'){
+                $current_weight = round(($user->current_weight / 2.20462), 1);
+            } else {
+                $current_weight = $user->current_weight;
+            }
+            if($user->starting_weight_unit == 'lbs'){
+                $starting_weight = round(($user->starting_weight / 2.20462), 1);
+            } else {
+                $starting_weight = $user->starting_weight;
+            }
+
+            $progress = 'No Change';
+            $change = 0;
+            if ($current_weight > $starting_weight) {
+                $progress = ($current_weight - $starting_weight) . 'kg gained';
+                $change =($current_weight / $starting_weight) * 100;
+            } elseif ($current_weight < $starting_weight) {
+                $progress = ($starting_weight - $current_weight) . 'kg lost';
+                $change =($current_weight / $starting_weight) * 100;
+            }
+
+            $data = [
+                'progress' => $progress,
+                'start' => $starting_weight,
+                'current' => $current_weight,
+                'change' => $change,
+            ];
+
+            return response()->json($data);
+        } catch (Exception $ex) {
+            return response($ex->getMessage());
+        }
+    }
 }
