@@ -22,6 +22,8 @@ return new class extends Migration
             $table->string('avatar', 2000)->nullable();
             $table->string('goal', 2000)->nullable();
             $table->string('daily_activity_level', 2000)->nullable();
+            $table->double('starting_weight', 20,2)->default(0);
+            $table->enum('starting_weight_unit', ['lbs','kg'])->default('kg');
             $table->double('current_weight', 20,2)->default(0);
             $table->enum('current_weight_unit', ['lbs','kg'])->default('kg');
             $table->double('target_weight', 20,2)->default(0);
