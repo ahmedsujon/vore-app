@@ -35,6 +35,10 @@ class UserTableSeeder extends Seeder
                 $user->daily_activity_level = $faker->randomElement(['Couch Potato', 'Lightly Active', 'Modarately Active', 'Very Active', 'Extermely Active']);
                 $user->current_weight = $faker->randomElement(['70', '80', '75', '85']);
                 $user->current_weight_unit = 'kg';
+
+                $user->starting_weight = $user->current_weight;
+                $user->starting_weight_unit = 'kg';
+
                 $user->target_weight = $user->current_weight >= 80 ? $user->current_weight - 5 : $user->current_weight + 3;
                 $user->target_weight_unit = 'kg';
                 $user->height = $faker->randomElement(['5.6', '6.1', '5.8', '6.3']);

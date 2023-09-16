@@ -14,6 +14,7 @@ use Illuminate\Http\Request;
 use App\Models\BreakfastFood;
 use App\Models\UserActivityItem;
 use App\Http\Controllers\Controller;
+use App\Models\Measurement;
 use App\Models\User;
 use App\Models\WaterSetting;
 use Illuminate\Support\Facades\Validator;
@@ -312,6 +313,7 @@ class DashboardController extends Controller
     {
         $rules = [
             'weight' => 'required',
+            'date' => 'required',
         ];
         $validator = Validator::make($request->all(), $rules);
         if ($validator->fails()) {
@@ -321,12 +323,24 @@ class DashboardController extends Controller
         try {
             $user = User::find(api_user()->id);
             if ($user->current_weight_unit == 'kg') {
-                $weight = $request->weight / 2.20462;
+                $weight = round(($request->weight / 2.20462), 1);
             } else {
                 $weight = $request->weight;
             }
             $user->current_weight = $weight;
             $user->save();
+
+            $getMeasurement = Measurement::where('user_id', api_user()->id)->where('date', Carbon::parse($request->date)->format('Y-m-d'))->first();
+            if($getMeasurement){
+                $mes = $getMeasurement;
+                $mes->weight = round(($request->weight / 2.20462), 1);
+            } else {
+                $mes = new Measurement();
+                $mes->user_id = api_user()->id;
+                $mes->date = $request->date;
+                $mes->weight = round(($request->weight / 2.20462), 1);
+            }
+            $mes->save();
 
             return response()->json(['result' => 'true', 'message' => 'Data updated successfully']);
 
