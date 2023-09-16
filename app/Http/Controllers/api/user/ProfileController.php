@@ -158,4 +158,37 @@ class ProfileController extends Controller
             return response($ex->getMessage());
         }
     }
+
+    public function myGoals(Request $request)
+    {
+        try {
+            $user = User::where('id', api_user()->id)->first();
+
+            if($user->current_weight_unit == 'kg'){
+                $current_weight = round(($user->current_weight * 2.20462), 1);
+            } else {
+                $current_weight = $user->current_weight;
+            }
+            if($user->starting_weight_unit == 'kg'){
+                $starting_weight = round(($user->starting_weight * 2.20462), 1);
+            } else {
+                $starting_weight = $user->starting_weight;
+            }
+
+            $data = [
+                'goal' => $user->goal,
+                'starting_weight' => $starting_weight . ' lb',
+                'current_weight' => $current_weight . ' lb',
+                'activity_level' => $user->daily_activity_level,
+                'weekly_goal' => 0 . ' lb',
+                'calorie_goal' => $user->calories,
+                'steps' => 0,
+                'nutrient_goals' => 'Default',
+            ];
+
+            return response()->json($data);
+        } catch (Exception $ex) {
+            return response($ex->getMessage());
+        }
+    }
 }
