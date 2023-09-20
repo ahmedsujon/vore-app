@@ -139,7 +139,7 @@ class ProfileController extends Controller
             $date = Carbon::today()->subDays(30);
             $measurements = Measurement::where('user_id', api_user()->id)->where('date', '>', $date)->orderBy('date', 'ASC')->get();
             foreach ($measurements as $key => $measurement) {
-                $graph_value[] = [Carbon::parse($measurement->date)->format('d'),$measurement->weight];
+                $graph_value[] = [(int) Carbon::parse($measurement->date)->format('d'),$measurement->weight];
             }
 
             $data = [
