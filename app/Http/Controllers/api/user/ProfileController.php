@@ -56,10 +56,14 @@ class ProfileController extends Controller
                 'avatar' => url('/') . '/' . $user->avatar,
                 'height' => $user->height,
                 'weight' => ($user->current_weight_unit == 'kg' ? round(($user->current_weight * 2.20462), 1) : round($user->current_weight, 1)) . ' lbs',
-                'weight' => ucfirst($user->gender),
+                'gender' => ucfirst($user->gender),
                 'goal' => $user->goal,
                 'measurements' => $user->measurements,
                 'progress' => $progress,
+                'target_weight' => $user->target_weight,
+                'target_weight_unit' => $user->target_weight_unit,
+                'height' => $user->height,
+                'birthdate' => $user->birth_date,
             ];
 
             return response()->json($data);
@@ -136,7 +140,8 @@ class ProfileController extends Controller
             }
 
             $graph_value = [];
-            $date = Carbon::today()->subDays(30);
+            $day = $request->time ? $request->time : 30;
+            $date = Carbon::today()->subDays($day);
             $measurements = Measurement::where('user_id', api_user()->id)->where('date', '>', $date)->orderBy('date', 'ASC')->get();
             foreach ($measurements as $key => $measurement) {
                 $graph_value[] = [(int) Carbon::parse($measurement->date)->format('d'),$measurement->weight];
@@ -172,10 +177,17 @@ class ProfileController extends Controller
                 $starting_weight = $user->starting_weight;
             }
 
+            if($user->target_weight_unit == 'kg'){
+                $goal_weight = round(($user->target_weight * 2.20462), 1);
+            } else {
+                $goal_weight = $user->target_weight;
+            }
+
             $data = [
                 'goal' => $user->goal,
                 'starting_weight' => $starting_weight . ' lb',
                 'current_weight' => $current_weight . ' lb',
+                'goal_weight' => $goal_weight . ' lb',
                 'activity_level' => $user->daily_activity_level,
                 'weekly_goal' => 0 . ' lb',
                 'calorie_goal' => $user->calories,
