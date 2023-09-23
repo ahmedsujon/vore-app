@@ -176,10 +176,17 @@ class ProfileController extends Controller
                 $starting_weight = $user->starting_weight;
             }
 
+            if($user->target_weight_unit == 'kg'){
+                $goal_weight = round(($user->target_weight * 2.20462), 1);
+            } else {
+                $goal_weight = $user->target_weight;
+            }
+
             $data = [
                 'goal' => $user->goal,
                 'starting_weight' => $starting_weight . ' lb',
                 'current_weight' => $current_weight . ' lb',
+                'goal_weight' => $goal_weight . ' lb',
                 'activity_level' => $user->daily_activity_level,
                 'weekly_goal' => 0 . ' lb',
                 'calorie_goal' => $user->calories,
