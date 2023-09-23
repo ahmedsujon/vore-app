@@ -56,10 +56,14 @@ class ProfileController extends Controller
                 'avatar' => url('/') . '/' . $user->avatar,
                 'height' => $user->height,
                 'weight' => ($user->current_weight_unit == 'kg' ? round(($user->current_weight * 2.20462), 1) : round($user->current_weight, 1)) . ' lbs',
-                'weight' => ucfirst($user->gender),
+                'gender' => ucfirst($user->gender),
                 'goal' => $user->goal,
                 'measurements' => $user->measurements,
                 'progress' => $progress,
+                'target_weight' => $user->target_weight,
+                'target_weight_unit' => $user->target_weight_unit,
+                'height' => $user->height,
+                'birthdate' => $user->birth_date,
             ];
 
             return response()->json($data);
