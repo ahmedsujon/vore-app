@@ -111,19 +111,19 @@ class DashboardController extends Controller
             $calories_left = $total_calories - $calories_eaten;
 
             return response()->json([
-                'total_calories' => $total_calories,
-                'target_calories' => $total_calories,
-                'target_crabs' => $total_crabs,
-                'target_protein' => $total_protein,
-                'target_fat' => $total_fat,
+                'total_calories' => round($total_calories),
+                'target_calories' => round($total_calories),
+                'target_crabs' => round($total_crabs),
+                'target_protein' => round($total_protein),
+                'target_fat' => round($total_fat),
 
-                'calories_left' => $calories_left >= 0 ? $calories_left : 0,
-                'calories_eaten' => $calories_eaten,
-                'calories_burned' => $calories_burned,
+                'calories_left' => $calories_left >= 0 ? round($calories_left) : 0,
+                'calories_eaten' => round($calories_eaten),
+                'calories_burned' => round($calories_burned),
 
-                'crabs' => $crabs,
-                'protein' => $protein,
-                'fat' => $fat,
+                'crabs' => round($crabs),
+                'protein' => round($protein),
+                'fat' => round($fat),
 
                 'meals' => [
                     'breakfast' => [
