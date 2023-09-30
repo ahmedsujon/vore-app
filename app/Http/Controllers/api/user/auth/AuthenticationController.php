@@ -55,10 +55,32 @@ class AuthenticationController extends Controller
     {
         //Calorie Calculations
         $total_calorie = 0;
+        $activity_level = 1;
+
+        if($request->get('daily_activity_level') == 'Couch Potato'){
+            $activity_level = 1.2;
+        }
+
+        if($request->get('daily_activity_level') == 'Lightly Active'){
+            $activity_level = 1.375;
+        }
+
+        if($request->get('daily_activity_level') == 'Moderately Active'){
+            $activity_level = 1.55;
+        }
+
+        if($request->get('daily_activity_level') == 'Very Active'){
+            $activity_level = 1.725;
+        }
+
+        if($request->get('daily_activity_level') == 'Extremely Active'){
+            $activity_level = 1.9;
+        }
+
         if($request->get('gender') == 'male'){
-            $total_calorie = round($request->get('current_weight') * 24 * 0.85 * 1.2);
+            $total_calorie = round($request->get('current_weight') * 24 * 0.85 * $activity_level);
         } else {
-            $total_calorie = round($request->get('current_weight') * 21.6 * 0.77 * 1.55);
+            $total_calorie = round($request->get('current_weight') * 21.6 * 0.77 * $activity_level);
         }
 
         $user = User::find(Auth::guard('user-api')->user()->id);
