@@ -90,7 +90,7 @@ class ActivityController extends Controller
             $act_item = new UserActivityItem();
             $act_item->user_activity_id = $user_activity->id;
             $act_item->activity_id = $request->activity_id;
-            $act_item->calories = $request->calories;
+            $act_item->calories = $request->calories * $request->duration;
             $act_item->duration = $request->duration;
             $act_item->save();
 
