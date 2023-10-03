@@ -16,6 +16,7 @@ use App\Models\UserActivityItem;
 use App\Http\Controllers\Controller;
 use App\Models\Measurement;
 use App\Models\User;
+use App\Models\UserActivity;
 use App\Models\WaterSetting;
 use Illuminate\Support\Facades\Validator;
 
@@ -34,6 +35,8 @@ class DashboardController extends Controller
 
             $dinners = Dinner::join('dinner_foods', 'dinner_foods.dinner_id', 'dinners.id')->where('dinners.user_id', api_user()->id)->select('dinners.id as dinner_id', 'dinners.date as date',  'dinner_foods.calories as calories', 'dinner_foods.crabs as crabs', 'dinner_foods.protein as protein', 'dinner_foods.fat as fat', 'dinner_foods.food_id as food_id')->whereYear('date', $date->year)->whereMonth('date', $date->month)->whereDay('date', $date->day)->get();
 
+            $activity = UserActivity::where('user_id', api_user()->id)->whereYear('date', $date->year)->whereMonth('date', $date->month)->whereDay('date', $date->day)->first();
+
             //Over View
             $total_calories = api_user()->calories;
             $total_crabs = api_user()->crabs;
@@ -41,7 +44,7 @@ class DashboardController extends Controller
             $total_fat = api_user()->fat;
 
             $calories_eaten = $breakfasts->sum('calories') + $lunches->sum('calories') + $snacks->sum('calories') + $dinners->sum('calories');
-            $calories_burned = 0;
+            $calories_burned = UserActivityItem::where('user_activity_id', $activity->id)->get()->sum('calories');
             $crabs = $breakfasts->sum('crabs') + $lunches->sum('crabs') + $snacks->sum('crabs') + $dinners->sum('crabs');
             $protein = $breakfasts->sum('protein') + $lunches->sum('protein') + $snacks->sum('protein') + $dinners->sum('protein');
             $fat = $breakfasts->sum('fat') + $lunches->sum('fat') + $snacks->sum('fat') + $dinners->sum('fat');
