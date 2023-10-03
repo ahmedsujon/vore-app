@@ -248,16 +248,16 @@ class DashboardController extends Controller
                     ],
                 ],
                 'crabs_stg' => [
-                    'status' => round(($crabs / $total_crabs) * 100),
-                    'goal' => 100,
+                    'status' => round(($crabs / $total_crabs) * 50) > 50 ? '50' : round(($crabs / $total_crabs) * 50),
+                    'goal' => 50,
                 ],
                 'protein_stg' => [
-                    'status' => round(($protein / $total_protein) * 100),
-                    'goal' => 100,
+                    'status' => round(($protein / $total_protein) * 30) > 30 ? '30' : round(($protein / $total_protein) * 30),
+                    'goal' => 30,
                 ],
                 'fat_stg' => [
-                    'status' => round(($fat / $total_fat) * 100),
-                    'goal' => 100,
+                    'status' => round(($fat / $total_fat) * 20) > 20 ? '20' : round(($fat / $total_fat) * 20),
+                    'goal' => 20,
                 ],
                 'Dietary Fiber' => 0,
                 'Total Sugars' => 0,
