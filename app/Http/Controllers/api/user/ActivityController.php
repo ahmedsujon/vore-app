@@ -35,6 +35,7 @@ class ActivityController extends Controller
             'name' => 'required',
             'calories' => 'required',
             'duration' => 'required',
+            'date' => 'required',
         ];
         $validator = Validator::make($request->all(), $rules);
         if ($validator->fails()) {
@@ -51,6 +52,24 @@ class ActivityController extends Controller
                 $activity->save();
 
                 $activity_id = Activity::find($activity->id)->id;
+
+                $getUserActivity = UserActivity::where('date', Carbon::parse($request->date)->format('Y-m-d'))->where('user_id', api_user()->id)->first();
+                if (!$getUserActivity) {
+                    $user_activity = new UserActivity();
+                    $user_activity->user_id = api_user()->id;
+                    $user_activity->date = $request->date;
+                    $user_activity->status = 1;
+                    $user_activity->save();
+                } else {
+                    $user_activity = $getUserActivity;
+                }
+
+                $act_item = new UserActivityItem();
+                $act_item->user_activity_id = $user_activity->id;
+                $act_item->activity_id = $activity_id;
+                $act_item->calories = $request->calories;
+                $act_item->duration = $request->duration;
+                $act_item->save();
 
                 return response()->json(['result' => 'true', 'message' => 'New activity added successfully', 'activity_id' => $activity_id]);
             } else {

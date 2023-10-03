@@ -44,7 +44,7 @@ class DashboardController extends Controller
             $total_fat = api_user()->fat;
 
             $calories_eaten = $breakfasts->sum('calories') + $lunches->sum('calories') + $snacks->sum('calories') + $dinners->sum('calories');
-            $calories_burned = UserActivityItem::where('user_activity_id', $activity->id)->get()->sum('calories');
+            $calories_burned = $activity ? UserActivityItem::where('user_activity_id', $activity->id)->get()->sum('calories') : 0;
             $crabs = $breakfasts->sum('crabs') + $lunches->sum('crabs') + $snacks->sum('crabs') + $dinners->sum('crabs');
             $protein = $breakfasts->sum('protein') + $lunches->sum('protein') + $snacks->sum('protein') + $dinners->sum('protein');
             $fat = $breakfasts->sum('fat') + $lunches->sum('fat') + $snacks->sum('fat') + $dinners->sum('fat');
