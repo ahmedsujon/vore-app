@@ -16,6 +16,7 @@ use App\Models\UserActivityItem;
 use App\Http\Controllers\Controller;
 use App\Models\Measurement;
 use App\Models\User;
+use App\Models\UserActivity;
 use App\Models\WaterSetting;
 use Illuminate\Support\Facades\Validator;
 
@@ -34,6 +35,8 @@ class DashboardController extends Controller
 
             $dinners = Dinner::join('dinner_foods', 'dinner_foods.dinner_id', 'dinners.id')->where('dinners.user_id', api_user()->id)->select('dinners.id as dinner_id', 'dinners.date as date',  'dinner_foods.calories as calories', 'dinner_foods.crabs as crabs', 'dinner_foods.protein as protein', 'dinner_foods.fat as fat', 'dinner_foods.food_id as food_id')->whereYear('date', $date->year)->whereMonth('date', $date->month)->whereDay('date', $date->day)->get();
 
+            $activity = UserActivity::where('user_id', api_user()->id)->whereYear('date', $date->year)->whereMonth('date', $date->month)->whereDay('date', $date->day)->first();
+
             //Over View
             $total_calories = api_user()->calories;
             $total_crabs = api_user()->crabs;
@@ -41,7 +44,7 @@ class DashboardController extends Controller
             $total_fat = api_user()->fat;
 
             $calories_eaten = $breakfasts->sum('calories') + $lunches->sum('calories') + $snacks->sum('calories') + $dinners->sum('calories');
-            $calories_burned = 0;
+            $calories_burned = $activity ? UserActivityItem::where('user_activity_id', $activity->id)->get()->sum('calories') : 0;
             $crabs = $breakfasts->sum('crabs') + $lunches->sum('crabs') + $snacks->sum('crabs') + $dinners->sum('crabs');
             $protein = $breakfasts->sum('protein') + $lunches->sum('protein') + $snacks->sum('protein') + $dinners->sum('protein');
             $fat = $breakfasts->sum('fat') + $lunches->sum('fat') + $snacks->sum('fat') + $dinners->sum('fat');
@@ -111,19 +114,19 @@ class DashboardController extends Controller
             $calories_left = $total_calories - $calories_eaten;
 
             return response()->json([
-                'total_calories' => $total_calories,
-                'target_calories' => $total_calories,
-                'target_crabs' => $total_crabs,
-                'target_protein' => $total_protein,
-                'target_fat' => $total_fat,
+                'total_calories' => round($total_calories),
+                'target_calories' => round($total_calories),
+                'target_crabs' => round($total_crabs),
+                'target_protein' => round($total_protein),
+                'target_fat' => round($total_fat),
 
-                'calories_left' => $calories_left >= 0 ? $calories_left : 0,
-                'calories_eaten' => $calories_eaten,
-                'calories_burned' => $calories_burned,
+                'calories_left' => $calories_left >= 0 ? round($calories_left) : 0,
+                'calories_eaten' => round($calories_eaten),
+                'calories_burned' => round($calories_burned),
 
-                'crabs' => $crabs,
-                'protein' => $protein,
-                'fat' => $fat,
+                'crabs' => round($crabs),
+                'protein' => round($protein),
+                'fat' => round($fat),
 
                 'meals' => [
                     'breakfast' => [
@@ -245,16 +248,16 @@ class DashboardController extends Controller
                     ],
                 ],
                 'crabs_stg' => [
-                    'status' => round(($crabs / $total_crabs) * 100),
-                    'goal' => 100,
+                    'status' => round(($crabs / $total_crabs) * 50) > 50 ? '50' : round(($crabs / $total_crabs) * 50),
+                    'goal' => 50,
                 ],
                 'protein_stg' => [
-                    'status' => round(($protein / $total_protein) * 100),
-                    'goal' => 100,
+                    'status' => round(($protein / $total_protein) * 30) > 30 ? '30' : round(($protein / $total_protein) * 30),
+                    'goal' => 30,
                 ],
                 'fat_stg' => [
-                    'status' => round(($fat / $total_fat) * 100),
-                    'goal' => 100,
+                    'status' => round(($fat / $total_fat) * 20) > 20 ? '20' : round(($fat / $total_fat) * 20),
+                    'goal' => 20,
                 ],
                 'Dietary Fiber' => 0,
                 'Total Sugars' => 0,
