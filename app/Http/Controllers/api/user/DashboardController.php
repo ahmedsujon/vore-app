@@ -380,6 +380,7 @@ class DashboardController extends Controller
         }
 
         try {
+            $amount = 0;
             $setting = WaterSetting::where('user_id', api_user()->id)->first();
 
             $getData = Water::where('date', Carbon::parse($request->date)->format('Y-m-d'))->where('user_id', api_user()->id)->first();
@@ -389,14 +390,22 @@ class DashboardController extends Controller
                 $water->glass = 1;
                 $water->drunk = $setting->pot_capacity;
                 $water->date = Carbon::parse($request->date)->format('Y-m-d');
+
+                $water->save();
+
+                $amount = $water->drunk;
             } else {
                 $water = $getData;
                 $water->drunk += $setting->pot_capacity;
                 $water->glass += 1;
-            }
-            $water->save();
 
-            return response()->json(['result' => 'true', 'message' => 'Water added successfully']);
+                $water->save();
+
+                $amount = $getData->drunk;
+            }
+
+
+            return response()->json(['result' => 'true', 'message' => 'Water added successfully', 'amount' => $amount]);
         } catch (Exception $ex) {
             return response($ex->getMessage());
         }
