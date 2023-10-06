@@ -77,7 +77,7 @@ class AuthenticationController extends Controller
             $activity_level = 1.9;
         }
 
-        if($request->get('gender') == 'male'){
+        if($request->get('gender') == 'Male'){
             $total_calorie = round($request->get('current_weight') * 24 * 0.85 * $activity_level);
         } else {
             $total_calorie = round($request->get('current_weight') * 21.6 * 0.77 * $activity_level);
