@@ -77,19 +77,25 @@ class AuthenticationController extends Controller
             $activity_level = 1.9;
         }
 
-        if($request->get('gender') == 'Male'){
-            $total_calorie = round($request->get('current_weight') * 24 * 0.85 * $activity_level);
+        if ($request->get('current_weight_unit') == 'lbs') {
+            $current_weight = $request->get('current_weight') * 0.453592;
         } else {
-            $total_calorie = round($request->get('current_weight') * 21.6 * 0.77 * $activity_level);
+            $current_weight = $request->get('current_weight');
+        }
+
+        if($request->get('gender') == 'Male'){
+            $total_calorie = round($current_weight * 24 * 0.85 * $activity_level);
+        } else {
+            $total_calorie = round($current_weight * 21.6 * 0.77 * $activity_level);
         }
 
         $user = User::find(Auth::guard('user-api')->user()->id);
         $user->gender = $request->get('gender');
         $user->goal = $request->get('goal');
         $user->daily_activity_level = $request->get('daily_activity_level');
-        $user->starting_weight = $request->get('current_weight');
+        $user->starting_weight = $current_weight;
         $user->starting_weight_unit = $request->get('current_weight_unit');
-        $user->current_weight = $request->get('current_weight');
+        $user->current_weight = $current_weight;
         $user->current_weight_unit = $request->get('current_weight_unit');
         $user->target_weight = $request->get('target_weight');
         $user->target_weight_unit = $request->get('target_weight_unit');
