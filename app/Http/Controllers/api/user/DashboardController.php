@@ -124,9 +124,9 @@ class DashboardController extends Controller
                 'calories_eaten' => round($calories_eaten),
                 'calories_burned' => round($calories_burned),
 
-                'crabs' => round($crabs),
-                'protein' => round($protein),
-                'fat' => round($fat),
+                'crabs' => round($crabs) < 0 ? 0 : round($crabs),
+                'protein' => round($protein) < 0 ? 0 : round($protein),
+                'fat' => round($fat) < 0 ? 0 : round($fat),
 
                 'meals' => [
                     'breakfast' => [

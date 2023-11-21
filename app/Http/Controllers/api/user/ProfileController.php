@@ -17,7 +17,7 @@ class ProfileController extends Controller
         try {
             $user = User::select('name', 'username', 'avatar')->where('id', api_user()->id)->first();
 
-            $user->avatar = url('/') . '/' . $user->avatar;
+            $user->avatar = ($user->avatar ==  '') ? url('/') . '/' . 'assets/images/avatar.png' : url('/') . '/' . $user->avatar;
 
             return response()->json($user);
         } catch (Exception $ex) {
@@ -53,7 +53,7 @@ class ProfileController extends Controller
             $data = [
                 'name' => $user->name,
                 'username' => $user->username,
-                'avatar' => url('/') . '/' . $user->avatar,
+                'avatar' => ($user->avatar ==  '') ? url('/') . '/' . 'assets/images/avatar.png' : url('/') . '/' . $user->avatar,
                 'height' => $user->height,
                 'weight' => ($user->current_weight_unit == 'kg' ? round(($user->current_weight * 2.20462), 1) : round($user->current_weight, 1)) . ' lbs',
                 'gender' => ucfirst($user->gender),
