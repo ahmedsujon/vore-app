@@ -118,13 +118,13 @@ class ProfileController extends Controller
         try {
             $user = User::where('id', api_user()->id)->first();
 
-            if($user->current_weight_unit == 'lbs'){
-                $current_weight = round(($user->current_weight / 2.20462), 1);
+            if($user->current_weight_unit == 'kg'){
+                $current_weight = round(($user->current_weight * 2.20462), 1);
             } else {
                 $current_weight = $user->current_weight;
             }
-            if($user->starting_weight_unit == 'lbs'){
-                $starting_weight = round(($user->starting_weight / 2.20462), 1);
+            if($user->starting_weight_unit == 'kg'){
+                $starting_weight = round(($user->starting_weight * 2.20462), 1);
             } else {
                 $starting_weight = $user->starting_weight;
             }
@@ -132,10 +132,10 @@ class ProfileController extends Controller
             $progress = 'No Change';
             $change = 0;
             if ($current_weight > $starting_weight) {
-                $progress = ($current_weight - $starting_weight) . 'kg gained';
+                $progress = ($current_weight - $starting_weight) . ' lbs gained';
                 $change = round(($current_weight / $starting_weight) * 100);
             } elseif ($current_weight < $starting_weight) {
-                $progress = ($starting_weight - $current_weight) . 'kg lost';
+                $progress = ($starting_weight - $current_weight) . ' lbs lost';
                 $change = round(($current_weight / $starting_weight) * 100);
             }
 
