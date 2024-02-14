@@ -93,9 +93,9 @@ class AuthenticationController extends Controller
         $user->gender = $request->get('gender');
         $user->goal = $request->get('goal');
         $user->daily_activity_level = $request->get('daily_activity_level');
-        $user->starting_weight = $current_weight;
+        $user->starting_weight = $request->get('current_weight');
         $user->starting_weight_unit = $request->get('current_weight_unit');
-        $user->current_weight = $current_weight;
+        $user->current_weight = $request->get('current_weight');
         $user->current_weight_unit = $request->get('current_weight_unit');
         $user->target_weight = $request->get('target_weight');
         $user->target_weight_unit = $request->get('target_weight_unit');
