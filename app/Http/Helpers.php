@@ -2,8 +2,10 @@
 
 use Carbon\Carbon;
 use App\Models\Food;
+use App\Models\Admin;
 use Illuminate\Support\Facades\Auth;
 
+// Api
 function api_user(){
     return Auth::guard('user-api')->user();
 }
@@ -87,4 +89,60 @@ function uploadFile($file, $folder)
     return $file_name;
 }
 
+// Web
+function admin()
+{
+    return Auth::guard('admin')->user();
+}
+
+function getAdminByID($id)
+{
+    return Admin::find($id);
+}
+function loadingStateSm($key, $title)
+{
+    $loadingSpinner = '
+        <div wire:loading wire:target="' . $key . '" wire:key="' . $key . '"><span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> loading</div>
+        <div wire:loading.remove wire:target="' . $key . '" wire:key="' . $key . '">' . $title . '</div>
+    ';
+
+    return $loadingSpinner;
+}
+
+function loadingStateXs($key, $title)
+{
+    $loadingSpinner = '
+        <div wire:loading wire:target="' . $key . '" wire:key="' . $key . '"><span class="spinner-border spinner-border-xs align-middle" role="status" aria-hidden="true"></span></div>
+        <div wire:loading.remove>' . $title . '</div>
+    ';
+    return $loadingSpinner;
+}
+
+function loadingStateStatus($key, $title)
+{
+    $loadingSpinner = '
+        <div wire:loading wire:target="' . $key . '" wire:key="' . $key . '"><span class="spinner-border spinner-border-xs" role="status" aria-hidden="true"></span></div> ' . $title . '
+    ';
+    return $loadingSpinner;
+}
+
+function loadingStateWithText($key, $title)
+{
+    $loadingSpinner = '
+        <div wire:loading wire:target="' . $key . '" wire:key="' . $key . '"><span class="spinner-border spinner-border-sm align-middle" role="status" aria-hidden="true"></span> </div> ' . $title . '
+    ';
+
+    return $loadingSpinner;
+}
+
+function showErrorMessage($message, $file, $line){
+    if(env('APP_DEBUG') == 'true'){
+        $error_array = [
+            'Message' => $message,
+            'File' => $file,
+            'Line No' => $line
+        ];
+        return dd($error_array);
+    }
+}
 

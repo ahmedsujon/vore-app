@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\User;
+use App\Models\UserMeasurement;
 use App\Models\WaterSetting;
 use Faker\Factory as Faker;
 use Illuminate\Database\Seeder;
@@ -66,6 +67,17 @@ class UserTableSeeder extends Seeder
                 $water_setting->pot_type = 'glass';
                 $water_setting->goal = 80;
                 $water_setting->save();
+
+                $measurements = ["waist", "hips", "chest", "thighs", "upper_arms"];
+
+                foreach ($measurements as $value) {
+                    $mes = new UserMeasurement();
+                    $mes->user_id = $user->id;
+                    $mes->name = $value;
+                    $mes->unit = "in";
+                    $mes->value = 0;
+                    $mes->save();
+                }
             }
         }
     }
