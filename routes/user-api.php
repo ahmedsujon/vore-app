@@ -7,6 +7,7 @@ use App\Http\Controllers\api\user\auth\AuthenticationController;
 use App\Http\Controllers\api\user\auth\UserResetPasswordController;
 use App\Http\Controllers\api\user\FoodController;
 use App\Http\Controllers\api\user\MealController;
+use App\Http\Controllers\api\user\MeasurementController;
 use App\Http\Controllers\api\user\ProfileController;
 use App\Http\Controllers\api\user\WaterController;
 
@@ -82,5 +83,11 @@ Route::group(['middleware' => ['jwtUser:user-api', 'jwt.auth'], 'prefix' => 'v1/
     Route::get('progress', [ProfileController::class, 'progress']);
     Route::get('my-goals', [ProfileController::class, 'myGoals']);
     Route::get('nutrient-goals', [ProfileController::class, 'nutrientGoals']);
+
+    // Measurements
+    Route::get('my-measurements', [MeasurementController::class, 'allMeasurements']);
+    Route::post('my-measurements/add', [MeasurementController::class, 'addMeasurement']);
+    Route::get('my-measurements/edit', [MeasurementController::class, 'editMeasurement']);
+    Route::post('my-measurements/update', [MeasurementController::class, 'updateMeasurement']);
 
 });
