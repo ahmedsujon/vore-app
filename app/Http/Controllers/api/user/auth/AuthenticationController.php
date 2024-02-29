@@ -133,21 +133,21 @@ class AuthenticationController extends Controller
         $water_setting->goal = 80;
         $water_setting->save();
 
-        if ($user->measurements) {
-            $measurements = ["waist", "hips", "chest", "thighs", "upper_arms"];
-            foreach ($measurements as $value) {
-                $getData = UserMeasurement::where('name', $value)->where('user_id', api_user()->id)->first();
-                if ($getData) {
-                    $mes = UserMeasurement::find($getData->id);
-                } else {
-                    $mes = new UserMeasurement();
-                }
-                $mes->user_id = $user->id;
-                $mes->name = $value;
-                $mes->unit = $user->measurements_unit;
-                $mes->value = $user->measurements[$value];
-                $mes->save();
-            }
+
+        $measurements = ["Chest", "Hips", "Muscle Mass", "Waist", "Blood Glucose", "Blood Pressure", "Body Fat"];
+        foreach ($measurements as $key => $value) {
+            // $getData = UserMeasurement::where('name', $value)->where('user_id', api_user()->id)->first();
+            // if ($getData) {
+            //     $mes = UserMeasurement::find($getData->id);
+            // } else {
+                $mes = new UserMeasurement();
+            // }
+            $mes->user_id = $user->id;
+            $mes->name = $value;
+            $mes->unit = $user->measurements_unit;
+            $mes->value = $user->measurements[$value];
+            $mes->icon = ;
+            $mes->save();
         }
 
         return response()->json(['result' => 'true', 'message' => 'Data updated successfully']);
