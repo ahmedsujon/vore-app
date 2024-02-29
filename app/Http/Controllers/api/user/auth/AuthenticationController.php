@@ -133,21 +133,29 @@ class AuthenticationController extends Controller
         $water_setting->goal = 80;
         $water_setting->save();
 
-        if ($user->measurements) {
-            $measurements = ["waist", "hips", "chest", "thighs", "upper_arms"];
-            foreach ($measurements as $value) {
-                $getData = UserMeasurement::where('name', $value)->where('user_id', api_user()->id)->first();
-                if ($getData) {
-                    $mes = UserMeasurement::find($getData->id);
-                } else {
-                    $mes = new UserMeasurement();
-                }
-                $mes->user_id = $user->id;
-                $mes->name = $value;
-                $mes->unit = $user->measurements_unit;
-                $mes->value = $user->measurements[$value];
-                $mes->save();
+        $measurements = ["Chest", "Hips", "Muscle Mass", "Waist", "Blood Glucose", "Blood Pressure", "Body Fat"];
+        foreach ($measurements as $key => $value) {
+            $mes = new UserMeasurement();
+            $mes->user_id = $user->id;
+            $mes->name = $value;
+            $mes->unit = 'in';
+            $mes->value = 0;
+            if ($key == 0) {
+                $mes->icon = 'assets/app/measurements/chest.png';
+            } else if ($key == 1) {
+                $mes->icon = 'assets/app/measurements/hips.png';
+            } else if ($key == 2) {
+                $mes->icon = 'assets/app/measurements/muscle_mass.png';
+            } else if ($key == 3) {
+                $mes->icon = 'assets/app/measurements/waist.png';
+            } else if ($key == 4) {
+                $mes->icon = 'assets/app/measurements/blood_glucose.png';
+            } else if ($key == 5) {
+                $mes->icon = 'assets/app/measurements/blood_pressure.png';
+            } else if ($key == 6) {
+                $mes->icon = 'assets/app/measurements/body_fat.png';
             }
+            $mes->save();
         }
 
         return response()->json(['result' => 'true', 'message' => 'Data updated successfully']);
