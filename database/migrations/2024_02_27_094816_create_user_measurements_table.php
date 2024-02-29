@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('name')->nullable();
             $table->string('unit')->nullable();
             $table->double('value', 20,2)->default(0);
+            $table->string('icon')->nullable();
             $table->timestamps();
         });
     }
