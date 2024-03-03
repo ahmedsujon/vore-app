@@ -144,12 +144,6 @@ class ProfileController extends Controller
             $date = Carbon::today()->subDays($day);
             $measurements = Measurement::where('user_id', api_user()->id)->where('date', '>', $date)->orderBy('date', 'ASC')->get();
             foreach ($measurements as $key => $measurement) {
-                if($user->current_weight_unit == 'lbs'){
-                    $current_weight = round(($user->current_weight / 2.20462), 1);
-                } else {
-                    $current_weight = $user->current_weight;
-                }
-
                 $graph_value[] = [(int) Carbon::parse($measurement->date)->format('d'),$measurement->weight];
             }
 
