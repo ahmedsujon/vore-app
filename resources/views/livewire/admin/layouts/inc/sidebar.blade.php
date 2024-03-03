@@ -16,6 +16,21 @@
                         </a>
                     </li>
 
+                    <li>
+                        <a href="{{ route('admin.users') }}" class="waves-effect">
+                            <i class="bx bx-home-circle"></i>
+                            <span key="t-dashboard">Users</span>
+                        </a>
+                    </li>
+
+
+                    {{-- <li>
+                        <a href="{{ route('admin.measurements') }}" class="waves-effect">
+                            <i class="bx bx-home-circle"></i>
+                            <span key="t-dashboard">Measurements</span>
+                        </a>
+                    </li> --}}
+
                 </ul>
             </div>
             <!-- Sidebar -->
