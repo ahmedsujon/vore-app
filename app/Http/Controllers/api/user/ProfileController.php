@@ -43,9 +43,9 @@ class ProfileController extends Controller
 
             $progress = 'No Change';
             if ($current_weight > $starting_weight) {
-                $progress = ($current_weight - $starting_weight) . 'kg gained';
+                $progress = (round(($current_weight - $starting_weight),2)) . 'kg gained';
             } elseif ($current_weight < $starting_weight) {
-                $progress = ($starting_weight - $current_weight) . 'kg lost';
+                $progress = (round(($starting_weight - $current_weight),2)) . 'kg lost';
             }
 
 
