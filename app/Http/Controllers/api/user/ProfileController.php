@@ -30,13 +30,13 @@ class ProfileController extends Controller
         try {
             $user = User::where('id', api_user()->id)->first();
 
-            if($user->current_weight_unit == 'lbs'){
-                $current_weight = round(($user->current_weight / 2.20462), 1);
+            if($user->current_weight_unit == 'kg'){
+                $current_weight = round(($user->current_weight * 2.20462), 1);
             } else {
                 $current_weight = $user->current_weight;
             }
-            if($user->starting_weight_unit == 'lbs'){
-                $starting_weight = round(($user->starting_weight / 2.20462), 1);
+            if($user->starting_weight_unit == 'kg'){
+                $starting_weight = round(($user->starting_weight * 2.20462), 1);
             } else {
                 $starting_weight = $user->starting_weight;
             }
