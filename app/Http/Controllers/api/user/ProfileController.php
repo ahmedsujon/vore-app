@@ -133,10 +133,10 @@ class ProfileController extends Controller
             $change = 0;
             if ($current_weight > $starting_weight) {
                 $progress = (round(($current_weight - $starting_weight), 2)) . ' lbs gained';
-                $change = round(($current_weight / $starting_weight) * 100);
+                $change = round(((($current_weight -$starting_weight) / $starting_weight) * 100), 2);
             } elseif ($current_weight < $starting_weight) {
                 $progress = (round(($starting_weight - $current_weight), 2)) . ' lbs lost';
-                $change = round(($current_weight / $starting_weight) * 100);
+                $change = abs(round(((($current_weight - $starting_weight) / $starting_weight) * 100), 2));
             }
 
             $graph_value = [];
