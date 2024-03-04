@@ -7,6 +7,7 @@ use Carbon\Carbon;
 use App\Models\User;
 use App\Models\Measurement;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
 
@@ -48,7 +49,11 @@ class ProfileController extends Controller
                 $progress = (round(($starting_weight - $current_weight),2)) . 'lbs lost';
             }
 
-
+            $user_measurements = DB::table('user_measurements')->select('name', 'value')->where('user_id', api_user()->id)->get();
+            $measurements = [];
+            foreach ($user_measurements as $key => $user_mes) {
+                $measurements[$user_mes->name] = $user_mes->value;
+            }
 
             $data = [
                 'name' => $user->name,
@@ -58,7 +63,7 @@ class ProfileController extends Controller
                 'weight' => ($user->current_weight_unit == 'kg' ? round(($user->current_weight * 2.20462), 1) : round($user->current_weight, 1)) . ' lbs',
                 'gender' => ucfirst($user->gender),
                 'goal' => $user->goal,
-                'measurements' => $user->measurements,
+                'measurements' => $measurements,
                 'progress' => $progress,
                 'target_weight' => $user->target_weight,
                 'target_weight_unit' => $user->target_weight_unit,
