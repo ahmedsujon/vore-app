@@ -49,10 +49,10 @@ class ProfileController extends Controller
                 $progress = (round(($starting_weight - $current_weight),2)) . 'lbs lost';
             }
 
-            $user_measurements = DB::table('user_measurements')->select('name', 'value')->where('user_id', api_user()->id)->get();
+            $user_measurements = DB::table('user_measurements')->select('name', 'value', 'unit')->where('user_id', api_user()->id)->get();
             $measurements = [];
             foreach ($user_measurements as $key => $user_mes) {
-                $measurements[$user_mes->name] = $user_mes->value;
+                $measurements[$user_mes->name] = $user_mes->value . ' ' . $user_mes->unit;
             }
 
             $data = [
