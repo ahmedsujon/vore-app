@@ -69,11 +69,12 @@ class UserTableSeeder extends Seeder
                 $water_setting->save();
 
                 $measurements = ["Chest", "Hips", "Muscle Mass", "Waist", "Blood Glucose", "Blood Pressure", "Body Fat"];
+                $units = ["in", "in", "in", "kgs", "mg", "Lb", "kgs"];
                 foreach ($measurements as $key => $value) {
                     $mes = new UserMeasurement();
                     $mes->user_id = $user->id;
                     $mes->name = $value;
-                    $mes->unit = 'in';
+                    $mes->unit = $units[$key];
                     $mes->value = 0;
                     if ($key == 0) {
                         $mes->icon = 'assets/app/measurements/chest.png';
