@@ -7,6 +7,7 @@ use Carbon\Carbon;
 use App\Models\User;
 use App\Models\Measurement;
 use Illuminate\Http\Request;
+use App\Models\UserMeasurement;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
@@ -50,9 +51,15 @@ class ProfileController extends Controller
             }
 
             $user_measurements = DB::table('user_measurements')->select('name', 'value', 'unit')->where('user_id', api_user()->id)->get();
-            $measurements = [];
-            foreach ($user_measurements as $key => $user_mes) {
-                $measurements[$user_mes->name] = $user_mes->value . ' ' . $user_mes->unit;
+            // $measurements = [];
+            // foreach ($user_measurements as $key => $user_mes) {
+            //     $measurements[$user_mes->name] = $user_mes->value . ' ' . $user_mes->unit;
+            // }
+
+            $measurements = UserMeasurement::select('id', 'name', 'value', 'unit', 'icon', 'updated_at as measured_at')->where('user_id', api_user()->id)->get();
+
+            foreach ($measurements as $mes) {
+                $mes->icon = url('/') . '/' . $mes->icon;
             }
 
             $data = [
