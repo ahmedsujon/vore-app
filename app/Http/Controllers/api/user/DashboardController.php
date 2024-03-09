@@ -2,22 +2,22 @@
 
 namespace App\Http\Controllers\api\user;
 
-use Exception;
-use Carbon\Carbon;
-use App\Models\Lunch;
-use App\Models\Water;
-use App\Models\Dinner;
-use App\Models\Snacks;
+use App\Http\Controllers\Controller;
 use App\Models\Activity;
 use App\Models\Breakfast;
-use Illuminate\Http\Request;
-use App\Models\BreakfastFood;
-use App\Models\UserActivityItem;
-use App\Http\Controllers\Controller;
+use App\Models\Dinner;
+use App\Models\Food;
+use App\Models\Lunch;
 use App\Models\Measurement;
+use App\Models\Snacks;
 use App\Models\User;
 use App\Models\UserActivity;
+use App\Models\UserActivityItem;
+use App\Models\Water;
 use App\Models\WaterSetting;
+use Carbon\Carbon;
+use Exception;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
 class DashboardController extends Controller
@@ -27,13 +27,13 @@ class DashboardController extends Controller
         try {
             $date = Carbon::parse($request->filter_date);
 
-            $breakfasts = Breakfast::join('breakfast_foods', 'breakfast_foods.breakfast_id', 'breakfasts.id')->where('breakfasts.user_id', api_user()->id)->select('breakfasts.id as breakfast_id', 'breakfasts.date as date',  'breakfast_foods.calories as calories', 'breakfast_foods.crabs as crabs', 'breakfast_foods.protein as protein', 'breakfast_foods.fat as fat', 'breakfast_foods.food_id as food_id')->whereYear('date', $date->year)->whereMonth('date', $date->month)->whereDay('date', $date->day)->get();
+            $breakfasts = Breakfast::join('breakfast_foods', 'breakfast_foods.breakfast_id', 'breakfasts.id')->where('breakfasts.user_id', api_user()->id)->select('breakfasts.id as breakfast_id', 'breakfasts.date as date', 'breakfast_foods.calories as calories', 'breakfast_foods.crabs as crabs', 'breakfast_foods.protein as protein', 'breakfast_foods.fat as fat', 'breakfast_foods.food_id as food_id')->whereYear('date', $date->year)->whereMonth('date', $date->month)->whereDay('date', $date->day)->get();
 
-            $lunches = Lunch::join('lunch_foods', 'lunch_foods.lunch_id', 'lunches.id')->where('lunches.user_id', api_user()->id)->select('lunches.id as lunch_id', 'lunches.date as date',  'lunch_foods.calories as calories', 'lunch_foods.crabs as crabs', 'lunch_foods.protein as protein', 'lunch_foods.fat as fat', 'lunch_foods.food_id as food_id')->whereYear('date', $date->year)->whereMonth('date', $date->month)->whereDay('date', $date->day)->get();
+            $lunches = Lunch::join('lunch_foods', 'lunch_foods.lunch_id', 'lunches.id')->where('lunches.user_id', api_user()->id)->select('lunches.id as lunch_id', 'lunches.date as date', 'lunch_foods.calories as calories', 'lunch_foods.crabs as crabs', 'lunch_foods.protein as protein', 'lunch_foods.fat as fat', 'lunch_foods.food_id as food_id')->whereYear('date', $date->year)->whereMonth('date', $date->month)->whereDay('date', $date->day)->get();
 
-            $snacks = Snacks::join('snack_foods', 'snack_foods.snack_id', 'snacks.id')->where('snacks.user_id', api_user()->id)->select('snacks.id as snack_id', 'snacks.date as date',  'snack_foods.calories as calories', 'snack_foods.crabs as crabs', 'snack_foods.protein as protein', 'snack_foods.fat as fat', 'snack_foods.food_id as food_id')->whereYear('date', $date->year)->whereMonth('date', $date->month)->whereDay('date', $date->day)->get();
+            $snacks = Snacks::join('snack_foods', 'snack_foods.snack_id', 'snacks.id')->where('snacks.user_id', api_user()->id)->select('snacks.id as snack_id', 'snacks.date as date', 'snack_foods.calories as calories', 'snack_foods.crabs as crabs', 'snack_foods.protein as protein', 'snack_foods.fat as fat', 'snack_foods.food_id as food_id')->whereYear('date', $date->year)->whereMonth('date', $date->month)->whereDay('date', $date->day)->get();
 
-            $dinners = Dinner::join('dinner_foods', 'dinner_foods.dinner_id', 'dinners.id')->where('dinners.user_id', api_user()->id)->select('dinners.id as dinner_id', 'dinners.date as date',  'dinner_foods.calories as calories', 'dinner_foods.crabs as crabs', 'dinner_foods.protein as protein', 'dinner_foods.fat as fat', 'dinner_foods.food_id as food_id')->whereYear('date', $date->year)->whereMonth('date', $date->month)->whereDay('date', $date->day)->get();
+            $dinners = Dinner::join('dinner_foods', 'dinner_foods.dinner_id', 'dinners.id')->where('dinners.user_id', api_user()->id)->select('dinners.id as dinner_id', 'dinners.date as date', 'dinner_foods.calories as calories', 'dinner_foods.crabs as crabs', 'dinner_foods.protein as protein', 'dinner_foods.fat as fat', 'dinner_foods.food_id as food_id')->whereYear('date', $date->year)->whereMonth('date', $date->month)->whereDay('date', $date->day)->get();
 
             $activity = UserActivity::where('user_id', api_user()->id)->whereYear('date', $date->year)->whereMonth('date', $date->month)->whereDay('date', $date->day)->first();
 
@@ -55,7 +55,7 @@ class DashboardController extends Controller
             $breakfast_id = '';
             $breakfast_foods = [];
 
-            foreach($breakfasts as $bFast){
+            foreach ($breakfasts as $bFast) {
                 $breakfast_foods[] = get_dashboard_meals_food($bFast->food_id, 'breakfast');
                 $breakfast_id = $bFast->breakfast_id;
             }
@@ -63,7 +63,7 @@ class DashboardController extends Controller
             $lunch_id = '';
             $lunch_foods = [];
 
-            foreach($lunches as $lun){
+            foreach ($lunches as $lun) {
                 $lunch_foods[] = get_dashboard_meals_food($lun->food_id, 'lunch');
                 $lunch_id = $lun->lunch_id;
             }
@@ -71,7 +71,7 @@ class DashboardController extends Controller
             $snack_id = '';
             $snack_foods = [];
 
-            foreach($snacks as $snc){
+            foreach ($snacks as $snc) {
                 $snack_foods[] = get_dashboard_meals_food($snc->food_id, 'snacks');
                 $snack_id = $snc->snack_id;
             }
@@ -79,19 +79,18 @@ class DashboardController extends Controller
             $dinner_id = '';
             $dinner_foods = [];
 
-            foreach($dinners as $dinr){
+            foreach ($dinners as $dinr) {
                 $dinner_foods[] = get_dashboard_meals_food($dinr->food_id, 'dinner');
                 $dinner_id = $dinr->dinner_id;
             }
 
-
             //exercise
-            $all_exercises = UserActivityItem::join('user_activities', 'user_activity_items.user_activity_id', 'user_activities.id' )
+            $all_exercises = UserActivityItem::join('user_activities', 'user_activity_items.user_activity_id', 'user_activities.id')
                 ->select('user_activities.date as date', 'user_activity_items.*')
                 ->whereYear('date', $date->year)->whereMonth('date', $date->month)->whereDay('date', $date->day)->where('user_activities.user_id', api_user()->id)->get();
 
             $exercises = [];
-            foreach($all_exercises as $ex){
+            foreach ($all_exercises as $ex) {
                 $exercises[] = [
                     'id' => $ex->id,
                     'name' => Activity::find($ex->activity_id)->name,
@@ -132,22 +131,22 @@ class DashboardController extends Controller
                     'breakfast' => [
                         'id' => $breakfast_id,
                         'calories' => $breakfasts->sum('calories'),
-                        'foods' => $breakfast_foods
+                        'foods' => $breakfast_foods,
                     ],
                     'lunch' => [
                         'id' => $lunch_id,
                         'calories' => $lunches->sum('calories'),
-                        'foods' => $lunch_foods
+                        'foods' => $lunch_foods,
                     ],
                     'snacks' => [
                         'id' => $snack_id,
                         'calories' => $snacks->sum('calories'),
-                        'foods' => $snack_foods
+                        'foods' => $snack_foods,
                     ],
                     'dinner' => [
                         'id' => $dinner_id,
                         'calories' => $dinners->sum('calories'),
-                        'foods' => $dinner_foods
+                        'foods' => $dinner_foods,
                     ],
                 ],
                 'exercise' => $exercises,
@@ -164,13 +163,13 @@ class DashboardController extends Controller
         try {
             $date = Carbon::parse($request->date);
 
-            $breakfasts = Breakfast::join('breakfast_foods', 'breakfast_foods.breakfast_id', 'breakfasts.id')->where('breakfasts.user_id', api_user()->id)->select('breakfasts.id as breakfast_id', 'breakfasts.date as date',  'breakfast_foods.calories as calories', 'breakfast_foods.crabs as crabs', 'breakfast_foods.protein as protein', 'breakfast_foods.fat as fat', 'breakfast_foods.food_id as food_id')->whereYear('date', $date->year)->whereMonth('date', $date->month)->whereDay('date', $date->day)->get();
+            $breakfasts = Breakfast::join('breakfast_foods', 'breakfast_foods.breakfast_id', 'breakfasts.id')->where('breakfasts.user_id', api_user()->id)->select('breakfasts.id as breakfast_id', 'breakfasts.date as date', 'breakfast_foods.calories as calories', 'breakfast_foods.crabs as crabs', 'breakfast_foods.protein as protein', 'breakfast_foods.fat as fat', 'breakfast_foods.food_id as food_id')->whereYear('date', $date->year)->whereMonth('date', $date->month)->whereDay('date', $date->day)->get();
 
-            $lunches = Lunch::join('lunch_foods', 'lunch_foods.lunch_id', 'lunches.id')->where('lunches.user_id', api_user()->id)->select('lunches.id as lunch_id', 'lunches.date as date',  'lunch_foods.calories as calories', 'lunch_foods.crabs as crabs', 'lunch_foods.protein as protein', 'lunch_foods.fat as fat', 'lunch_foods.food_id as food_id')->whereYear('date', $date->year)->whereMonth('date', $date->month)->whereDay('date', $date->day)->get();
+            $lunches = Lunch::join('lunch_foods', 'lunch_foods.lunch_id', 'lunches.id')->where('lunches.user_id', api_user()->id)->select('lunches.id as lunch_id', 'lunches.date as date', 'lunch_foods.calories as calories', 'lunch_foods.crabs as crabs', 'lunch_foods.protein as protein', 'lunch_foods.fat as fat', 'lunch_foods.food_id as food_id')->whereYear('date', $date->year)->whereMonth('date', $date->month)->whereDay('date', $date->day)->get();
 
-            $snacks = Snacks::join('snack_foods', 'snack_foods.snack_id', 'snacks.id')->where('snacks.user_id', api_user()->id)->select('snacks.id as snack_id', 'snacks.date as date',  'snack_foods.calories as calories', 'snack_foods.crabs as crabs', 'snack_foods.protein as protein', 'snack_foods.fat as fat', 'snack_foods.food_id as food_id')->whereYear('date', $date->year)->whereMonth('date', $date->month)->whereDay('date', $date->day)->get();
+            $snacks = Snacks::join('snack_foods', 'snack_foods.snack_id', 'snacks.id')->where('snacks.user_id', api_user()->id)->select('snacks.id as snack_id', 'snacks.date as date', 'snack_foods.calories as calories', 'snack_foods.crabs as crabs', 'snack_foods.protein as protein', 'snack_foods.fat as fat', 'snack_foods.food_id as food_id')->whereYear('date', $date->year)->whereMonth('date', $date->month)->whereDay('date', $date->day)->get();
 
-            $dinners = Dinner::join('dinner_foods', 'dinner_foods.dinner_id', 'dinners.id')->where('dinners.user_id', api_user()->id)->select('dinners.id as dinner_id', 'dinners.date as date',  'dinner_foods.calories as calories', 'dinner_foods.crabs as crabs', 'dinner_foods.protein as protein', 'dinner_foods.fat as fat', 'dinner_foods.food_id as food_id')->whereYear('date', $date->year)->whereMonth('date', $date->month)->whereDay('date', $date->day)->get();
+            $dinners = Dinner::join('dinner_foods', 'dinner_foods.dinner_id', 'dinners.id')->where('dinners.user_id', api_user()->id)->select('dinners.id as dinner_id', 'dinners.date as date', 'dinner_foods.calories as calories', 'dinner_foods.crabs as crabs', 'dinner_foods.protein as protein', 'dinner_foods.fat as fat', 'dinner_foods.food_id as food_id')->whereYear('date', $date->year)->whereMonth('date', $date->month)->whereDay('date', $date->day)->get();
 
             //Total Goals
             $total_calories = api_user()->calories;
@@ -209,6 +208,37 @@ class DashboardController extends Controller
             $dinner_protein = $dinners->sum('protein');
             $dinner_fat = $dinners->sum('fat');
 
+            $all_foods = [];
+
+            foreach ($breakfasts as $br) {
+                $all_foods[] = $br->food_id;
+            }
+            foreach ($lunches as $lu) {
+                $all_foods[] = $lu->food_id;
+            }
+            foreach ($dinners as $din) {
+                $all_foods[] = $din->food_id;
+            }
+            foreach ($snacks as $sn) {
+                $all_foods[] = $sn->food_id;
+            }
+
+            $nutations = [];
+            if ($all_foods != []) {
+
+                $all_nutations = [];
+                foreach ($all_foods as $food) {
+                    $all_nutations[] = Food::find($food)->nutrations;
+                }
+
+                $collection = collect($all_nutations);
+                $nutations = collect(array_fill_keys(array_keys($all_nutations[0]), 0));
+                $collection->each(function ($item) use ($nutations) {
+                    foreach ($item as $key => $value) {
+                        $nutations[$key] += $value;
+                    }
+                });
+            }
 
             return response()->json([
                 'target_calories' => $total_calories,
@@ -259,27 +289,27 @@ class DashboardController extends Controller
                     'status' => $fat >= 100 ? 100 : round(($fat / $total_fat) * 100),
                     'goal' => 20,
                 ],
-                'Dietary Fiber' => 0,
-                'Total Sugars' => 0,
-                'Saturated Fat' => 0,
-                'Monounsaturated Fat' => 0,
-                'Polyunsaturated Fat' => 0,
-                'Trans Fat' => 0,
-                'Cholesterol' => 0,
-                'Sodium' => 0,
-                'Salt' => 0,
-                'Water' => 0,
-                'Alcohol' => 0,
-                'Vitamin B7' => 0,
-                'Vitamin C' => 0,
-                'Vitamin D' => 0,
-                'Vitamin E' => 0,
-                'Vitamin K' => 0,
-                'Calcium' => 0,
-                'Iron' => 0,
-                'Magnesium' => 0,
-                'Potassium' => 0,
-                'Zinc' => 0,
+                'Dietary Fiber' => isset($nutations['dietary_fiber']) ? $nutations['dietary_fiber'] : 0,
+                'Total Sugars' => isset($nutations['total_sugars']) ? $nutations['total_sugars'] : 0,
+                'Saturated Fat' => isset($nutations['saturated_fat']) ? $nutations['saturated_fat'] : 0,
+                'Monounsaturated Fat' => isset($nutations['monounsaturated_fat']) ? $nutations['monounsaturated_fat'] : 0,
+                'Polyunsaturated Fat' => isset($nutations['polyunsaturated_fat']) ? $nutations['polyunsaturated_fat'] : 0,
+                'Trans Fat' => isset($nutations['trans_fat']) ? $nutations['trans_fat'] : 0,
+                'Cholesterol' => isset($nutations['cholesterol']) ? $nutations['cholesterol'] : 0,
+                'Sodium' => isset($nutations['sodium']) ? $nutations['sodium'] : 0,
+                'Salt' => isset($nutations['salt']) ? $nutations['salt'] : 0,
+                'Water' => isset($nutations['water']) ? $nutations['water'] : 0,
+                'Alcohol' => isset($nutations['alcohol']) ? $nutations['alcohol'] : 0,
+                'Vitamin B7' => isset($nutations['vitamin_B7']) ? $nutations['vitamin_B7'] : 0,
+                'Vitamin C' => isset($nutations['vitamin_C']) ? $nutations['vitamin_C'] : 0,
+                'Vitamin D' => isset($nutations['vitamin_D']) ? $nutations['vitamin_D'] : 0,
+                'Vitamin E' => isset($nutations['vitamin_E']) ? $nutations['vitamin_E'] : 0,
+                'Vitamin K' => isset($nutations['vitamin_K']) ? $nutations['vitamin_K'] : 0,
+                'Calcium' => isset($nutations['calcium']) ? $nutations['calcium'] : 0,
+                'Iron' => isset($nutations['iron']) ? $nutations['iron'] : 0,
+                'Magnesium' => isset($nutations['magnesium']) ? $nutations['magnesium'] : 0,
+                'Potassium' => isset($nutations['potassium']) ? $nutations['potassium'] : 0,
+                'Zinc' => isset($nutations['zinc']) ? $nutations['zinc'] : 0,
             ]);
         } catch (Exception $ex) {
             return response($ex->getMessage());
@@ -334,7 +364,7 @@ class DashboardController extends Controller
             $user->save();
 
             $getMeasurement = Measurement::where('user_id', api_user()->id)->where('date', Carbon::parse($request->date)->format('Y-m-d'))->first();
-            if($getMeasurement){
+            if ($getMeasurement) {
                 $mes = $getMeasurement;
                 $mes->weight = round(($request->weight), 1);
             } else {
@@ -403,7 +433,6 @@ class DashboardController extends Controller
 
                 $amount = $getData->drunk;
             }
-
 
             return response()->json(['result' => 'true', 'message' => 'Water added successfully', 'amount' => $amount]);
         } catch (Exception $ex) {

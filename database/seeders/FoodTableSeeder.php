@@ -33,6 +33,29 @@ class FoodTableSeeder extends Seeder
             $food->protein = rand(20,100);
             $food->barcode = rand(10000000000,99999999999);
             $food->images = [];
+            $food->nutrations = [
+                "dietary_fiber" => rand(5,20),
+                "total_sugars" => rand(5,20),
+                "saturated_fat" => rand(5,20),
+                "monounsaturated_fat" => rand(5,20),
+                "polyunsaturated_fat" => rand(5,20),
+                "trans_fat" => rand(5,20),
+                "cholesterol" => rand(5,20),
+                "sodium" => rand(5,20),
+                "salt" => rand(5,20),
+                "water" => rand(5,20),
+                "alcohol" => rand(5,20),
+                "vitamin_B7" => rand(5,20),
+                "vitamin_C" => rand(5,20),
+                "vitamin_D" => rand(5,20),
+                "vitamin_E" => rand(5,20),
+                "vitamin_K" => rand(5,20),
+                "calcium" => rand(5,20),
+                "iron" => rand(5,20),
+                "magnesium" => rand(5,20),
+                "potassium" => rand(5,20),
+                "zinc" => rand(5,20)
+            ];
             $food->save();
         }
     }
