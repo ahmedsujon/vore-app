@@ -213,6 +213,85 @@ class ProfileController extends Controller
         }
     }
 
+    public function updateMyGoals(Request $request)
+    {
+        $rules = [
+            'daily_activity_level' => 'required',
+            'goal' => 'required',
+        ];
+        $validator = Validator::make($request->all(), $rules);
+        if ($validator->fails()) {
+            return response()->json($validator->errors(), 400);
+        }
+
+        try {
+            $user = User::find(api_user()->id);
+
+            //Calorie Calculations
+            $total_calorie = 0;
+            $activity_level = 1;
+
+            if ($request->get('daily_activity_level') == 'Couch Potato') {
+                $activity_level = 1.2;
+            }
+
+            if ($request->get('daily_activity_level') == 'Lightly Active') {
+                $activity_level = 1.375;
+            }
+
+            if ($request->get('daily_activity_level') == 'Moderately Active') {
+                $activity_level = 1.55;
+            }
+
+            if ($request->get('daily_activity_level') == 'Very Active') {
+                $activity_level = 1.725;
+            }
+
+            if ($request->get('daily_activity_level') == 'Extremely Active') {
+                $activity_level = 1.9;
+            }
+
+            if ($user->current_weight_unit == 'lbs') {
+                $current_weight = $user->current_weight * 0.453592;
+            } else {
+                $current_weight = $user->current_weight;
+            }
+
+            if ($user->gender == 'Male') {
+                $total_calorie = round($current_weight * 24 * 0.85 * $activity_level);
+            } else {
+                $total_calorie = round($current_weight * 21.6 * 0.77 * $activity_level);
+            }
+
+            $user->goal = $request->get('goal');
+            $user->daily_activity_level = $request->get('daily_activity_level');
+            $user->calories = $total_calorie;
+
+            if ($request->get('goal') == 'Maintain weight') {
+                $user->crabs = $total_calorie > 0 ? round((($total_calorie * 0.5) / 4)) : 0;
+                $user->protein = $total_calorie > 0 ? round((($total_calorie * 0.2) / 4)) : 0;
+                $user->fat = $total_calorie > 0 ? round((($total_calorie * 0.3) / 9)) : 0;
+            }
+            if ($request->get('goal') == 'Lose weight') {
+                $user->crabs = $total_calorie > 0 ? round(((($total_calorie - 1000) * 0.5) / 4)) : 0;
+                $user->protein = $total_calorie > 0 ? round(((($total_calorie - 1000) * 0.2) / 4)) : 0;
+                $user->fat = $total_calorie > 0 ? round(((($total_calorie - 1000) * 0.3) / 9)) : 0;
+            }
+            if ($request->get('goal') == 'Build muscle') {
+                $user->crabs = $total_calorie > 0 ? round(((($total_calorie + 500) * 0.5) / 4)) : 0;
+                $user->protein = $total_calorie > 0 ? round(((($total_calorie + 500) * 0.2) / 4)) : 0;
+                $user->fat = $total_calorie > 0 ? round(((($total_calorie + 500) * 0.3) / 9)) : 0;
+            }
+
+            $user->save();
+
+            return response()->json(['result' => 'true', 'message' => 'Goal updated successfully']);
+
+        } catch (Exception $ex) {
+            return response($ex->getMessage());
+        }
+    }
+
     public function nutrientGoals(Request $request)
     {
         try {
