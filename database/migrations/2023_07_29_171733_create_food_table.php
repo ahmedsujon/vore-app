@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->enum('added_by', ['user', 'admin'])->nullable();
             $table->bigInteger('user_id')->unsigned()->nullable();
+            $table->string('food_unique_id', 2048)->nullable();
             $table->string('name')->nullable();
             $table->string('slug')->nullable();
             $table->double('calories')->default(0)->comment('cal');

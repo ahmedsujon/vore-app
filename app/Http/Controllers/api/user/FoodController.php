@@ -45,31 +45,38 @@ class FoodController extends Controller
         }
 
         try {
-            $food = new Food();
-            $food->added_by = 'user';
-            $food->user_id = api_user()->id;
-            $food->name = $request->name;
-            $food->slug = Str::slug($request->name).'-'.Str::lower(Str::random(5));
-            $food->calories = $request->calories;
-            $food->crabs = $request->crabs;
-            $food->fat = $request->fat;
-            $food->protein = $request->protein;
-            $food->nutrations = $request->nutrations;
-            $food->barcode = $request->barcode;
+            $getFood = Food::where('food_unique_id', $request->food_unique_id)->first();
 
-            $uploaded_images = [];
-            if($request->file('images')){
-                foreach ($request->file('images') as $image) {
-                    $uploaded_images[] = uploadFile($image, 'foods');
+            if (!$getFood) {
+                $food = new Food();
+                $food->added_by = 'user';
+                $food->food_unique_id = $request->food_unique_id ? $request->food_unique_id : 'vore_food_' . Str::lower(Str::random(15));
+                $food->user_id = api_user()->id;
+                $food->name = $request->name;
+                $food->slug = Str::slug($request->name).'-'.Str::lower(Str::random(5));
+                $food->calories = $request->calories;
+                $food->crabs = $request->crabs;
+                $food->fat = $request->fat;
+                $food->protein = $request->protein;
+                $food->nutrations = $request->nutrations;
+                $food->barcode = $request->barcode;
+
+                $uploaded_images = [];
+                if($request->file('images')){
+                    foreach ($request->file('images') as $image) {
+                        $uploaded_images[] = uploadFile($image, 'foods');
+                    }
                 }
+
+
+                $food->images = $uploaded_images;
+                $food->save();
+
+
+                return response()->json(['result' => 'true', 'message' => 'Food added successfully', 'food_id'=>$food->id]);
+            } else {
+                return response()->json(['result' => 'true', 'message' => 'Food added successfully', 'food_id'=>$getFood->id]);
             }
-
-
-            $food->images = $uploaded_images;
-            $food->save();
-
-
-            return response()->json(['result' => 'true', 'message' => 'Food added successfully', 'food_id'=>$food->id]);
         } catch (Exception $ex) {
             return response($ex->getMessage());
         }
