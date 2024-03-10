@@ -47,6 +47,30 @@ class FoodController extends Controller
         try {
             $getFood = Food::where('food_unique_id', $request->food_unique_id)->first();
 
+            $demo_nutations = [
+                "dietary_fiber" => 0,
+                "total_sugars" => 0,
+                "saturated_fat" => 0,
+                "monounsaturated_fat" => 0,
+                "polyunsaturated_fat" => 0,
+                "trans_fat" => 0,
+                "cholesterol" => 0,
+                "sodium" => 0,
+                "salt" => 0,
+                "water" => 0,
+                "alcohol" => 0,
+                "vitamin_B7" => 0,
+                "vitamin_C" => 0,
+                "vitamin_D" => 0,
+                "vitamin_E" => 0,
+                "vitamin_K" => 0,
+                "calcium" => 0,
+                "iron" => 0,
+                "magnesium" => 0,
+                "potassium" => 0,
+                "zinc" => 0
+            ];
+
             if (!$getFood) {
                 $food = new Food();
                 $food->added_by = 'user';
@@ -58,7 +82,7 @@ class FoodController extends Controller
                 $food->crabs = $request->crabs;
                 $food->fat = $request->fat;
                 $food->protein = $request->protein;
-                $food->nutrations = $request->nutrations;
+                $food->nutrations = $request->nutrations ? $request->nutrations : $demo_nutations;
                 $food->barcode = $request->barcode;
 
                 $uploaded_images = [];
