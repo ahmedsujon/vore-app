@@ -86,8 +86,8 @@ class MealController extends Controller
                 $breakfast = $getBreakfast;
             }
 
-            $getFood = BreakfastFood::where('breakfast_id', $breakfast->id)->where('food_id', $request->food_id)->first();
-            if(!$getFood){
+            // $getFood = BreakfastFood::where('breakfast_id', $breakfast->id)->where('food_id', $request->food_id)->first();
+            // if(!$getFood){
                 $food = new BreakfastFood();
                 $food->breakfast_id = $breakfast->id;
                 $food->food_id = $request->food_id;
@@ -98,9 +98,9 @@ class MealController extends Controller
                 $food->quantity = $request->quantity;
                 $food->serving_size = $request->serving_size;
                 $food->save();
-            } else {
-                return response()->json(['result' => 'false', 'message' => 'Food already added']);
-            }
+            // } else {
+            //     return response()->json(['result' => 'false', 'message' => 'Food already added']);
+            // }
 
             return response()->json(['result' => 'true', 'message' => 'Breakfast added successfully']);
 
@@ -220,8 +220,8 @@ class MealController extends Controller
                 $lunch = $getLunch;
             }
 
-            $getFood = LunchFood::where('lunch_id', $lunch->id)->where('food_id', $request->food_id)->first();
-            if(!$getFood){
+            // $getFood = LunchFood::where('lunch_id', $lunch->id)->where('food_id', $request->food_id)->first();
+            // if(!$getFood){
                 $food = new LunchFood();
                 $food->lunch_id = $lunch->id;
                 $food->food_id = $request->food_id;
@@ -232,9 +232,9 @@ class MealController extends Controller
                 $food->quantity = $request->quantity;
                 $food->serving_size = $request->serving_size;
                 $food->save();
-            } else {
-                return response()->json(['result' => 'false', 'message' => 'Food already added']);
-            }
+            // } else {
+            //     return response()->json(['result' => 'false', 'message' => 'Food already added']);
+            // }
 
             return response()->json(['result' => 'true', 'message' => 'Lunch added successfully']);
 
@@ -354,8 +354,8 @@ class MealController extends Controller
                 $snack = $getSnack;
             }
 
-            $getFood = SnackFood::where('snack_id', $snack->id)->where('food_id', $request->food_id)->first();
-            if(!$getFood){
+            // $getFood = SnackFood::where('snack_id', $snack->id)->where('food_id', $request->food_id)->first();
+            // if(!$getFood){
                 $food = new SnackFood();
                 $food->snack_id = $snack->id;
                 $food->food_id = $request->food_id;
@@ -366,9 +366,9 @@ class MealController extends Controller
                 $food->quantity = $request->quantity;
                 $food->serving_size = $request->serving_size;
                 $food->save();
-            } else {
-                return response()->json(['result' => 'false', 'message' => 'Food already added']);
-            }
+            // } else {
+            //     return response()->json(['result' => 'false', 'message' => 'Food already added']);
+            // }
 
             return response()->json(['result' => 'true', 'message' => 'Snacks added successfully']);
 
@@ -488,8 +488,8 @@ class MealController extends Controller
                 $dinner = $getdinner;
             }
 
-            $getFood = DinnerFood::where('dinner_id', $dinner->id)->where('food_id', $request->food_id)->first();
-            if(!$getFood){
+            // $getFood = DinnerFood::where('dinner_id', $dinner->id)->where('food_id', $request->food_id)->first();
+            // if(!$getFood){
                 $food = new DinnerFood();
                 $food->dinner_id = $dinner->id;
                 $food->food_id = $request->food_id;
@@ -500,9 +500,9 @@ class MealController extends Controller
                 $food->quantity = $request->quantity;
                 $food->serving_size = $request->serving_size;
                 $food->save();
-            } else {
-                return response()->json(['result' => 'false', 'message' => 'Food already added']);
-            }
+            // } else {
+            //     return response()->json(['result' => 'false', 'message' => 'Food already added']);
+            // }
 
             return response()->json(['result' => 'true', 'message' => 'Dinner added successfully']);
 
