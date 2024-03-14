@@ -46,6 +46,7 @@ class FoodTableSeeder extends Seeder
                 "salt" => rand(5,20),
                 "water" => rand(5,20),
                 "alcohol" => rand(5,20),
+                "vitamin_A" => rand(5,20),
                 "vitamin_B7" => rand(5,20),
                 "vitamin_C" => rand(5,20),
                 "vitamin_D" => rand(5,20),

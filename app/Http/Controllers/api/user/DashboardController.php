@@ -317,6 +317,7 @@ class DashboardController extends Controller
                 'Salt' => isset($nutations['salt']) ? $nutations['salt'] : 0,
                 'Water' => isset($nutations['water']) ? $nutations['water'] : 0,
                 'Alcohol' => isset($nutations['alcohol']) ? $nutations['alcohol'] : 0,
+                'Vitamin A' => isset($nutations['vitamin_A']) ? $nutations['vitamin_A'] : 0,
                 'Vitamin B7' => isset($nutations['vitamin_B7']) ? $nutations['vitamin_B7'] : 0,
                 'Vitamin C' => isset($nutations['vitamin_C']) ? $nutations['vitamin_C'] : 0,
                 'Vitamin D' => isset($nutations['vitamin_D']) ? $nutations['vitamin_D'] : 0,
