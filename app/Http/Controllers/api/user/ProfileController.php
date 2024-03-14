@@ -253,11 +253,11 @@ class ProfileController extends Controller
                 $activity_level = 1.9;
             }
 
-            if ($user->current_weight_unit == 'lbs') {
-                $current_weight = $request->get('current_weight') * 0.453592;
-            } else {
-                $current_weight = $request->get('current_weight');
-            }
+            // if ($user->current_weight_unit == 'lbs') {
+            $current_weight = $request->get('current_weight') * 0.453592;
+            // } else {
+            //     $current_weight = $request->get('current_weight');
+            // }
 
             if ($user->gender == 'Male') {
                 $total_calorie = round($current_weight * 24 * 0.85 * $activity_level);
@@ -269,8 +269,11 @@ class ProfileController extends Controller
             $user->daily_activity_level = $request->get('daily_activity_level');
             $user->calories = $total_calorie;
             $user->starting_weight = $request->get('current_weight');
+            $user->starting_weight_unit = 'lbs';
             $user->current_weight = $request->get('current_weight');
+            $user->current_weight_unit = 'lbs';
             $user->target_weight = $request->get('target_weight');
+            $user->target_weight_unit = 'lbs';
 
             if ($request->get('goal') == 'Maintain weight') {
                 $user->crabs = $total_calorie > 0 ? round((($total_calorie * 0.5) / 4)) : 0;
