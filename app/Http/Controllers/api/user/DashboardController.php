@@ -240,6 +240,23 @@ class DashboardController extends Controller
                 });
             }
 
+            // % calculations
+            $crabs_cal_con = $crabs * 4;
+            $protein_cal_con = $protein * 4;
+            $fat_cal_con = $fat * 9;
+
+            $total_calories_consumed = $crabs_cal_con + $protein_cal_con + $fat_cal_con;
+
+            if ($total_calories_consumed > 0) {
+                $crabs_status = ($crabs_cal_con / $total_calories_consumed) * 100;
+                $protein_status = ($protein_cal_con / $total_calories_consumed) * 100;
+                $fat_status = ($fat_cal_con / $total_calories_consumed) * 100;
+            } else {
+                $crabs_status = 0;
+                $protein_status = 0;
+                $fat_status = 0;
+            }
+
             return response()->json([
                 'target_calories' => $total_calories,
                 'target_crabs' => $total_crabs,
@@ -278,15 +295,15 @@ class DashboardController extends Controller
                     ],
                 ],
                 'crabs_stg' => [
-                    'status' => $crabs >= 100 ? 100 : round(($crabs / $total_crabs) * 100),
+                    'status' => round($crabs_status),
                     'goal' => 50,
                 ],
                 'protein_stg' => [
-                    'status' => $protein >= 100 ? 100 : round(($protein / $total_protein) * 100),
+                    'status' => round($protein_status),
                     'goal' => 30,
                 ],
                 'fat_stg' => [
-                    'status' => $fat >= 100 ? 100 : round(($fat / $total_fat) * 100),
+                    'status' => round($fat_status),
                     'goal' => 20,
                 ],
                 'Dietary Fiber' => isset($nutations['dietary_fiber']) ? $nutations['dietary_fiber'] : 0,
