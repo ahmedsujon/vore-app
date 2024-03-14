@@ -218,6 +218,8 @@ class ProfileController extends Controller
         $rules = [
             'daily_activity_level' => 'required',
             'goal' => 'required',
+            'current_weight' => 'required',
+            'target_weight' => 'required',
         ];
         $validator = Validator::make($request->all(), $rules);
         if ($validator->fails()) {
@@ -252,9 +254,9 @@ class ProfileController extends Controller
             }
 
             if ($user->current_weight_unit == 'lbs') {
-                $current_weight = $user->current_weight * 0.453592;
+                $current_weight = $request->get('current_weight') * 0.453592;
             } else {
-                $current_weight = $user->current_weight;
+                $current_weight = $request->get('current_weight');
             }
 
             if ($user->gender == 'Male') {
@@ -266,6 +268,9 @@ class ProfileController extends Controller
             $user->goal = $request->get('goal');
             $user->daily_activity_level = $request->get('daily_activity_level');
             $user->calories = $total_calorie;
+            $user->starting_weight = $request->get('current_weight');
+            $user->current_weight = $request->get('current_weight');
+            $user->target_weight = $request->get('target_weight');
 
             if ($request->get('goal') == 'Maintain weight') {
                 $user->crabs = $total_calorie > 0 ? round((($total_calorie * 0.5) / 4)) : 0;
