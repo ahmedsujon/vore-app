@@ -156,7 +156,7 @@ class AuthenticationController extends Controller
                     $mes->icon = 'assets/app/measurements/muscle.png';
                 } else if ($key == 5) {
                     $mes->icon = 'assets/app/measurements/body_fat.png';
-                } else if ($key == 2) {
+                } else if ($key == 6) {
                     $mes->icon = 'assets/app/measurements/muscle_mass.png';
                 }
                 $mes->save();
