@@ -68,8 +68,8 @@ class UserTableSeeder extends Seeder
                 $water_setting->goal = 80;
                 $water_setting->save();
 
-                $measurements = ["Chest", "Hips", "Muscle Mass", "Waist", "Blood Glucose", "Blood Pressure", "Body Fat"];
-                $units = ["in", "in", "in", "kgs", "mg", "Lb", "kgs"];
+                $measurements = ["Chest", "Hips", "Waist", "Thighs", "Upper Arms", "Body Fat", "Muscle Mass"]; //"Blood Glucose", "Blood Pressure",
+                $units = ["in", "in", "in", "in", "in", "%", "lbs"];
                 foreach ($measurements as $key => $value) {
                     $mes = new UserMeasurement();
                     $mes->user_id = $user->id;
@@ -81,15 +81,15 @@ class UserTableSeeder extends Seeder
                     } else if ($key == 1) {
                         $mes->icon = 'assets/app/measurements/hips.png';
                     } else if ($key == 2) {
-                        $mes->icon = 'assets/app/measurements/muscle_mass.png';
-                    } else if ($key == 3) {
                         $mes->icon = 'assets/app/measurements/waist.png';
+                    } else if ($key == 3) {
+                        $mes->icon = 'assets/app/measurements/thigh.png';
                     } else if ($key == 4) {
-                        $mes->icon = 'assets/app/measurements/blood_glucose.png';
+                        $mes->icon = 'assets/app/measurements/muscle.png';
                     } else if ($key == 5) {
-                        $mes->icon = 'assets/app/measurements/blood_pressure.png';
-                    } else if ($key == 6) {
                         $mes->icon = 'assets/app/measurements/body_fat.png';
+                    } else if ($key == 2) {
+                        $mes->icon = 'assets/app/measurements/muscle_mass.png';
                     }
                     $mes->save();
                 }
