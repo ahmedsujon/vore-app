@@ -1,41 +1,38 @@
 <?php
 
-use Carbon\Carbon;
-use App\Models\Food;
 use App\Models\Admin;
+use App\Models\Food;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 
 // Api
-function api_user(){
+function api_user()
+{
     return Auth::guard('user-api')->user();
 }
 
-function get_meals_food($food, $meal){
-    $getFood = Food::select('id', 'food_unique_id', 'is_fat_secret', 'name', 'slug', 'nutrations', 'barcode', 'images')->find($food['food_id']);
+function get_meals_food($food, $meal)
+{
+    $getFood = Food::select('id', 'food_unique_id', 'is_fat_secret', 'name', 'slug', 'nutrations', 'barcode', 'image')->find($food['food_id']);
 
-    $imgs = [];
-
-    if($meal == 'breakfast'){
-        $img = url('/').'/assets/images/breakfast.jpeg';
+    if ($meal == 'breakfast') {
+        $img = url('/') . '/assets/images/breakfast.jpeg';
     }
-    if($meal == 'lunch'){
-        $img = url('/').'/assets/images/lunch.jpeg';
+    if ($meal == 'lunch') {
+        $img = url('/') . '/assets/images/lunch.jpeg';
     }
-    if($meal == 'snacks'){
-        $img = url('/').'/assets/images/snacks.jpeg';
+    if ($meal == 'snacks') {
+        $img = url('/') . '/assets/images/snacks.jpeg';
     }
-    if($meal == 'dinner'){
-        $img = url('/').'/assets/images/dinner.jpeg';
+    if ($meal == 'dinner') {
+        $img = url('/') . '/assets/images/dinner.jpeg';
     }
 
-    if(count($getFood->images) > 0){
-        foreach ($getFood->images as $image) {
-            $imgs[] = url('/').'/'.$image;
-        }
+    if ($food['image']) {
+        $img = url('/') . '/' . $food['image'];
     } else {
-        $imgs[] = $img;
+        $img = $img;
     }
-
 
     $getFood->id = $food['id'];
     $getFood->name = $food['name'];
@@ -45,30 +42,31 @@ function get_meals_food($food, $meal){
     $getFood->fat = $food['fat'];
     $getFood->quantity = $food['quantity'];
     $getFood->serving_size = $food['serving_size'];
-    $getFood->images = $imgs;
+    $getFood->image = $img;
     return $getFood;
 }
 
-function get_dashboard_meals_food($food_id, $meal){
+function get_dashboard_meals_food($food_id, $meal)
+{
     $getFood = Food::select('id', 'name', 'images')->find($food_id);
 
-    if($meal == 'breakfast'){
-        $img = url('/').'/assets/images/breakfast.jpeg';
+    if ($meal == 'breakfast') {
+        $img = url('/') . '/assets/images/breakfast.jpeg';
     }
-    if($meal == 'lunch'){
-        $img = url('/').'/assets/images/lunch.jpeg';
+    if ($meal == 'lunch') {
+        $img = url('/') . '/assets/images/lunch.jpeg';
     }
-    if($meal == 'snacks'){
-        $img = url('/').'/assets/images/snacks.jpeg';
+    if ($meal == 'snacks') {
+        $img = url('/') . '/assets/images/snacks.jpeg';
     }
-    if($meal == 'dinner'){
-        $img = url('/').'/assets/images/dinner.jpeg';
+    if ($meal == 'dinner') {
+        $img = url('/') . '/assets/images/dinner.jpeg';
     }
 
     $imgs = [];
-    if(count($getFood->images) > 0){
+    if (count($getFood->images) > 0) {
         foreach ($getFood->images as $image) {
-            $imgs[] = url('/').'/'.$image;
+            $imgs[] = url('/') . '/' . $image;
         }
         $getFood->images = $imgs;
     } else {
@@ -76,17 +74,15 @@ function get_dashboard_meals_food($food_id, $meal){
         $getFood->images = $imgs;
     }
 
-
     return $getFood;
 }
 
-
 function uploadFile($file, $folder)
 {
-    $fileName = uniqid() . Carbon::now()->timestamp. '.' .$file->extension();
+    $fileName = uniqid() . Carbon::now()->timestamp . '.' . $file->extension();
     $file->storeAs($folder, $fileName);
 
-    $file_name = 'uploads/'.$folder.'/'.$fileName;
+    $file_name = 'uploads/' . $folder . '/' . $fileName;
     return $file_name;
 }
 
@@ -136,14 +132,14 @@ function loadingStateWithText($key, $title)
     return $loadingSpinner;
 }
 
-function showErrorMessage($message, $file, $line){
-    if(env('APP_DEBUG') == 'true'){
+function showErrorMessage($message, $file, $line)
+{
+    if (env('APP_DEBUG') == 'true') {
         $error_array = [
             'Message' => $message,
             'File' => $file,
-            'Line No' => $line
+            'Line No' => $line,
         ];
         return dd($error_array);
     }
 }
-

@@ -97,6 +97,7 @@ class MealController extends Controller
             $food->fat = $request->fat;
             $food->quantity = $request->quantity;
             $food->serving_size = $request->serving_size;
+            $food->image = Food::find($request->food_id)->image;
             $food->save();
 
             return response()->json(['result' => 'true', 'message' => 'Breakfast added successfully']);
@@ -113,7 +114,7 @@ class MealController extends Controller
 
             if ($breakfast) {
                 $foods = [];
-                $breakfast_foods = BreakfastFood::select('id', 'food_id', 'name', 'calories', 'protein', 'crabs', 'fat', 'quantity', 'serving_size')->where('breakfast_id', $breakfast->id)->get();
+                $breakfast_foods = BreakfastFood::select('id', 'food_id', 'name', 'calories', 'protein', 'crabs', 'fat', 'quantity', 'image', 'serving_size')->where('breakfast_id', $breakfast->id)->get();
 
                 foreach($breakfast_foods as $food){
                     $foods[] = get_meals_food($food, 'breakfast');
@@ -161,6 +162,9 @@ class MealController extends Controller
             $food->fat = $request->fat;
             $food->quantity = $request->quantity;
             $food->serving_size = $request->serving_size;
+            if ($request->file('new_image')) {
+                $food->image = uploadFile($request->file('new_image'), 'foods');
+            }
             $food->save();
 
             return response()->json(['result' => 'true', 'message' => 'Breakfast updated successfully']);

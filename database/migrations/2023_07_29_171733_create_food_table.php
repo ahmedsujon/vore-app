@@ -24,7 +24,7 @@ return new class extends Migration
             $table->double('protein')->default(0)->comment('g');
             $table->longText('nutrations')->nullable();
             $table->string('barcode')->nullable();
-            $table->longText('images')->nullable();
+            $table->string('image', 2048)->nullable();
             $table->tinyInteger('is_fat_secret')->default(0);
             $table->tinyInteger('status')->default(1);
             $table->timestamps();

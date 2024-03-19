@@ -2,27 +2,22 @@
 
 namespace App\Http\Controllers\api\user;
 
-use Exception;
-use App\Models\Food;
-use Illuminate\Support\Str;
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\Food;
+use Exception;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
 
 class FoodController extends Controller
 {
     public function getFoods(Request $request)
     {
         // $pagination_value = $request->per_page ? $request->per_page : 10;
-        $foods = Food::select('id', 'name', 'slug', 'calories', 'protein', 'crabs', 'fat', 'nutrations', 'barcode', 'images', 'created_at')->where('name', 'like', '%'.$request->search_term.'%')->where('status', 1)->get();
+        $foods = Food::select('id', 'name', 'slug', 'calories', 'protein', 'crabs', 'fat', 'nutrations', 'barcode', 'image', 'created_at')->where('name', 'like', '%' . $request->search_term . '%')->where('status', 1)->get();
 
-        foreach ($foods as $food)
-        {
-            $imgs = [];
-            foreach ($food->images as $image) {
-                $imgs[] = url('/').'/'.$image;
-            }
-            $food->images = $imgs;
+        foreach ($foods as $food) {
+            $food->image = url('/') . '/' . $food->image;
         }
 
         return response()->json($foods);
@@ -68,7 +63,7 @@ class FoodController extends Controller
                 "iron" => 0,
                 "magnesium" => 0,
                 "potassium" => 0,
-                "zinc" => 0
+                "zinc" => 0,
             ];
 
             if (!$getFood) {
@@ -77,7 +72,7 @@ class FoodController extends Controller
                 $food->food_unique_id = $request->food_unique_id ? $request->food_unique_id : 'vore_food_' . Str::lower(Str::random(15));
                 $food->user_id = api_user()->id;
                 $food->name = $request->name;
-                $food->slug = Str::slug($request->name).'-'.Str::lower(Str::random(5));
+                $food->slug = Str::slug($request->name) . '-' . Str::lower(Str::random(5));
                 $food->calories = $request->calories;
                 $food->crabs = $request->crabs;
                 $food->fat = $request->fat;
@@ -86,21 +81,14 @@ class FoodController extends Controller
                 $food->barcode = $request->barcode;
                 $food->is_fat_secret = $request->food_unique_id ? 1 : 0;
 
-                $uploaded_images = [];
-                if($request->file('images')){
-                    foreach ($request->file('images') as $image) {
-                        $uploaded_images[] = uploadFile($image, 'foods');
-                    }
+                if ($request->file('image')) {
+                    $food->image = uploadFile($request->file('image'), 'foods');
                 }
-
-
-                $food->images = $uploaded_images;
                 $food->save();
 
-
-                return response()->json(['result' => 'true', 'message' => 'Food added successfully', 'food_id'=>$food->id]);
+                return response()->json(['result' => 'true', 'message' => 'Food added successfully', 'food_id' => $food->id]);
             } else {
-                return response()->json(['result' => 'true', 'message' => 'Food added successfully', 'food_id'=>$getFood->id]);
+                return response()->json(['result' => 'true', 'message' => 'Food added successfully', 'food_id' => $getFood->id]);
             }
         } catch (Exception $ex) {
             return response($ex->getMessage());

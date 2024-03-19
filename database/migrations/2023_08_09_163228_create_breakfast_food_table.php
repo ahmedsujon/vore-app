@@ -22,6 +22,7 @@ return new class extends Migration
             $table->double('fat', 20,2)->default(0);
             $table->integer('quantity')->default(0);
             $table->string('serving_size')->nullable();
+            $table->string('image', 2048)->nullable();
             $table->timestamps();
         });
     }
