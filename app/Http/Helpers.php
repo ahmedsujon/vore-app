@@ -11,7 +11,7 @@ function api_user(){
 }
 
 function get_meals_food($food, $meal){
-    $getFood = Food::select('id', 'name', 'slug', 'nutrations', 'barcode', 'images')->find($food['food_id']);
+    $getFood = Food::select('id', 'food_unique_id', 'is_fat_secret', 'name', 'slug', 'nutrations', 'barcode', 'images')->find($food['food_id']);
 
     $imgs = [];
 
