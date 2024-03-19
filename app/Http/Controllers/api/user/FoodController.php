@@ -84,6 +84,7 @@ class FoodController extends Controller
                 $food->protein = $request->protein;
                 $food->nutrations = $request->nutrations ? $request->nutrations : $demo_nutations;
                 $food->barcode = $request->barcode;
+                $food->is_fat_secret = $request->food_unique_id ? 1 : 0;
 
                 $uploaded_images = [];
                 if($request->file('images')){
