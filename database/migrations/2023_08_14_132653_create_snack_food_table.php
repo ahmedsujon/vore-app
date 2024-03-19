@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->bigInteger('snack_id')->unsigned()->nullable();
             $table->bigInteger('food_id')->unsigned()->nullable();
+            $table->string('name')->nullable();
             $table->double('calories', 20,2)->default(0);
             $table->double('protein', 20,2)->default(0);
             $table->double('crabs', 20,2)->default(0);

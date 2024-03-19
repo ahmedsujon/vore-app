@@ -13,6 +13,7 @@ use Illuminate\Http\Request;
 use App\Models\BreakfastFood;
 use App\Http\Controllers\Controller;
 use App\Models\DinnerFood;
+use App\Models\Food;
 use App\Models\SnackFood;
 use Illuminate\Support\Facades\Validator;
 
@@ -86,21 +87,17 @@ class MealController extends Controller
                 $breakfast = $getBreakfast;
             }
 
-            // $getFood = BreakfastFood::where('breakfast_id', $breakfast->id)->where('food_id', $request->food_id)->first();
-            // if(!$getFood){
-                $food = new BreakfastFood();
-                $food->breakfast_id = $breakfast->id;
-                $food->food_id = $request->food_id;
-                $food->calories = $request->calories;
-                $food->protein = $request->protein;
-                $food->crabs = $request->crabs;
-                $food->fat = $request->fat;
-                $food->quantity = $request->quantity;
-                $food->serving_size = $request->serving_size;
-                $food->save();
-            // } else {
-            //     return response()->json(['result' => 'false', 'message' => 'Food already added']);
-            // }
+            $food = new BreakfastFood();
+            $food->breakfast_id = $breakfast->id;
+            $food->food_id = $request->food_id;
+            $food->name = Food::find($request->food_id)->name;
+            $food->calories = $request->calories;
+            $food->protein = $request->protein;
+            $food->crabs = $request->crabs;
+            $food->fat = $request->fat;
+            $food->quantity = $request->quantity;
+            $food->serving_size = $request->serving_size;
+            $food->save();
 
             return response()->json(['result' => 'true', 'message' => 'Breakfast added successfully']);
 
@@ -116,7 +113,7 @@ class MealController extends Controller
 
             if ($breakfast) {
                 $foods = [];
-                $breakfast_foods = BreakfastFood::select('id', 'food_id', 'calories', 'protein', 'crabs', 'fat', 'quantity', 'serving_size')->where('breakfast_id', $breakfast->id)->get();
+                $breakfast_foods = BreakfastFood::select('id', 'food_id', 'name', 'calories', 'protein', 'crabs', 'fat', 'quantity', 'serving_size')->where('breakfast_id', $breakfast->id)->get();
 
                 foreach($breakfast_foods as $food){
                     $foods[] = get_meals_food($food, 'breakfast');
@@ -132,6 +129,42 @@ class MealController extends Controller
             } else {
                 return response()->json(['result' => 'false', 'message' => 'No data found!']);
             }
+        } catch (Exception $ex) {
+            return response($ex->getMessage());
+        }
+    }
+
+    public function updateBreakfast(Request $request)
+    {
+        $rules = [
+            'breakfast_id' => 'required',
+            'food_id' => 'required',
+            'name' => 'required',
+            'calories' => 'required',
+            'protein' => 'required',
+            'crabs' => 'required',
+            'fat' => 'required',
+            'quantity' => 'required',
+            'serving_size' => 'required'
+        ];
+        $validator = Validator::make($request->all(), $rules);
+        if ($validator->fails()) {
+            return response()->json($validator->errors(), 400);
+        }
+
+        try {
+            $food = BreakfastFood::find($request->food_id);
+            $food->name = $request->name;
+            $food->calories = $request->calories;
+            $food->protein = $request->protein;
+            $food->crabs = $request->crabs;
+            $food->fat = $request->fat;
+            $food->quantity = $request->quantity;
+            $food->serving_size = $request->serving_size;
+            $food->save();
+
+            return response()->json(['result' => 'true', 'message' => 'Breakfast updated successfully']);
+
         } catch (Exception $ex) {
             return response($ex->getMessage());
         }

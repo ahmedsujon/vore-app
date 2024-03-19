@@ -38,6 +38,7 @@ Route::group(['middleware' => ['jwtUser:user-api', 'jwt.auth'], 'prefix' => 'v1/
     Route::get('all-breakfasts', [MealController::class, 'breakfastIndex']);
     Route::get('breakfast', [MealController::class, 'getBreakfast']);
     Route::post('breakfast/add', [MealController::class, 'addBreakfast']);
+    Route::post('breakfast/update', [MealController::class, 'updateBreakfast']);
     Route::get('breakfast/delete', [MealController::class, 'deleteBreakfast']);
 
     //lunch

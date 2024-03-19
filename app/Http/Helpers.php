@@ -38,6 +38,7 @@ function get_meals_food($food, $meal){
 
 
     $getFood->id = $food['id'];
+    $getFood->name = $food['name'];
     $getFood->calories = $food['calories'];
     $getFood->protein = $food['protein'];
     $getFood->crabs = $food['crabs'];
