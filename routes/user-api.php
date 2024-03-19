@@ -38,24 +38,28 @@ Route::group(['middleware' => ['jwtUser:user-api', 'jwt.auth'], 'prefix' => 'v1/
     Route::get('all-breakfasts', [MealController::class, 'breakfastIndex']);
     Route::get('breakfast', [MealController::class, 'getBreakfast']);
     Route::post('breakfast/add', [MealController::class, 'addBreakfast']);
+    Route::post('breakfast/update', [MealController::class, 'updateBreakfast']);
     Route::get('breakfast/delete', [MealController::class, 'deleteBreakfast']);
 
     //lunch
     Route::get('all-lunches', [MealController::class, 'lunchIndex']);
     Route::get('lunch', [MealController::class, 'getLunch']);
     Route::post('lunch/add', [MealController::class, 'addLunch']);
+    Route::post('lunch/update', [MealController::class, 'updateLunch']);
     Route::get('lunch/delete', [MealController::class, 'deleteLunch']);
 
     //Snacks
     Route::get('all-snacks', [MealController::class, 'snackIndex']);
     Route::get('snack', [MealController::class, 'getSnack']);
     Route::post('snack/add', [MealController::class, 'addSnack']);
+    Route::post('snack/update', [MealController::class, 'updateSnack']);
     Route::get('snack/delete', [MealController::class, 'deleteSnack']);
 
     //Dinners
     Route::get('all-dinners', [MealController::class, 'dinnerIndex']);
     Route::get('dinner', [MealController::class, 'getDinner']);
     Route::post('dinner/add', [MealController::class, 'addDinner']);
+    Route::post('dinner/update', [MealController::class, 'updateDinner']);
     Route::get('dinner/delete', [MealController::class, 'deleteDinner']);
 
     //foods api
