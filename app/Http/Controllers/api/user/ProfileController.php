@@ -2,14 +2,14 @@
 
 namespace App\Http\Controllers\api\user;
 
-use Exception;
-use Carbon\Carbon;
-use App\Models\User;
-use App\Models\Measurement;
-use Illuminate\Http\Request;
-use App\Models\UserMeasurement;
-use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use App\Models\Measurement;
+use App\Models\User;
+use App\Models\UserMeasurement;
+use Carbon\Carbon;
+use Exception;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
 class ProfileController extends Controller
@@ -19,7 +19,7 @@ class ProfileController extends Controller
         try {
             $user = User::select('name', 'username', 'avatar')->where('id', api_user()->id)->first();
 
-            $user->avatar = ($user->avatar ==  '') ? url('/') . '/' . 'assets/images/avatar.png' : url('/') . '/' . $user->avatar;
+            $user->avatar = ($user->avatar == '') ? url('/') . '/' . 'assets/images/avatar.png' : url('/') . '/' . $user->avatar;
 
             return response()->json($user);
         } catch (Exception $ex) {
@@ -32,12 +32,12 @@ class ProfileController extends Controller
         try {
             $user = User::where('id', api_user()->id)->first();
 
-            if($user->current_weight_unit == 'kg'){
+            if ($user->current_weight_unit == 'kg') {
                 $current_weight = round(($user->current_weight * 2.20462), 1);
             } else {
                 $current_weight = $user->current_weight;
             }
-            if($user->starting_weight_unit == 'kg'){
+            if ($user->starting_weight_unit == 'kg') {
                 $starting_weight = round(($user->starting_weight * 2.20462), 1);
             } else {
                 $starting_weight = $user->starting_weight;
@@ -45,9 +45,9 @@ class ProfileController extends Controller
 
             $progress = 'No Change';
             if ($current_weight > $starting_weight) {
-                $progress = (round(($current_weight - $starting_weight),2)) . 'lbs gained';
+                $progress = (round(($current_weight - $starting_weight), 2)) . 'lbs gained';
             } elseif ($current_weight < $starting_weight) {
-                $progress = (round(($starting_weight - $current_weight),2)) . 'lbs lost';
+                $progress = (round(($starting_weight - $current_weight), 2)) . 'lbs lost';
             }
 
             $user_measurements = DB::table('user_measurements')->select('name', 'value', 'unit')->where('user_id', api_user()->id)->get();
@@ -65,7 +65,7 @@ class ProfileController extends Controller
             $data = [
                 'name' => $user->name,
                 'username' => $user->username,
-                'avatar' => ($user->avatar ==  '') ? url('/') . '/' . 'assets/images/avatar.png' : url('/') . '/' . $user->avatar,
+                'avatar' => ($user->avatar == '') ? url('/') . '/' . 'assets/images/avatar.png' : url('/') . '/' . $user->avatar,
                 'height' => $user->height,
                 'weight' => ($user->current_weight_unit == 'kg' ? round(($user->current_weight * 2.20462), 1) : round($user->current_weight, 1)) . ' lbs',
                 'gender' => ucfirst($user->gender),
@@ -130,12 +130,12 @@ class ProfileController extends Controller
         try {
             $user = User::where('id', api_user()->id)->first();
 
-            if($user->current_weight_unit == 'kg'){
+            if ($user->current_weight_unit == 'kg') {
                 $current_weight = round(($user->current_weight * 2.20462), 1);
             } else {
                 $current_weight = $user->current_weight;
             }
-            if($user->starting_weight_unit == 'kg'){
+            if ($user->starting_weight_unit == 'kg') {
                 $starting_weight = round(($user->starting_weight * 2.20462), 1);
             } else {
                 $starting_weight = $user->starting_weight;
@@ -145,7 +145,7 @@ class ProfileController extends Controller
             $change = 0;
             if ($current_weight > $starting_weight) {
                 $progress = (round(($current_weight - $starting_weight), 2)) . ' lbs gained';
-                $change = round(((($current_weight -$starting_weight) / $starting_weight) * 100), 2);
+                $change = round(((($current_weight - $starting_weight) / $starting_weight) * 100), 2);
             } elseif ($current_weight < $starting_weight) {
                 $progress = (round(($starting_weight - $current_weight), 2)) . ' lbs lost';
                 $change = abs(round(((($current_weight - $starting_weight) / $starting_weight) * 100), 2));
@@ -156,7 +156,7 @@ class ProfileController extends Controller
             $date = Carbon::today()->subDays($day);
             $measurements = Measurement::where('user_id', api_user()->id)->where('date', '>', $date)->orderBy('date', 'ASC')->get();
             foreach ($measurements as $key => $measurement) {
-                $graph_value[] = [(int) Carbon::parse($measurement->date)->format('d'),$measurement->weight];
+                $graph_value[] = [(int) Carbon::parse($measurement->date)->format('d'), $measurement->weight];
             }
 
             $data = [
@@ -178,18 +178,18 @@ class ProfileController extends Controller
         try {
             $user = User::where('id', api_user()->id)->first();
 
-            if($user->current_weight_unit == 'kg'){
+            if ($user->current_weight_unit == 'kg') {
                 $current_weight = round(($user->current_weight * 2.20462), 1);
             } else {
                 $current_weight = $user->current_weight;
             }
-            if($user->starting_weight_unit == 'kg'){
+            if ($user->starting_weight_unit == 'kg') {
                 $starting_weight = round(($user->starting_weight * 2.20462), 1);
             } else {
                 $starting_weight = $user->starting_weight;
             }
 
-            if($user->target_weight_unit == 'kg'){
+            if ($user->target_weight_unit == 'kg') {
                 $goal_weight = round(($user->target_weight * 2.20462), 1);
             } else {
                 $goal_weight = $user->target_weight;
@@ -254,41 +254,49 @@ class ProfileController extends Controller
             }
 
             // if ($user->current_weight_unit == 'lbs') {
-            $current_weight = $request->get('current_weight') * 0.453592;
+                $current_weight = $request->get('current_weight') * 0.453592;
             // } else {
             //     $current_weight = $request->get('current_weight');
             // }
 
-            if ($user->gender == 'Male') {
-                $total_calorie = round($current_weight * 24 * 0.85 * $activity_level);
+            if ($user->height_unit == 'in') {
+                $height = $user->height * 2.54;
             } else {
-                $total_calorie = round($current_weight * 21.6 * 0.77 * $activity_level);
+                $height = $user->height;
+            }
+
+            $age = $this->calculateAge($user->birth_date);
+
+            if ($request->get('gender') == 'Male') {
+                $total_calorie = round((88.362 + (13.397 * $current_weight) + (4.799 * $height) - (5.677 * $age)) * $activity_level, 2);
+            } else {
+                $total_calorie = round((447.593 + (9.247 * $current_weight) + (3.098 * $height) - (4.33 * $age)) * $activity_level, 2);
             }
 
             $user->goal = $request->get('goal');
             $user->daily_activity_level = $request->get('daily_activity_level');
-            $user->calories = $total_calorie;
+            $user->calories = round($total_calorie);
             $user->starting_weight = $request->get('current_weight');
-            $user->starting_weight_unit = 'lbs';
+            // $user->starting_weight_unit = 'lbs';
             $user->current_weight = $request->get('current_weight');
-            $user->current_weight_unit = 'lbs';
+            // $user->current_weight_unit = 'lbs';
             $user->target_weight = $request->get('target_weight');
-            $user->target_weight_unit = 'lbs';
+            // $user->target_weight_unit = 'lbs';
 
             if ($request->get('goal') == 'Maintain weight') {
-                $user->crabs = $total_calorie > 0 ? round((($total_calorie * 0.5) / 4)) : 0;
-                $user->protein = $total_calorie > 0 ? round((($total_calorie * 0.2) / 4)) : 0;
-                $user->fat = $total_calorie > 0 ? round((($total_calorie * 0.3) / 9)) : 0;
+                $user->crabs = $total_calorie > 0 ? round((($total_calorie * 0.5) / 4), 2) : 0;
+                $user->protein = $total_calorie > 0 ? round((($total_calorie * 0.3) / 4), 2) : 0;
+                $user->fat = $total_calorie > 0 ? round((($total_calorie * 0.2) / 9), 2) : 0;
             }
             if ($request->get('goal') == 'Lose weight') {
-                $user->crabs = $total_calorie > 0 ? round(((($total_calorie - 1000) * 0.5) / 4)) : 0;
-                $user->protein = $total_calorie > 0 ? round(((($total_calorie - 1000) * 0.2) / 4)) : 0;
-                $user->fat = $total_calorie > 0 ? round(((($total_calorie - 1000) * 0.3) / 9)) : 0;
+                $user->crabs = $total_calorie > 0 ? round(((($total_calorie - 1000) * 0.5) / 4), 2) : 0;
+                $user->protein = $total_calorie > 0 ? round(((($total_calorie - 1000) * 0.3) / 4), 2) : 0;
+                $user->fat = $total_calorie > 0 ? round(((($total_calorie - 1000) * 0.2) / 9), 2) : 0;
             }
             if ($request->get('goal') == 'Build muscle') {
-                $user->crabs = $total_calorie > 0 ? round(((($total_calorie + 500) * 0.5) / 4)) : 0;
-                $user->protein = $total_calorie > 0 ? round(((($total_calorie + 500) * 0.2) / 4)) : 0;
-                $user->fat = $total_calorie > 0 ? round(((($total_calorie + 500) * 0.3) / 9)) : 0;
+                $user->crabs = $total_calorie > 0 ? round(((($total_calorie + 500) * 0.5) / 4), 2) : 0;
+                $user->protein = $total_calorie > 0 ? round(((($total_calorie + 500) * 0.3) / 4), 2) : 0;
+                $user->fat = $total_calorie > 0 ? round(((($total_calorie + 500) * 0.2) / 9), 2) : 0;
             }
 
             $user->save();
@@ -298,6 +306,18 @@ class ProfileController extends Controller
         } catch (Exception $ex) {
             return response($ex->getMessage());
         }
+    }
+
+    private function calculateAge($dateOfBirth)
+    {
+        // Assuming $dateOfBirth is a string in the format 'YYYY-MM-DD'
+        $birthDate = Carbon::parse($dateOfBirth);
+        $currentDate = Carbon::now();
+
+        // Calculate the difference between the current date and the date of birth
+        $age = $currentDate->diffInYears($birthDate);
+
+        return $age;
     }
 
     public function nutrientGoals(Request $request)
