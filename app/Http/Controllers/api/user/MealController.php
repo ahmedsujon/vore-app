@@ -2,19 +2,19 @@
 
 namespace App\Http\Controllers\api\user;
 
-use Exception;
-use Carbon\Carbon;
-use App\Models\Lunch;
-use App\Models\Dinner;
-use App\Models\Snacks;
-use App\Models\Breakfast;
-use App\Models\LunchFood;
-use Illuminate\Http\Request;
-use App\Models\BreakfastFood;
 use App\Http\Controllers\Controller;
+use App\Models\Breakfast;
+use App\Models\BreakfastFood;
+use App\Models\Dinner;
 use App\Models\DinnerFood;
 use App\Models\Food;
+use App\Models\Lunch;
+use App\Models\LunchFood;
 use App\Models\SnackFood;
+use App\Models\Snacks;
+use Carbon\Carbon;
+use Exception;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
 class MealController extends Controller
@@ -33,12 +33,11 @@ class MealController extends Controller
             $breakfasts = $breakfasts->get();
 
             if ($breakfasts->count() > 0) {
-                foreach ($breakfasts as $breakfast)
-                {
+                foreach ($breakfasts as $breakfast) {
                     $foods = [];
-                    $breakfast_foods = BreakfastFood::select('id', 'food_id', 'calories', 'protein', 'crabs', 'fat', 'quantity', 'serving_size')->where('breakfast_id', $breakfast->id)->get();
+                    $breakfast_foods = BreakfastFood::select('id', 'food_id', 'name', 'calories', 'protein', 'crabs', 'fat', 'quantity', 'image', 'serving_size')->where('breakfast_id', $breakfast->id)->get();
 
-                    foreach($breakfast_foods as $food){
+                    foreach ($breakfast_foods as $food) {
                         $foods[] = get_meals_food($food, 'breakfast');
                     }
 
@@ -97,7 +96,7 @@ class MealController extends Controller
             $food->fat = $request->fat;
             $food->quantity = $request->quantity;
             $food->serving_size = $request->serving_size;
-            $food->image = Food::find($request->food_id)->image;
+            $food->image = '';
             $food->save();
 
             return response()->json(['result' => 'true', 'message' => 'Breakfast added successfully']);
@@ -116,7 +115,7 @@ class MealController extends Controller
                 $foods = [];
                 $breakfast_foods = BreakfastFood::select('id', 'food_id', 'name', 'calories', 'protein', 'crabs', 'fat', 'quantity', 'image', 'serving_size')->where('breakfast_id', $breakfast->id)->get();
 
-                foreach($breakfast_foods as $food){
+                foreach ($breakfast_foods as $food) {
                     $foods[] = get_meals_food($food, 'breakfast');
                 }
 
@@ -146,7 +145,7 @@ class MealController extends Controller
             'crabs' => 'required',
             'fat' => 'required',
             'quantity' => 'required',
-            'serving_size' => 'required'
+            'serving_size' => 'required',
         ];
         $validator = Validator::make($request->all(), $rules);
         if ($validator->fails()) {
@@ -174,15 +173,16 @@ class MealController extends Controller
         }
     }
 
-    public function deleteBreakfast(Request $request){
+    public function deleteBreakfast(Request $request)
+    {
         try {
             $item = BreakfastFood::where('id', $request->item_id)->first();
 
             if ($item) {
                 $item->delete();
-                return response()->json(['result' => 'true','message' => 'Item deleted successfully']);
+                return response()->json(['result' => 'true', 'message' => 'Item deleted successfully']);
             } else {
-                return response()->json(['result' => 'false','message' => 'No data found!']);
+                return response()->json(['result' => 'false', 'message' => 'No data found!']);
             }
         } catch (Exception $ex) {
             return response($ex->getMessage());
@@ -203,12 +203,11 @@ class MealController extends Controller
             $lunches = $lunches->get();
 
             if ($lunches->count() > 0) {
-                foreach ($lunches as $lunch)
-                {
+                foreach ($lunches as $lunch) {
                     $foods = [];
-                    $lunch_foods = LunchFood::select('id', 'food_id', 'calories', 'protein', 'crabs', 'fat', 'quantity', 'serving_size')->where('lunch_id', $lunch->id)->get();
+                    $lunch_foods = LunchFood::select('id', 'food_id', 'name', 'calories', 'protein', 'crabs', 'fat', 'quantity', 'image', 'serving_size')->where('lunch_id', $lunch->id)->get();
 
-                    foreach($lunch_foods as $food){
+                    foreach ($lunch_foods as $food) {
                         $foods[] = get_meals_food($food, 'lunch');
                     }
 
@@ -266,7 +265,7 @@ class MealController extends Controller
             $food->fat = $request->fat;
             $food->quantity = $request->quantity;
             $food->serving_size = $request->serving_size;
-            $food->image = Food::find($request->food_id)->image;
+            $food->image = '';
             $food->save();
 
             return response()->json(['result' => 'true', 'message' => 'Lunch added successfully']);
@@ -287,7 +286,7 @@ class MealController extends Controller
             'crabs' => 'required',
             'fat' => 'required',
             'quantity' => 'required',
-            'serving_size' => 'required'
+            'serving_size' => 'required',
         ];
         $validator = Validator::make($request->all(), $rules);
         if ($validator->fails()) {
@@ -324,7 +323,7 @@ class MealController extends Controller
                 $foods = [];
                 $lunch_foods = LunchFood::select('id', 'food_id', 'name', 'calories', 'protein', 'crabs', 'fat', 'quantity', 'image', 'serving_size')->where('lunch_id', $lunch->id)->get();
 
-                foreach($lunch_foods as $food){
+                foreach ($lunch_foods as $food) {
                     $foods[] = get_meals_food($food, 'lunch');
                 }
 
@@ -343,15 +342,16 @@ class MealController extends Controller
         }
     }
 
-    public function deleteLunch(Request $request){
+    public function deleteLunch(Request $request)
+    {
         try {
             $item = LunchFood::where('id', $request->item_id)->first();
 
             if ($item) {
                 $item->delete();
-                return response()->json(['result' => 'true','message' => 'Item deleted successfully']);
+                return response()->json(['result' => 'true', 'message' => 'Item deleted successfully']);
             } else {
-                return response()->json(['result' => 'false','message' => 'No data found!']);
+                return response()->json(['result' => 'false', 'message' => 'No data found!']);
             }
         } catch (Exception $ex) {
             return response($ex->getMessage());
@@ -372,12 +372,11 @@ class MealController extends Controller
             $snacks = $snacks->get();
 
             if ($snacks->count() > 0) {
-                foreach ($snacks as $snack)
-                {
+                foreach ($snacks as $snack) {
                     $foods = [];
-                    $snack_foods = SnackFood::select('id', 'food_id', 'calories', 'protein', 'crabs', 'fat', 'quantity', 'serving_size')->where('snack_id', $snack->id)->get();
+                    $snack_foods = SnackFood::select('id', 'food_id', 'name', 'calories', 'protein', 'crabs', 'fat', 'quantity', 'image', 'serving_size')->where('snack_id', $snack->id)->get();
 
-                    foreach($snack_foods as $food){
+                    foreach ($snack_foods as $food) {
                         $foods[] = get_meals_food($food, 'snacks');
                     }
 
@@ -426,21 +425,18 @@ class MealController extends Controller
                 $snack = $getSnack;
             }
 
-            // $getFood = SnackFood::where('snack_id', $snack->id)->where('food_id', $request->food_id)->first();
-            // if(!$getFood){
-                $food = new SnackFood();
-                $food->snack_id = $snack->id;
-                $food->food_id = $request->food_id;
-                $food->calories = $request->calories;
-                $food->protein = $request->protein;
-                $food->crabs = $request->crabs;
-                $food->fat = $request->fat;
-                $food->quantity = $request->quantity;
-                $food->serving_size = $request->serving_size;
-                $food->save();
-            // } else {
-            //     return response()->json(['result' => 'false', 'message' => 'Food already added']);
-            // }
+            $food = new SnackFood();
+            $food->snack_id = $snack->id;
+            $food->food_id = $request->food_id;
+            $food->name = Food::find($request->food_id)->name;
+            $food->calories = $request->calories;
+            $food->protein = $request->protein;
+            $food->crabs = $request->crabs;
+            $food->fat = $request->fat;
+            $food->quantity = $request->quantity;
+            $food->serving_size = $request->serving_size;
+            $food->image = '';
+            $food->save();
 
             return response()->json(['result' => 'true', 'message' => 'Snacks added successfully']);
 
@@ -456,9 +452,9 @@ class MealController extends Controller
 
             if ($snack) {
                 $foods = [];
-                $snack_foods = SnackFood::select('id', 'food_id', 'calories', 'protein', 'crabs', 'fat', 'quantity', 'serving_size')->where('snack_id', $snack->id)->get();
+                $snack_foods = SnackFood::select('id', 'food_id', 'name', 'calories', 'protein', 'crabs', 'fat', 'quantity', 'image', 'serving_size')->where('snack_id', $snack->id)->get();
 
-                foreach($snack_foods as $food){
+                foreach ($snack_foods as $food) {
                     $foods[] = get_meals_food($food, 'snacks');
                 }
 
@@ -477,15 +473,55 @@ class MealController extends Controller
         }
     }
 
-    public function deleteSnack(Request $request){
+    public function updateSnack(Request $request)
+    {
+        $rules = [
+            'snack_id' => 'required',
+            'food_id' => 'required',
+            'name' => 'required',
+            'calories' => 'required',
+            'protein' => 'required',
+            'crabs' => 'required',
+            'fat' => 'required',
+            'quantity' => 'required',
+            'serving_size' => 'required',
+        ];
+        $validator = Validator::make($request->all(), $rules);
+        if ($validator->fails()) {
+            return response()->json($validator->errors(), 400);
+        }
+
+        try {
+            $food = SnackFood::find($request->food_id);
+            $food->name = $request->name;
+            $food->calories = $request->calories;
+            $food->protein = $request->protein;
+            $food->crabs = $request->crabs;
+            $food->fat = $request->fat;
+            $food->quantity = $request->quantity;
+            $food->serving_size = $request->serving_size;
+            if ($request->file('new_image')) {
+                $food->image = uploadFile($request->file('new_image'), 'foods');
+            }
+            $food->save();
+
+            return response()->json(['result' => 'true', 'message' => 'Snack updated successfully']);
+
+        } catch (Exception $ex) {
+            return response($ex->getMessage());
+        }
+    }
+
+    public function deleteSnack(Request $request)
+    {
         try {
             $item = SnackFood::where('id', $request->item_id)->first();
 
             if ($item) {
                 $item->delete();
-                return response()->json(['result' => 'true','message' => 'Item deleted successfully']);
+                return response()->json(['result' => 'true', 'message' => 'Item deleted successfully']);
             } else {
-                return response()->json(['result' => 'false','message' => 'No data found!']);
+                return response()->json(['result' => 'false', 'message' => 'No data found!']);
             }
         } catch (Exception $ex) {
             return response($ex->getMessage());
@@ -506,12 +542,11 @@ class MealController extends Controller
             $dinners = $dinners->get();
 
             if ($dinners->count() > 0) {
-                foreach ($dinners as $dinner)
-                {
+                foreach ($dinners as $dinner) {
                     $foods = [];
-                    $dinner_foods = DinnerFood::select('id', 'food_id', 'calories', 'protein', 'crabs', 'fat', 'quantity', 'serving_size')->where('dinner_id', $dinner->id)->get();
+                    $dinner_foods = DinnerFood::select('id', 'food_id', 'name', 'calories', 'protein', 'crabs', 'fat', 'quantity', 'image', 'serving_size')->where('dinner_id', $dinner->id)->get();
 
-                    foreach($dinner_foods as $food){
+                    foreach ($dinner_foods as $food) {
                         $foods[] = get_meals_food($food, 'dinner');
                     }
 
@@ -560,21 +595,18 @@ class MealController extends Controller
                 $dinner = $getdinner;
             }
 
-            // $getFood = DinnerFood::where('dinner_id', $dinner->id)->where('food_id', $request->food_id)->first();
-            // if(!$getFood){
-                $food = new DinnerFood();
-                $food->dinner_id = $dinner->id;
-                $food->food_id = $request->food_id;
-                $food->calories = $request->calories;
-                $food->protein = $request->protein;
-                $food->crabs = $request->crabs;
-                $food->fat = $request->fat;
-                $food->quantity = $request->quantity;
-                $food->serving_size = $request->serving_size;
-                $food->save();
-            // } else {
-            //     return response()->json(['result' => 'false', 'message' => 'Food already added']);
-            // }
+            $food = new DinnerFood();
+            $food->dinner_id = $dinner->id;
+            $food->food_id = $request->food_id;
+            $food->name = Food::find($request->food_id)->name;
+            $food->calories = $request->calories;
+            $food->protein = $request->protein;
+            $food->crabs = $request->crabs;
+            $food->fat = $request->fat;
+            $food->quantity = $request->quantity;
+            $food->serving_size = $request->serving_size;
+            $food->image = '';
+            $food->save();
 
             return response()->json(['result' => 'true', 'message' => 'Dinner added successfully']);
 
@@ -583,16 +615,16 @@ class MealController extends Controller
         }
     }
 
-    public function getdinner(Request $request)
+    public function getDinner(Request $request)
     {
         try {
             $dinner = Dinner::select('id', 'date', 'created_at')->where('id', $request->dinner_id)->where('user_id', api_user()->id)->first();
 
             if ($dinner) {
                 $foods = [];
-                $dinner_foods = DinnerFood::select('id', 'food_id', 'calories', 'protein', 'crabs', 'fat', 'quantity', 'serving_size')->where('dinner_id', $dinner->id)->get();
+                $dinner_foods = DinnerFood::select('id', 'food_id', 'name', 'calories', 'protein', 'crabs', 'fat', 'quantity', 'image', 'serving_size')->where('dinner_id', $dinner->id)->get();
 
-                foreach($dinner_foods as $food){
+                foreach ($dinner_foods as $food) {
                     $foods[] = get_meals_food($food, 'dinner');
                 }
 
@@ -611,15 +643,55 @@ class MealController extends Controller
         }
     }
 
-    public function deleteDinner(Request $request){
+    public function updateDinner(Request $request)
+    {
+        $rules = [
+            'dinner_id' => 'required',
+            'food_id' => 'required',
+            'name' => 'required',
+            'calories' => 'required',
+            'protein' => 'required',
+            'crabs' => 'required',
+            'fat' => 'required',
+            'quantity' => 'required',
+            'serving_size' => 'required',
+        ];
+        $validator = Validator::make($request->all(), $rules);
+        if ($validator->fails()) {
+            return response()->json($validator->errors(), 400);
+        }
+
+        try {
+            $food = DinnerFood::find($request->food_id);
+            $food->name = $request->name;
+            $food->calories = $request->calories;
+            $food->protein = $request->protein;
+            $food->crabs = $request->crabs;
+            $food->fat = $request->fat;
+            $food->quantity = $request->quantity;
+            $food->serving_size = $request->serving_size;
+            if ($request->file('new_image')) {
+                $food->image = uploadFile($request->file('new_image'), 'foods');
+            }
+            $food->save();
+
+            return response()->json(['result' => 'true', 'message' => 'Dinner updated successfully']);
+
+        } catch (Exception $ex) {
+            return response($ex->getMessage());
+        }
+    }
+
+    public function deleteDinner(Request $request)
+    {
         try {
             $item = DinnerFood::where('id', $request->item_id)->first();
 
             if ($item) {
                 $item->delete();
-                return response()->json(['result' => 'true','message' => 'Item deleted successfully']);
+                return response()->json(['result' => 'true', 'message' => 'Item deleted successfully']);
             } else {
-                return response()->json(['result' => 'false','message' => 'No data found!']);
+                return response()->json(['result' => 'false', 'message' => 'No data found!']);
             }
         } catch (Exception $ex) {
             return response($ex->getMessage());
