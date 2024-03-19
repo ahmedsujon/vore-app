@@ -2,16 +2,17 @@
 
 namespace App\Http\Controllers\api\user\auth;
 
-use App\Http\Controllers\Controller;
-use App\Models\User;
-use App\Models\UserMeasurement;
-use App\Models\WaterSetting;
 use Exception;
+use Carbon\Carbon;
+use App\Models\User;
+use Illuminate\Support\Str;
+use App\Models\WaterSetting;
 use Illuminate\Http\Request;
+use App\Models\UserMeasurement;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Str;
 
 class AuthenticationController extends Controller
 {
@@ -84,10 +85,18 @@ class AuthenticationController extends Controller
             $current_weight = $request->get('current_weight');
         }
 
-        if ($request->get('gender') == 'Male') {
-            $total_calorie = round($current_weight * 24 * 0.85 * $activity_level);
+        if ($request->get('height_unit') == 'in') {
+            $height = $request->get('height') * 2.54;
         } else {
-            $total_calorie = round($current_weight * 21.6 * 0.77 * $activity_level);
+            $height = $request->get('height');
+        }
+
+        $age = $this->calculateAge($request->get('birth_date'));
+
+        if ($request->get('gender') == 'Male') {
+            $total_calorie = round((88.362 + (13.397 * $current_weight) + (4.799 * $height) - (5.677 * $age)) * $activity_level, 2);
+        } else {
+            $total_calorie = round((447.593 + (9.247 * $current_weight) + (3.098 * $height) - (4.33 * $age)) * $activity_level, 2);
         }
 
         $user = User::find(Auth::guard('user-api')->user()->id);
@@ -106,24 +115,23 @@ class AuthenticationController extends Controller
         $user->measurements = $request->get('measurements');
         $user->measurements_unit = $request->get('measurements_unit');
 
-        $user->calories = $total_calorie;
+        $user->calories = round($total_calorie);
 
         if ($request->get('goal') == 'Maintain weight') {
-            $user->crabs = $total_calorie > 0 ? round((($total_calorie * 0.5) / 4)) : 0;
-            $user->protein = $total_calorie > 0 ? round((($total_calorie * 0.2) / 4)) : 0;
-            $user->fat = $total_calorie > 0 ? round((($total_calorie * 0.3) / 9)) : 0;
+            $user->crabs = $total_calorie > 0 ? round((($total_calorie * 0.5) / 4), 2) : 0;
+            $user->protein = $total_calorie > 0 ? round((($total_calorie * 0.3) / 4), 2) : 0;
+            $user->fat = $total_calorie > 0 ? round((($total_calorie * 0.2) / 9), 2) : 0;
         }
         if ($request->get('goal') == 'Lose weight') {
-            $user->crabs = $total_calorie > 0 ? round(((($total_calorie - 1000) * 0.5) / 4)) : 0;
-            $user->protein = $total_calorie > 0 ? round(((($total_calorie - 1000) * 0.2) / 4)) : 0;
-            $user->fat = $total_calorie > 0 ? round(((($total_calorie - 1000) * 0.3) / 9)) : 0;
+            $user->crabs = $total_calorie > 0 ? round(((($total_calorie - 1000) * 0.5) / 4), 2) : 0;
+            $user->protein = $total_calorie > 0 ? round(((($total_calorie - 1000) * 0.3) / 4), 2) : 0;
+            $user->fat = $total_calorie > 0 ? round(((($total_calorie - 1000) * 0.2) / 9), 2) : 0;
         }
         if ($request->get('goal') == 'Build muscle') {
-            $user->crabs = $total_calorie > 0 ? round(((($total_calorie + 500) * 0.5) / 4)) : 0;
-            $user->protein = $total_calorie > 0 ? round(((($total_calorie + 500) * 0.2) / 4)) : 0;
-            $user->fat = $total_calorie > 0 ? round(((($total_calorie + 500) * 0.3) / 9)) : 0;
+            $user->crabs = $total_calorie > 0 ? round(((($total_calorie + 500) * 0.5) / 4), 2) : 0;
+            $user->protein = $total_calorie > 0 ? round(((($total_calorie + 500) * 0.3) / 4), 2) : 0;
+            $user->fat = $total_calorie > 0 ? round(((($total_calorie + 500) * 0.2) / 9), 2) : 0;
         }
-
         $user->save();
 
         $water_setting = new WaterSetting();
@@ -165,6 +173,19 @@ class AuthenticationController extends Controller
 
         return response()->json(['result' => 'true', 'message' => 'Data updated successfully']);
     }
+
+    private function calculateAge($dateOfBirth)
+    {
+        // Assuming $dateOfBirth is a string in the format 'YYYY-MM-DD'
+        $birthDate = Carbon::parse($dateOfBirth);
+        $currentDate = Carbon::now();
+
+        // Calculate the difference between the current date and the date of birth
+        $age = $currentDate->diffInYears($birthDate);
+
+        return $age;
+    }
+
 
     public function login(Request $request)
     {
