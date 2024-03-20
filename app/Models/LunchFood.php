@@ -12,6 +12,7 @@ class LunchFood extends Model
     protected $table = 'lunch_foods';
 
     protected $casts = [
+        'nutations' => 'array',
         'created_at' => 'datetime:Y-m-d H:i:s',
         'updated_at' => 'datetime:Y-m-d H:i:s',
     ];

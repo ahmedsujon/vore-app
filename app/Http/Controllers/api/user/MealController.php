@@ -35,7 +35,7 @@ class MealController extends Controller
             if ($breakfasts->count() > 0) {
                 foreach ($breakfasts as $breakfast) {
                     $foods = [];
-                    $breakfast_foods = BreakfastFood::select('id', 'food_id', 'name', 'calories', 'protein', 'crabs', 'fat', 'quantity', 'image', 'serving_size')->where('breakfast_id', $breakfast->id)->get();
+                    $breakfast_foods = BreakfastFood::select('id', 'food_id', 'name', 'calories', 'protein', 'crabs', 'fat', 'quantity', 'image', 'serving_size', 'nutations')->where('breakfast_id', $breakfast->id)->get();
 
                     foreach ($breakfast_foods as $food) {
                         $foods[] = get_meals_food($food, 'breakfast');
@@ -97,6 +97,7 @@ class MealController extends Controller
             $food->quantity = $request->quantity;
             $food->serving_size = $request->serving_size;
             $food->image = '';
+            $food->nutations = Food::find($request->food_id)->nutrations;
             $food->save();
 
             return response()->json(['result' => 'true', 'message' => 'Breakfast added successfully']);
@@ -113,7 +114,7 @@ class MealController extends Controller
 
             if ($breakfast) {
                 $foods = [];
-                $breakfast_foods = BreakfastFood::select('id', 'food_id', 'name', 'calories', 'protein', 'crabs', 'fat', 'quantity', 'image', 'serving_size')->where('breakfast_id', $breakfast->id)->get();
+                $breakfast_foods = BreakfastFood::select('id', 'food_id', 'name', 'calories', 'protein', 'crabs', 'fat', 'quantity', 'image', 'serving_size', 'nutations')->where('breakfast_id', $breakfast->id)->get();
 
                 foreach ($breakfast_foods as $food) {
                     $foods[] = get_meals_food($food, 'breakfast');
@@ -164,6 +165,9 @@ class MealController extends Controller
             if ($request->file('new_image')) {
                 $food->image = uploadFile($request->file('new_image'), 'foods');
             }
+            if ($request->get('nutations')) {
+                $food->nutations = $request->get('nutations');
+            }
             $food->save();
 
             return response()->json(['result' => 'true', 'message' => 'Breakfast updated successfully']);
@@ -205,7 +209,7 @@ class MealController extends Controller
             if ($lunches->count() > 0) {
                 foreach ($lunches as $lunch) {
                     $foods = [];
-                    $lunch_foods = LunchFood::select('id', 'food_id', 'name', 'calories', 'protein', 'crabs', 'fat', 'quantity', 'image', 'serving_size')->where('lunch_id', $lunch->id)->get();
+                    $lunch_foods = LunchFood::select('id', 'food_id', 'name', 'calories', 'protein', 'crabs', 'fat', 'quantity', 'image', 'serving_size', 'nutations')->where('lunch_id', $lunch->id)->get();
 
                     foreach ($lunch_foods as $food) {
                         $foods[] = get_meals_food($food, 'lunch');
@@ -266,6 +270,7 @@ class MealController extends Controller
             $food->quantity = $request->quantity;
             $food->serving_size = $request->serving_size;
             $food->image = '';
+            $food->nutations = Food::find($request->food_id)->nutrations;
             $food->save();
 
             return response()->json(['result' => 'true', 'message' => 'Lunch added successfully']);
@@ -305,6 +310,9 @@ class MealController extends Controller
             if ($request->file('new_image')) {
                 $food->image = uploadFile($request->file('new_image'), 'foods');
             }
+            if ($request->get('nutations')) {
+                $food->nutations = $request->get('nutations');
+            }
             $food->save();
 
             return response()->json(['result' => 'true', 'message' => 'Lunch updated successfully']);
@@ -321,7 +329,7 @@ class MealController extends Controller
 
             if ($lunch) {
                 $foods = [];
-                $lunch_foods = LunchFood::select('id', 'food_id', 'name', 'calories', 'protein', 'crabs', 'fat', 'quantity', 'image', 'serving_size')->where('lunch_id', $lunch->id)->get();
+                $lunch_foods = LunchFood::select('id', 'food_id', 'name', 'calories', 'protein', 'crabs', 'fat', 'quantity', 'image', 'serving_size', 'nutations')->where('lunch_id', $lunch->id)->get();
 
                 foreach ($lunch_foods as $food) {
                     $foods[] = get_meals_food($food, 'lunch');
@@ -374,7 +382,7 @@ class MealController extends Controller
             if ($snacks->count() > 0) {
                 foreach ($snacks as $snack) {
                     $foods = [];
-                    $snack_foods = SnackFood::select('id', 'food_id', 'name', 'calories', 'protein', 'crabs', 'fat', 'quantity', 'image', 'serving_size')->where('snack_id', $snack->id)->get();
+                    $snack_foods = SnackFood::select('id', 'food_id', 'name', 'calories', 'protein', 'crabs', 'fat', 'quantity', 'image', 'serving_size', 'nutations')->where('snack_id', $snack->id)->get();
 
                     foreach ($snack_foods as $food) {
                         $foods[] = get_meals_food($food, 'snacks');
@@ -436,6 +444,7 @@ class MealController extends Controller
             $food->quantity = $request->quantity;
             $food->serving_size = $request->serving_size;
             $food->image = '';
+            $food->nutations = Food::find($request->food_id)->nutrations;
             $food->save();
 
             return response()->json(['result' => 'true', 'message' => 'Snacks added successfully']);
@@ -452,7 +461,7 @@ class MealController extends Controller
 
             if ($snack) {
                 $foods = [];
-                $snack_foods = SnackFood::select('id', 'food_id', 'name', 'calories', 'protein', 'crabs', 'fat', 'quantity', 'image', 'serving_size')->where('snack_id', $snack->id)->get();
+                $snack_foods = SnackFood::select('id', 'food_id', 'name', 'calories', 'protein', 'crabs', 'fat', 'quantity', 'image', 'serving_size', 'nutations')->where('snack_id', $snack->id)->get();
 
                 foreach ($snack_foods as $food) {
                     $foods[] = get_meals_food($food, 'snacks');
@@ -503,6 +512,9 @@ class MealController extends Controller
             if ($request->file('new_image')) {
                 $food->image = uploadFile($request->file('new_image'), 'foods');
             }
+            if ($request->get('nutations')) {
+                $food->nutations = $request->get('nutations');
+            }
             $food->save();
 
             return response()->json(['result' => 'true', 'message' => 'Snack updated successfully']);
@@ -544,7 +556,7 @@ class MealController extends Controller
             if ($dinners->count() > 0) {
                 foreach ($dinners as $dinner) {
                     $foods = [];
-                    $dinner_foods = DinnerFood::select('id', 'food_id', 'name', 'calories', 'protein', 'crabs', 'fat', 'quantity', 'image', 'serving_size')->where('dinner_id', $dinner->id)->get();
+                    $dinner_foods = DinnerFood::select('id', 'food_id', 'name', 'calories', 'protein', 'crabs', 'fat', 'quantity', 'image', 'serving_size', 'nutations')->where('dinner_id', $dinner->id)->get();
 
                     foreach ($dinner_foods as $food) {
                         $foods[] = get_meals_food($food, 'dinner');
@@ -606,6 +618,7 @@ class MealController extends Controller
             $food->quantity = $request->quantity;
             $food->serving_size = $request->serving_size;
             $food->image = '';
+            $food->nutations = Food::find($request->food_id)->nutrations;
             $food->save();
 
             return response()->json(['result' => 'true', 'message' => 'Dinner added successfully']);
@@ -622,7 +635,7 @@ class MealController extends Controller
 
             if ($dinner) {
                 $foods = [];
-                $dinner_foods = DinnerFood::select('id', 'food_id', 'name', 'calories', 'protein', 'crabs', 'fat', 'quantity', 'image', 'serving_size')->where('dinner_id', $dinner->id)->get();
+                $dinner_foods = DinnerFood::select('id', 'food_id', 'name', 'calories', 'protein', 'crabs', 'fat', 'quantity', 'image', 'serving_size', 'nutations')->where('dinner_id', $dinner->id)->get();
 
                 foreach ($dinner_foods as $food) {
                     $foods[] = get_meals_food($food, 'dinner');
@@ -672,6 +685,9 @@ class MealController extends Controller
             $food->serving_size = $request->serving_size;
             if ($request->file('new_image')) {
                 $food->image = uploadFile($request->file('new_image'), 'foods');
+            }
+            if ($request->get('nutations')) {
+                $food->nutations = $request->get('nutations');
             }
             $food->save();
 

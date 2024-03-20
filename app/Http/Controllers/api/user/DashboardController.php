@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Models\Activity;
 use App\Models\Breakfast;
 use App\Models\Dinner;
-use App\Models\Food;
 use App\Models\Lunch;
 use App\Models\Measurement;
 use App\Models\Snacks;
@@ -163,13 +162,13 @@ class DashboardController extends Controller
         try {
             $date = Carbon::parse($request->date);
 
-            $breakfasts = Breakfast::join('breakfast_foods', 'breakfast_foods.breakfast_id', 'breakfasts.id')->where('breakfasts.user_id', api_user()->id)->select('breakfasts.id as breakfast_id', 'breakfasts.date as date', 'breakfast_foods.calories as calories', 'breakfast_foods.crabs as crabs', 'breakfast_foods.protein as protein', 'breakfast_foods.fat as fat', 'breakfast_foods.food_id as food_id')->whereYear('date', $date->year)->whereMonth('date', $date->month)->whereDay('date', $date->day)->get();
+            $breakfasts = Breakfast::join('breakfast_foods', 'breakfast_foods.breakfast_id', 'breakfasts.id')->where('breakfasts.user_id', api_user()->id)->select('breakfasts.id as breakfast_id', 'breakfasts.date as date', 'breakfast_foods.calories as calories', 'breakfast_foods.crabs as crabs', 'breakfast_foods.protein as protein', 'breakfast_foods.fat as fat', 'breakfast_foods.food_id as food_id', 'breakfast_foods.nutations as nutations')->whereYear('date', $date->year)->whereMonth('date', $date->month)->whereDay('date', $date->day)->get();
 
-            $lunches = Lunch::join('lunch_foods', 'lunch_foods.lunch_id', 'lunches.id')->where('lunches.user_id', api_user()->id)->select('lunches.id as lunch_id', 'lunches.date as date', 'lunch_foods.calories as calories', 'lunch_foods.crabs as crabs', 'lunch_foods.protein as protein', 'lunch_foods.fat as fat', 'lunch_foods.food_id as food_id')->whereYear('date', $date->year)->whereMonth('date', $date->month)->whereDay('date', $date->day)->get();
+            $lunches = Lunch::join('lunch_foods', 'lunch_foods.lunch_id', 'lunches.id')->where('lunches.user_id', api_user()->id)->select('lunches.id as lunch_id', 'lunches.date as date', 'lunch_foods.calories as calories', 'lunch_foods.crabs as crabs', 'lunch_foods.protein as protein', 'lunch_foods.fat as fat', 'lunch_foods.food_id as food_id', 'lunch_foods.nutations as nutations')->whereYear('date', $date->year)->whereMonth('date', $date->month)->whereDay('date', $date->day)->get();
 
-            $snacks = Snacks::join('snack_foods', 'snack_foods.snack_id', 'snacks.id')->where('snacks.user_id', api_user()->id)->select('snacks.id as snack_id', 'snacks.date as date', 'snack_foods.calories as calories', 'snack_foods.crabs as crabs', 'snack_foods.protein as protein', 'snack_foods.fat as fat', 'snack_foods.food_id as food_id')->whereYear('date', $date->year)->whereMonth('date', $date->month)->whereDay('date', $date->day)->get();
+            $snacks = Snacks::join('snack_foods', 'snack_foods.snack_id', 'snacks.id')->where('snacks.user_id', api_user()->id)->select('snacks.id as snack_id', 'snacks.date as date', 'snack_foods.calories as calories', 'snack_foods.crabs as crabs', 'snack_foods.protein as protein', 'snack_foods.fat as fat', 'snack_foods.food_id as food_id', 'snack_foods.nutations as nutations')->whereYear('date', $date->year)->whereMonth('date', $date->month)->whereDay('date', $date->day)->get();
 
-            $dinners = Dinner::join('dinner_foods', 'dinner_foods.dinner_id', 'dinners.id')->where('dinners.user_id', api_user()->id)->select('dinners.id as dinner_id', 'dinners.date as date', 'dinner_foods.calories as calories', 'dinner_foods.crabs as crabs', 'dinner_foods.protein as protein', 'dinner_foods.fat as fat', 'dinner_foods.food_id as food_id')->whereYear('date', $date->year)->whereMonth('date', $date->month)->whereDay('date', $date->day)->get();
+            $dinners = Dinner::join('dinner_foods', 'dinner_foods.dinner_id', 'dinners.id')->where('dinners.user_id', api_user()->id)->select('dinners.id as dinner_id', 'dinners.date as date', 'dinner_foods.calories as calories', 'dinner_foods.crabs as crabs', 'dinner_foods.protein as protein', 'dinner_foods.fat as fat', 'dinner_foods.food_id as food_id', 'dinner_foods.nutations as nutations')->whereYear('date', $date->year)->whereMonth('date', $date->month)->whereDay('date', $date->day)->get();
 
             //Total Goals
             $total_calories = api_user()->calories;
@@ -208,36 +207,57 @@ class DashboardController extends Controller
             $dinner_protein = $dinners->sum('protein');
             $dinner_fat = $dinners->sum('fat');
 
-            $all_foods = [];
+            // $nutations_breakfast_foods = Breakfast::where
+
+            $all_nutations = [];
 
             foreach ($breakfasts as $br) {
-                $all_foods[] = $br->food_id;
+                $all_nutations[] = json_decode($br->nutations);
             }
+
             foreach ($lunches as $lu) {
-                $all_foods[] = $lu->food_id;
+                $all_nutations[] = json_decode($lu->nutations);
             }
             foreach ($dinners as $din) {
-                $all_foods[] = $din->food_id;
+                $all_nutations[] = json_decode($din->nutations);
             }
             foreach ($snacks as $sn) {
-                $all_foods[] = $sn->food_id;
+                $all_nutations[] = json_decode($sn->nutations);
             }
 
-            $nutations = [];
-            if ($all_foods != []) {
-
-                $all_nutations = [];
-                foreach ($all_foods as $food) {
-                    $all_nutations[] = Food::find($food)->nutrations;
-                }
-
+            $nutations = array(
+                'dietary_fiber' => 0,
+                'total_sugars' => 0,
+                'saturated_fat' => 0,
+                'monounsaturated_fat' => 0,
+                'polyunsaturated_fat' => 0,
+                'trans_fat' => 0,
+                'cholesterol' => 0,
+                'sodium' => 0,
+                'salt' => 0,
+                'water' => 0,
+                'alcohol' => 0,
+                'vitamin_A' => 0,
+                'vitamin_B7' => 0,
+                'vitamin_C' => 0,
+                'vitamin_D' => 0,
+                'vitamin_E' => 0,
+                'vitamin_K' => 0,
+                'calcium' => 0,
+                'iron' => 0,
+                'magnesium' => 0,
+                'potassium' => 0,
+                'zinc' => 0,
+            );
+            if ($all_nutations != []) {
                 $collection = collect($all_nutations);
-                $nutations = collect(array_fill_keys(array_keys($all_nutations[0]), 0));
-                $collection->each(function ($item) use ($nutations) {
+
+                $data = json_decode($collection, true);
+                foreach ($data as $item) {
                     foreach ($item as $key => $value) {
                         $nutations[$key] += $value;
                     }
-                });
+                }
             }
 
             // % calculations

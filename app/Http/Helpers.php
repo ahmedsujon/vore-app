@@ -46,6 +46,7 @@ function get_meals_food($food, $meal){
     $getFood->quantity = $food['quantity'];
     $getFood->serving_size = $food['serving_size'];
     $getFood->images = $imgs;
+    $getFood->nutrations = $food['nutations'];
     return $getFood;
 }
 
