@@ -66,7 +66,6 @@ class ProfileController extends Controller
                 'name' => $user->name,
                 'username' => $user->username,
                 'avatar' => ($user->avatar == '') ? url('/') . '/' . 'assets/images/avatar.png' : url('/') . '/' . $user->avatar,
-                'height' => $user->height,
                 'weight' => ($user->current_weight_unit == 'kg' ? round(($user->current_weight * 2.20462), 1) : round($user->current_weight, 1)) . ' lbs',
                 'gender' => ucfirst($user->gender),
                 'goal' => $user->goal,
@@ -75,6 +74,7 @@ class ProfileController extends Controller
                 'target_weight' => $user->target_weight,
                 'target_weight_unit' => $user->target_weight_unit,
                 'height' => $user->height,
+                'height_unit' => $user->height_unit,
                 'birthdate' => $user->birth_date,
             ];
 
