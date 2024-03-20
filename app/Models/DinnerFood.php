@@ -12,6 +12,7 @@ class DinnerFood extends Model
     protected $table = 'dinner_foods';
 
     protected $casts = [
+        'nutations' => 'array',
         'created_at' => 'datetime:Y-m-d H:i:s',
         'updated_at' => 'datetime:Y-m-d H:i:s',
     ];

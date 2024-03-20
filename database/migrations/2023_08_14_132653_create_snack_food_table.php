@@ -23,6 +23,7 @@ return new class extends Migration
             $table->integer('quantity')->default(0);
             $table->string('serving_size')->nullable();
             $table->string('image', 2048)->nullable();
+            $table->longText('nutations')->nullable();
             $table->timestamps();
         });
     }
