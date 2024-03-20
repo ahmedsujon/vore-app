@@ -93,6 +93,7 @@ class ProfileController extends Controller
             'target_weight' => 'required',
             'target_weight_unit' => 'required',
             'height' => 'required',
+            'height_unit' => 'required',
             'birthdate' => 'required',
             // 'avatar' => 'required',
         ];
@@ -103,22 +104,85 @@ class ProfileController extends Controller
 
         try {
             $user = User::find(api_user()->id);
+
+            //Calorie Calculations
+            $total_calorie = 0;
+            $activity_level = 1;
+
+            if ($user->daily_activity_level == 'Couch Potato') {
+                $activity_level = 1.2;
+            }
+            if ($user->daily_activity_level == 'Lightly Active') {
+                $activity_level = 1.375;
+            }
+            if ($user->daily_activity_level == 'Moderately Active') {
+                $activity_level = 1.55;
+            }
+            if ($user->daily_activity_level == 'Very Active') {
+                $activity_level = 1.725;
+            }
+            if ($user->daily_activity_level == 'Extremely Active') {
+                $activity_level = 1.9;
+            }
+
+            if ($user->current_weight_unit == 'lbs') {
+                $current_weight = $user->current_weight * 0.453592;
+            } else {
+                $current_weight = $user->current_weight;
+            }
+
+            if ($request->get('height_unit') == 'in') {
+                $height = $request->get('height') * 2.54;
+            } else {
+                $height = $request->get('height');
+            }
+
+            $age = $this->calculateAge($request->get('birthdate'));
+
+            if ($request->get('gender') == 'Male') {
+                $total_calorie = round((88.362 + (13.397 * $current_weight) + (4.799 * $height) - (5.677 * $age)) * $activity_level, 2);
+            } else {
+                $total_calorie = round((447.593 + (9.247 * $current_weight) + (3.098 * $height) - (4.33 * $age)) * $activity_level, 2);
+            }
+
             $user->name = $request->name;
             if ($request->username) {
                 $user->username = $request->username;
             }
-            $user->goal = $request->goal;
+            $user->goal = $request->get('goal');
             $user->gender = $request->gender;
             $user->target_weight = $request->target_weight;
             $user->target_weight_unit = $request->target_weight_unit;
             $user->height = $request->height;
+            $user->height_unit = $request->height_unit;
             $user->birth_date = $request->birthdate;
+
+            $user->calories = round($total_calorie);
+
             if ($request->file('avatar')) {
                 $user->avatar = uploadFile($request->file('avatar'), 'profile_images');
             }
-            $user->save();
 
-            return response()->json(['result' => 'true', 'message' => 'Profile updated successfully']);
+            if ($request->get('goal') == 'Maintain weight') {
+                $user->crabs = $total_calorie > 0 ? round((($total_calorie * 0.5) / 4), 2) : 0;
+                $user->protein = $total_calorie > 0 ? round((($total_calorie * 0.3) / 4), 2) : 0;
+                $user->fat = $total_calorie > 0 ? round((($total_calorie * 0.2) / 9), 2) : 0;
+            }
+            if ($request->get('goal') == 'Lose weight') {
+                $user->crabs = $total_calorie > 0 ? round(((($total_calorie - 1000) * 0.5) / 4), 2) : 0;
+                $user->protein = $total_calorie > 0 ? round(((($total_calorie - 1000) * 0.3) / 4), 2) : 0;
+                $user->fat = $total_calorie > 0 ? round(((($total_calorie - 1000) * 0.2) / 9), 2) : 0;
+            }
+            if ($request->get('goal') == 'Build muscle') {
+                $user->crabs = $total_calorie > 0 ? round(((($total_calorie + 500) * 0.5) / 4), 2) : 0;
+                $user->protein = $total_calorie > 0 ? round(((($total_calorie + 500) * 0.3) / 4), 2) : 0;
+                $user->fat = $total_calorie > 0 ? round(((($total_calorie + 500) * 0.2) / 9), 2) : 0;
+            }
+
+            // $user->save();
+
+            return response()->json($user);
+            // return response()->json(['result' => 'true', 'message' => 'Profile updated successfully']);
 
         } catch (Exception $ex) {
             return response($ex->getMessage());
@@ -254,7 +318,7 @@ class ProfileController extends Controller
             }
 
             // if ($user->current_weight_unit == 'lbs') {
-                $current_weight = $request->get('current_weight') * 0.453592;
+            $current_weight = $request->get('current_weight') * 0.453592;
             // } else {
             //     $current_weight = $request->get('current_weight');
             // }

@@ -31,9 +31,9 @@ class UserTableSeeder extends Seeder
                 $user->email = $email;
                 $user->password = Hash::make('12345678');
                 $user->avatar = 'assets/images/avatar.png';
-                $user->gender = $faker->randomElement(['male', 'female']);
-                $user->goal = $faker->randomElement(['Lose Weight', 'Maintain Weght', 'Build Muscle']);
-                $user->daily_activity_level = $faker->randomElement(['Couch Potato', 'Lightly Active', 'Modarately Active', 'Very Active', 'Extermely Active']);
+                $user->gender = $faker->randomElement(['Male', 'Female']);
+                $user->goal = $faker->randomElement(['Lose weight', 'Maintain weight', 'Build muscle']);
+                $user->daily_activity_level = $faker->randomElement(['Couch Potato', 'Lightly Active', 'Moderately Active', 'Very Active', 'Extermely Active']);
                 $user->current_weight = $faker->randomElement(['70', '80', '75', '85']);
                 $user->current_weight_unit = 'kg';
 
@@ -42,8 +42,8 @@ class UserTableSeeder extends Seeder
 
                 $user->target_weight = $user->current_weight >= 80 ? $user->current_weight - 5 : $user->current_weight + 3;
                 $user->target_weight_unit = 'kg';
-                $user->height = $faker->randomElement(['5.6', '6.1', '5.8', '6.3']);
-                $user->height_unit = 'ft';
+                $user->height = $faker->randomElement(['188', '160']);
+                $user->height_unit = 'cm';
                 $user->birth_date = $faker->dateTimeBetween('1990-01-01', '2002-12-31')->format('d/m/Y');
                 $user->measurements = [
                     'waist' => 0,
