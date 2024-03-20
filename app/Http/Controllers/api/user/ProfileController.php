@@ -145,17 +145,17 @@ class ProfileController extends Controller
                 $total_calorie = round((447.593 + (9.247 * $current_weight) + (3.098 * $height) - (4.33 * $age)) * $activity_level, 2);
             }
 
-            $user->name = $request->name;
-            if ($request->username) {
-                $user->username = $request->username;
+            $user->name = $request->get('name');
+            if ($request->get('username')) {
+                $user->username = $request->get('username');
             }
             $user->goal = $request->get('goal');
-            $user->gender = $request->gender;
-            $user->target_weight = $request->target_weight;
-            $user->target_weight_unit = $request->target_weight_unit;
-            $user->height = $request->height;
-            $user->height_unit = $request->height_unit;
-            $user->birth_date = $request->birthdate;
+            $user->gender = $request->get('gender');
+            $user->target_weight = $request->get('target_weight');
+            $user->target_weight_unit = $request->get('target_weight_unit');
+            $user->height = $request->get('height');
+            $user->height_unit = $request->get('height_unit');
+            $user->birth_date = $request->get('birthdate');
 
             $user->calories = round($total_calorie);
 
@@ -179,10 +179,10 @@ class ProfileController extends Controller
                 $user->fat = $total_calorie > 0 ? round(((($total_calorie + 500) * 0.2) / 9), 2) : 0;
             }
 
-            // $user->save();
+            $user->save();
 
-            return response()->json($user);
-            // return response()->json(['result' => 'true', 'message' => 'Profile updated successfully']);
+            // return response()->json($user);
+            return response()->json(['result' => 'true', 'message' => 'Profile updated successfully']);
 
         } catch (Exception $ex) {
             return response($ex->getMessage());
