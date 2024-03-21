@@ -341,11 +341,11 @@ class ProfileController extends Controller
             $user->daily_activity_level = $request->get('daily_activity_level');
             $user->calories = round($total_calorie);
             $user->starting_weight = $request->get('current_weight');
-            // $user->starting_weight_unit = 'lbs';
+            $user->starting_weight_unit = 'lbs';
             $user->current_weight = $request->get('current_weight');
-            // $user->current_weight_unit = 'lbs';
+            $user->current_weight_unit = 'lbs';
             $user->target_weight = $request->get('target_weight');
-            // $user->target_weight_unit = 'lbs';
+            $user->target_weight_unit = 'lbs';
 
             if ($request->get('goal') == 'Maintain weight') {
                 $user->crabs = $total_calorie > 0 ? round((($total_calorie * 0.5) / 4), 2) : 0;
