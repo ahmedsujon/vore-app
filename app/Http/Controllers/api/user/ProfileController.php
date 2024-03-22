@@ -331,7 +331,7 @@ class ProfileController extends Controller
 
             $age = $this->calculateAge($user->birth_date);
 
-            if ($request->get('gender') == 'Male') {
+            if ($user->gender == 'Male') {
                 $total_calorie = round((88.362 + (13.397 * $current_weight) + (4.799 * $height) - (5.677 * $age)) * $activity_level, 2);
             } else {
                 $total_calorie = round((447.593 + (9.247 * $current_weight) + (3.098 * $height) - (4.33 * $age)) * $activity_level, 2);
