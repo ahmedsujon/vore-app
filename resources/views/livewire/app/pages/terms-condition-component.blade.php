@@ -8,7 +8,7 @@
             <div class="row">
                 <div class="col-lg-12">
                     <div class="text">
-                        <h1>Vore Fitness App Terms and Conditions</h1>
+                        <h1>Vore App Terms and Conditions</h1>
                         <p>Welcome to Vore! These terms and conditions outline the rules and regulations for the use of
                             the Vore Fitness App.</p>
 

@@ -8,7 +8,7 @@
             <div class="row">
                 <div class="col-lg-12">
                     <div class="text">
-                        <h1>Vore Fitness App Privacy Policy</h1>
+                        <h1>Vore App Privacy Policy</h1>
                         <p>Vore is committed to protecting the privacy of its users. This Privacy Policy outlines the
                             types of personal information that is received and collected by Vore and how it is used.</p>
 
