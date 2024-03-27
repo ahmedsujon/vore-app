@@ -3,7 +3,20 @@
 use Carbon\Carbon;
 use App\Models\Food;
 use App\Models\Admin;
+use App\Models\Setting;
+use App\Models\Permission;
 use Illuminate\Support\Facades\Auth;
+
+
+function admin()
+{
+    return Auth::guard('admin')->user();
+}
+
+function getAdminByID($id)
+{
+    return Admin::find($id);
+}
 
 // Api
 function api_user(){
@@ -91,16 +104,33 @@ function uploadFile($file, $folder)
     return $file_name;
 }
 
-// Web
-function admin()
+//setting
+function setting()
 {
-    return Auth::guard('admin')->user();
+    return Setting::find(1);
 }
 
-function getAdminByID($id)
+function adminPermissions()
 {
-    return Admin::find($id);
+    $permissions = [];
+    foreach (json_decode(admin()->permissions) as $permission) {
+        $perm = Permission::where('id', $permission)->first()->value;
+        $permissions[] = $perm;
+    }
+    return $permissions;
 }
+
+function isAdminPermitted($permission)
+{
+    $permission = Permission::where('value', $permission)->first();
+
+    if (in_array($permission->id, json_decode(admin()->permissions))) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
 function loadingStateSm($key, $title)
 {
     $loadingSpinner = '
@@ -147,4 +177,3 @@ function showErrorMessage($message, $file, $line){
         return dd($error_array);
     }
 }
-
