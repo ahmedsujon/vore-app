@@ -1,5 +1,7 @@
 <?php
 
+use App\Livewire\App\Pages\PrivacyPolicyComponent;
+use App\Livewire\App\Pages\TermsConditionComponent;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -16,6 +18,10 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return redirect()->route('admin.login');
 });
+
+Route::get('privacy-policy', PrivacyPolicyComponent::class)->name('privacy.policy');
+Route::get('terms-and-conditions', TermsConditionComponent::class)->name('terms.conditions');
+
 
 //Call Route Files
 require __DIR__ . '/admin.php';
