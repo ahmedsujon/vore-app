@@ -1,7 +1,7 @@
 <div>
     <div wire:ignore.self class="modal fade" id="editProfileModal" tabindex="-1" role="dialog" data-bs-backdrop="static"
         data-bs-keyboard="false" aria-labelledby="modelTitleId">
-        <div class="modal-dialog modal-dialog-centered modal-dialog-zoom modal-md" role="document">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-zoom modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header" style="background: white;">
                     <h5 class="modal-title m-0" id="mySmallModalLabel">Admin Profile</h5>

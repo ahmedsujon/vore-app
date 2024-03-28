@@ -59,7 +59,6 @@
                                             <th class="align-middle">ID</th>
                                             <th class="align-middle">Name</th>
                                             <th class="align-middle">Email</th>
-                                            <th class="align-middle">Phone</th>
                                             <th class="align-middle">Added By</th>
                                             <th class="align-middle">Created Date</th>
                                             <th class="align-middle text-center">Action</th>
@@ -72,9 +71,7 @@
                                                     <td>{{ $admin->id }}</td>
                                                     <td>{{ $admin->name }}</td>
                                                     <td>{{ $admin->email }}</td>
-                                                    <td>{{ $admin->phone }}</td>
-                                                    {{-- <td>{{ getAdminByID($admin->added_by)->name }}</td> --}}
-                                                    <td>{{ $admin->added_by }}</td>
+                                                    <td>{{ getAdminByID($admin->added_by)->name }}</td>
                                                     <td>{{ $admin->created_at }}</td>
                                                     <td class="text-center">
                                                         <button
