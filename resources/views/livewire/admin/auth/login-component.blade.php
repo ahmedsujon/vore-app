@@ -13,7 +13,7 @@
                                         <div class="text-center">
                                             <h4 class="mb-3"><i
                                                     class="bx bxs-quote-alt-left text-primary h1 align-middle me-3"></i><span
-                                                    class="text-primary">IntrigueIT</span> Solutions</h4>
+                                                    class="text-primary">Vore</span> App</h4>
                                         </div>
                                     </div>
                                 </div>
@@ -56,7 +56,7 @@
                                                 <span class="text-danger" style="font-size: 12px;">{{ $message }}</span>
                                             @enderror
                                         </div>
-    
+
                                         <div class="mb-3">
                                             <label class="form-label">Password</label>
                                             <div class="input-group auth-pass-inputgroup">
@@ -118,7 +118,7 @@
                                 <p class="mb-0">© <script>
                                         document.write(new Date().getFullYear())
                                     </script> Skote. Crafted with <i class="mdi mdi-heart text-danger"></i> by
-                                    Intrigueit</p>
+                                    Vore</p>
                             </div>
                         </div>
                     </div>
