@@ -1,5 +1,6 @@
 <?php
 
+use App\Livewire\App\Contact\ContactComponent;
 use App\Livewire\App\Pages\PrivacyPolicyComponent;
 use App\Livewire\App\Pages\TermsConditionComponent;
 use Illuminate\Support\Facades\Route;
@@ -21,6 +22,9 @@ Route::get('/', function () {
 
 Route::get('privacy-policy', PrivacyPolicyComponent::class)->name('privacy.policy');
 Route::get('terms-and-conditions', TermsConditionComponent::class)->name('terms.conditions');
+
+// Contact Route
+Route::get('contact-us', ContactComponent::class)->name('app.contact.us');
 
 
 //Call Route Files
