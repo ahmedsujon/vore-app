@@ -189,7 +189,6 @@
                                             <th class="align-middle">Gender</th>
                                             <th class="align-middle">Date Of Birth</th>
                                             <th class="align-middle">Created Date</th>
-                                            <th class="align-middle text-center">Action</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -202,15 +201,6 @@
                                                     <td>{{ $customer->gender }}</td>
                                                     <td>{{ $customer->birth_date }}</td>
                                                     <td>{{ $customer->created_at }}</td>
-                                                    <td class="text-center">
-                                                        <button
-                                                            class="btn btn-sm btn-soft-primary waves-effect waves-light action-btn edit_btn"
-                                                            wire:click.prevent='editData({{ $customer->id }})'
-                                                            wire:loading.attr='disabled'>
-                                                            <i
-                                                                class="mdi mdi-eye-outline font-size-13 align-middle"></i>
-                                                        </button>
-                                                    </td>
                                                 </tr>
                                             @endforeach
                                         @else
