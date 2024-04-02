@@ -16,36 +16,36 @@
                         </a>
                     </li>
 
-                    @if (isAdminPermitted('users_manage'))
-                        <li class="menu-title" key="t-user">Customer</li>
-                    @endif
-                    @if (isAdminPermitted('users_manage'))
-                        <li>
-                            <a href="{{ route('admin.allUsers') }}" class="waves-effect">
-                                <i class="bx bx-user"></i>
-                                <span key="t-chat">Customer List</span>
-                            </a>
-                        </li>
-                    @endif
-
                     @if (isAdminPermitted('admins_manage'))
                         <li class="menu-title" key="t-user">App Feathurs</li>
                     @endif
                     @if (isAdminPermitted('admins_manage'))
                         <li>
                             <a href="#" class="waves-effect">
-                                <i class="bx bx-user"></i>
+                                <i class="bx bx-data"></i>
                                 <span key="t-chat">Plan List</span>
                             </a>
                         </li>
                         <li>
                             <a href="#" class="waves-effect">
-                                <i class="bx bx-user"></i>
+                                <i class="bx bx-customize"></i>
                                 <span key="t-chat">Coach List</span>
                             </a>
                         </li>
-
                     @endif
+
+                    @if (isAdminPermitted('admins_manage'))
+                        <li class="menu-title" key="t-user">Admin</li>
+                    @endif
+                    @if (isAdminPermitted('admins_manage'))
+                        <li>
+                            <a href="{{ route('admin.customers') }}" class="waves-effect">
+                                <i class="bx bxs-user-rectangle"></i>
+                                <span key="t-chat">Customer List</span>
+                            </a>
+                        </li>
+                    @endif
+
 
                     @if (isAdminPermitted('admins_manage'))
                         <li class="menu-title" key="t-user">Admin</li>
