@@ -1,3 +1,3 @@
 <div>
-    {{-- If you look to others for fulfillment, you will never truly be fulfilled. --}}
+    {{-- A good traveler has no fixed plans and is not intent upon arriving. --}}
 </div>

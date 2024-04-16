@@ -4,8 +4,12 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\LogoutController;
 use App\Livewire\Admin\DashboardComponent;
 use App\Livewire\Admin\Auth\LoginComponent;
-use App\Livewire\Admin\Measurements\MeasurementsComponent;
+use App\Livewire\Admin\Customers\CustomerComponent;
 use App\Livewire\Admin\Users\UserComponent;
+use App\Livewire\Admin\Users\UsersComponent;
+use App\Livewire\Admin\Users\AdminsComponent;
+use App\Livewire\Admin\Profile\ProfileComponent;
+use App\Livewire\Admin\Measurements\MeasurementsComponent;
 
 /*
 |--------------------------------------------------------------------------
@@ -21,10 +25,14 @@ use App\Livewire\Admin\Users\UserComponent;
 Route::get('admin/login', LoginComponent::class)->middleware('guest:admin')->name('admin.login');
 
 Route::get('admin', DashboardComponent::class)->middleware('auth:admin');
-Route::prefix('admin/')->name('admin.')->middleware('auth:admin')->group(function(){
+Route::prefix('admin/')->name('admin.')->middleware('auth:admin')->group(function () {
     Route::post('logout', [LogoutController::class, 'adminLogout'])->name('logout');
 
+
     Route::get('dashboard', DashboardComponent::class)->name('dashboard');
-    Route::get('users', UserComponent::class)->name('users');
-    Route::get('measurements', MeasurementsComponent::class)->name('measurements');
+    Route::get('customers', CustomerComponent::class)->name('customers');
+
+    //user management
+    Route::get('all-users', UsersComponent::class)->name('allUsers')->middleware('adminPermission:users_manage');
+    Route::get('all-admins', AdminsComponent::class)->name('allAdmins')->middleware('adminPermission:admins_manage');
 });
