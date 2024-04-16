@@ -126,7 +126,7 @@ class ProfileController extends Controller
             }
 
             if ($user->current_weight_unit == 'lbs') {
-                $current_weight = $user->current_weight * 0.453592;
+                $current_weight = $user->current_weight * 0.45;
             } else {
                 $current_weight = $user->current_weight;
             }
@@ -318,7 +318,7 @@ class ProfileController extends Controller
             }
 
             // if ($user->current_weight_unit == 'lbs') {
-            $current_weight = $request->get('current_weight') * 0.453592;
+            $current_weight = $request->get('current_weight') * 0.45;
             // } else {
             //     $current_weight = $request->get('current_weight');
             // }
