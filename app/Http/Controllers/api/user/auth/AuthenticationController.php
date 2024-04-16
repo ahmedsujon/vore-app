@@ -80,7 +80,7 @@ class AuthenticationController extends Controller
         }
 
         if ($request->get('current_weight_unit') == 'lbs') {
-            $current_weight = $request->get('current_weight') * 0.453592;
+            $current_weight = $request->get('current_weight') * 0.45;
         } else {
             $current_weight = $request->get('current_weight');
         }
