@@ -141,15 +141,6 @@
                                     </div>
 
                                     <div class="col-md-6">
-                                        <label for="example-number-input" class="col-form-label">Phone</label>
-                                        <input class="form-control mb-2" type="number" wire:model="phone"
-                                            placeholder="Enter phone">
-                                        @error('phone')
-                                            <p class="text-danger" style="font-size: 11.5px;">{{ $message }}</p>
-                                        @enderror
-                                    </div>
-
-                                    <div class="col-md-6">
                                         <label for="example-number-input" class="col-form-label">Password</label>
                                         <input class="form-control mb-2" type="password" wire:model="password"
                                             placeholder="Enter new password" wire:model='password'>

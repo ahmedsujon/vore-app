@@ -15,12 +15,12 @@ class AdminTableSeeder extends Seeder
      */
     public function run(): void
     {
-        $getSAdmin = Admin::where('email', 'admin@voreapp.com')->first();
+        $getSAdmin = Admin::where('email', 'admin@voreapp.co')->first();
 
         if (!$getSAdmin) {
             $admin = new Admin();
             $admin->name = 'Vore Admin';
-            $admin->email = 'admin@voreapp.com';
+            $admin->email = 'admin@voreapp.co';
             $admin->password = Hash::make('vore@2024');
             $admin->avatar = 'assets/images/avatar.png';
             $admin->type = 'super_admin';

@@ -17,7 +17,7 @@ class AdminsComponent extends Component
     use WithFileUploads;
     public $sortingValue = 10, $searchTerm;
     public $edit_id, $delete_id;
-    public $name, $email, $phone, $password, $avatar, $uploadedAvatar, $permissions = [];
+    public $name, $email, $password, $avatar, $uploadedAvatar, $permissions = [];
 
     public function storeData()
     {
@@ -31,7 +31,6 @@ class AdminsComponent extends Component
         $data->added_by = admin()->id;
         $data->name = $this->name;
         $data->email = $this->email;
-        $data->phone = $this->phone;
         $data->password = Hash::make($this->password);
         $data->type = 'admin';
         $data->permissions = json_encode($this->permissions);
@@ -55,7 +54,6 @@ class AdminsComponent extends Component
         $data = Admin::find($id);
         $this->name = $data->name;
         $this->email = $data->email;
-        $this->phone = $data->phone;
         $this->uploadedAvatar = $data->avatar;
         $this->permissions = json_decode($data->permissions);
         $this->edit_id = $data->id;
@@ -69,21 +67,18 @@ class AdminsComponent extends Component
             $this->validate([
                 'name' => 'required',
                 'email' => 'required|email',
-                'phone' => 'required|numeric',
                 'password' => 'min:8|max:25',
             ]);
         } else {
             $this->validate([
                 'name' => 'required',
                 'email' => 'required|email',
-                'phone' => 'required|numeric',
             ]);
         }
 
         $user = Admin::find($this->edit_id);
         $user->name = $this->name;
         $user->email = $this->email;
-        $user->phone = $this->phone;
         $user->permissions = json_encode($this->permissions);
 
         if ($this->password) {
@@ -110,7 +105,6 @@ class AdminsComponent extends Component
     {
         $this->name = null;
         $this->email = null;
-        $this->phone = null;
         $this->password = null;
         $this->avatar = null;
         $this->uploadedAvatar = null;

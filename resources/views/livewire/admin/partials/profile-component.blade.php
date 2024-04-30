@@ -32,16 +32,6 @@
                                     </div>
                                 </div>
                                 <div class="mb-3 row">
-                                    <label for="example-number-input" class="col-sm-3 col-form-label">Phone</label>
-                                    <div class="col-sm-9">
-                                        <input class="form-control mb-2" type="text" wire:model="phone" placeholder="Enter phone">
-                                        @error('phone')
-                                            <span class="text-danger" style="font-size: 11.5px;">{{ $message }}</span>
-                                            <br>
-                                        @enderror
-                                    </div>
-                                </div>
-                                <div class="mb-3 row">
                                     <label for="example-number-input" class="col-sm-3 col-form-label">Password</label>
                                     <div class="col-sm-9">
                                         <input class="form-control mb-2" type="text" wire:model="password" placeholder="Enter new password" wire:model='password'>
