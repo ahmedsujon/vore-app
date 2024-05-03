@@ -25,7 +25,9 @@
 
 <body>
 
+    @livewire('app.layouts.inc.header')
     {{ $slot }}
+    @livewire('app.layouts.inc.footer')
 
     <!-- JAVASCRIPT -->
     <script src="{{ asset('assets/admin/libs/jquery/jquery.min.js') }}"></script>
