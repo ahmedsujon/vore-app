@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Mail;
 
 class ContactComponent extends Component
 {
-    public $name, $email, $phone, $descriptions;
+    public $name, $email, $phone, $description;
 
     public function storeData()
     {
@@ -16,19 +16,19 @@ class ContactComponent extends Component
             'name' => 'required',
             'email' => 'required',
             'phone' => 'required',
-            'descriptions' => 'required',
+            'description' => 'required',
         ]);
 
         $data = new Contact();
         $data->name = $this->name;
         $data->email = $this->email;
         $data->phone = $this->phone;
-        $data->descriptions = $this->descriptions;
+        $data->description = $this->description;
 
         $mailData['name'] = $this->name;
         $mailData['email'] = $this->email;
         $mailData['phone'] = $this->phone;
-        $mailData['descriptions'] = $this->descriptions;
+        $mailData['description'] = $this->description;
         Mail::send('emails.contact-message', $mailData, function ($message) use ($mailData) {
             $message->to('admin@voreapp.co')
                 ->subject('Vore Contact Message');
