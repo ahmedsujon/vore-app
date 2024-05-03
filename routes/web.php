@@ -2,6 +2,7 @@
 
 use App\Livewire\App\Contact\ContactComponent;
 use App\Livewire\App\HomeComponent;
+use App\Livewire\App\Pages\AboutComponent;
 use App\Livewire\App\Pages\PrivacyPolicyComponent;
 use App\Livewire\App\Pages\TermsConditionComponent;
 use Illuminate\Support\Facades\Route;
@@ -20,12 +21,15 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', HomeComponent::class)->name('app.home');
 
+Route::get('about-us', AboutComponent::class)->name('app.aboutus');
 Route::get('privacy-policy', PrivacyPolicyComponent::class)->name('privacy.policy');
 Route::get('terms-and-conditions', TermsConditionComponent::class)->name('terms.conditions');
 
 // Contact Route
 Route::get('contact-us', ContactComponent::class)->name('app.contact.us');
 
+// About us Route
+Route::get('about-us', AboutComponent::class)->name('app.aboutus');
 
 //Call Route Files
 require __DIR__ . '/admin.php';
