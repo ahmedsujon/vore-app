@@ -29,15 +29,15 @@
                         </div>
                         <div class="form-group">
                             <label for="phone">Phone</label>
-                            <input type="text" wire:model='phone' class="form-control">
+                            <input type="number" wire:model='phone' class="form-control">
                             @error('phone')
                                 <p class="text-danger" style="font-size: 11.5px;">{{ $message }}</p>
                             @enderror
                         </div>
                         <div class="form-group">
-                            <label for="descriptions">Message</label>
-                            <textarea class="form-control" wire:model='descriptions' placeholder="Write your message..." rows="3"></textarea>
-                            @error('descriptions')
+                            <label for="description">Message</label>
+                            <textarea class="form-control" wire:model='description' placeholder="Write your message..." rows="3"></textarea>
+                            @error('description')
                                 <p class="text-danger" style="font-size: 11.5px;">{{ $message }}</p>
                             @enderror
                         </div>
