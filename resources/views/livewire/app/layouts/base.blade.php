@@ -1,49 +1,41 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
-
     <meta charset="utf-8" />
-    <title>Vore</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta content="Premium Multipurpose Admin & Dashboard Template" name="description" />
-    <meta content="Themesbrand" name="author" />
-    <!-- App favicon -->
-    <link rel="shortcut icon" href="{{ asset('assets/admin/images/favicon.ico') }}">
+    <meta http-equiv="x-ua-compatible" content="ie=edge" />
+    <title>Home</title>
+    <meta name="description" content="" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="shortcut icon" href="assets/images/header/logo.png" type="image/x-icon" />
+    <link rel="stylesheet" href="{{ asset('assets/app/plugins/css/bootstrap.min.css') }}" />
+    <link rel="stylesheet" href="{{ asset('assets/app/plugins/css/swiper-bundle.min.css') }}" />
 
-    <!-- Bootstrap Css -->
-    <link href="{{ asset('assets/admin/css/bootstrap.min.css') }}" id="bootstrap-style" rel="stylesheet"
-        type="text/css" />
-    <!-- Icons Css -->
-    <link href="{{ asset('assets/admin/css/icons.min.css') }}" rel="stylesheet" type="text/css" />
-    <!-- App Css-->
-    <link href="{{ asset('assets/admin/css/app.min.css') }}" id="app-style" rel="stylesheet" type="text/css" />
-    <!-- App js -->
-    <script src="{{ asset('assets/admin/js/plugin.js') }}"></script>
+    <link rel="stylesheet" href="{{ asset('assets/app/plugins/css/magnific-popup.css') }}" />
+    <link rel="stylesheet" href="{{ asset('assets/app/plugins/css/aos/aos.css') }}" />
 
+    <link rel="stylesheet" href="{{ asset('assets/app/sass/style.css') }}" />
 </head>
 
 <body>
+    <!-- Scroll To Top -->
+    <div class="scrolltop" id="scrollTop">
+        <i class="fas fa-chevron-up"></i>
+    </div>
+
 
     @livewire('app.layouts.inc.header')
     {{ $slot }}
     @livewire('app.layouts.inc.footer')
 
-    <!-- JAVASCRIPT -->
-    <script src="{{ asset('assets/admin/libs/jquery/jquery.min.js') }}"></script>
-    <script src="{{ asset('assets/admin/libs/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
-    <script src="{{ asset('assets/admin/libs/metismenu/metisMenu.min.js') }}"></script>
-    <script src="{{ asset('assets/admin/libs/simplebar/simplebar.min.js') }}"></script>
-    <script src="{{ asset('assets/admin/libs/node-waves/waves.min.js') }}"></script>
-
-    <!-- Plugins js-->
-    <script src="{{ asset('assets/admin/libs/jquery-countdown/jquery.countdown.min.js') }}"></script>
-
-    <!-- Countdown js -->
-    <script src="{{ asset('assets/admin/js/pages/coming-soon.init.js') }}"></script>
-
-    <script src="{{ asset('assets/admin/js/app.js') }}"></script>
-
+    <!-- JS Here -->
+    <script src="{{ asset('assets/app/plugins/js/jquery-3.6.0.min.js') }}"></script>
+    <script src="{{ asset('assets/app/plugins/js/bootstrap.bundle.min.js') }}"></script>
+    <script src="{{ asset('assets/app/plugins/js/swiper-bundle.min.js') }}"></script>
+    <script src="{{ asset('assets/app/plugins/js/jquery.magnific-popup.min.js') }}"></script>
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+    <script src="https://kit.fontawesome.com/46f35fbc02.js" crossorigin="anonymous"></script>
+    <script src="{{ asset('assets/app/js/main.js') }}"></script>
 </body>
 
 </html>

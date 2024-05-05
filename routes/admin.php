@@ -11,6 +11,7 @@ use App\Livewire\Admin\Users\UsersComponent;
 use App\Livewire\Admin\Users\AdminsComponent;
 use App\Livewire\Admin\Profile\ProfileComponent;
 use App\Livewire\Admin\Measurements\MeasurementsComponent;
+use App\Livewire\Admin\Team\TeamComponent;
 
 /*
 |--------------------------------------------------------------------------
@@ -33,6 +34,7 @@ Route::prefix('admin/')->name('admin.')->middleware('auth:admin')->group(functio
     Route::get('dashboard', DashboardComponent::class)->name('dashboard');
     Route::get('customers', CustomerComponent::class)->name('customers');
     Route::get('contact/message', ContactComponent::class)->name('contact.message');
+    Route::get('team/members', TeamComponent::class)->name('team.members');
 
     //user management
     Route::get('all-users', UsersComponent::class)->name('allUsers')->middleware('adminPermission:users_manage');

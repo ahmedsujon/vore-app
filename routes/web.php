@@ -21,7 +21,6 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', HomeComponent::class)->name('app.home');
 
-Route::get('about-us', AboutComponent::class)->name('app.aboutus');
 Route::get('privacy-policy', PrivacyPolicyComponent::class)->name('privacy.policy');
 Route::get('terms-and-conditions', TermsConditionComponent::class)->name('terms.conditions');
 

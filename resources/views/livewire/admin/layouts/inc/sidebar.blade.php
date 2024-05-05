@@ -68,6 +68,12 @@
                                 <span key="t-chat">All Admins</span>
                             </a>
                         </li>
+                        <li>
+                            <a href="{{ route('admin.team.members') }}" class="waves-effect">
+                                <i class="bx bx-user"></i>
+                                <span key="t-chat">Team Members</span>
+                            </a>
+                        </li>
                     @endif
 
                     @if (isAdminPermitted('settings_manage'))
