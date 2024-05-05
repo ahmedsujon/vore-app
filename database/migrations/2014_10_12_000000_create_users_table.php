@@ -29,7 +29,7 @@ return new class extends Migration
             $table->double('target_weight', 20,2)->default(0);
             $table->enum('target_weight_unit', ['lbs','kg'])->default('kg');
             $table->double('height', 20,2)->default(0);
-            $table->enum('height_unit', ['cm', 'in'])->default('in');
+            $table->enum('height_unit', ['cm', 'ft'])->default('ft');
             $table->string('birth_date')->nullable();
             $table->longText('measurements')->nullable();
             $table->enum('measurements_unit', ['in','cm'])->default('in');
