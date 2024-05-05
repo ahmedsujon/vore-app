@@ -113,12 +113,9 @@ class ProfileController extends Controller
                 $activity_level = 1.2;
             }
             if ($user->daily_activity_level == 'Lightly Active') {
-                $activity_level = 1.375;
-            }
-            if ($user->daily_activity_level == 'Moderately Active') {
                 $activity_level = 1.55;
             }
-            if ($user->daily_activity_level == 'Very Active') {
+            if ($user->daily_activity_level == 'Moderately Active') {
                 $activity_level = 1.725;
             }
             if ($user->daily_activity_level == 'Extremely Active') {
@@ -131,8 +128,13 @@ class ProfileController extends Controller
                 $current_weight = $user->current_weight;
             }
 
-            if ($request->get('height_unit') == 'in') {
-                $height = $request->get('height') * 2.54;
+            if ($request->get('height_unit') == 'ft') {
+                $get_height = explode('.', $request->get('height'));
+
+                $height_ft = ($get_height[0] * 12) * 2.54;
+                $height_in = $get_height[1] * 2.54;
+
+                $height = $height_ft + $height_in;
             } else {
                 $height = $request->get('height');
             }
@@ -157,6 +159,16 @@ class ProfileController extends Controller
             $user->height_unit = $request->get('height_unit');
             $user->birth_date = $request->get('birthdate');
 
+            $weekly_goal = $user->weekly_goal;
+            if ($weekly_goal == 1) {
+                $weekly_value = 250;
+            }if ($weekly_goal == 2) {
+                $weekly_value = 500;
+            }if ($weekly_goal == 3) {
+                $weekly_value = 750;
+            }if ($weekly_goal == 4) {
+                $weekly_value = 1000;
+            }
 
             if ($request->file('avatar')) {
                 $user->avatar = uploadFile($request->file('avatar'), 'profile_images');
@@ -170,18 +182,18 @@ class ProfileController extends Controller
                 $user->calories = round($total_calorie);
             }
             if ($request->get('goal') == 'Lose weight') {
-                $user->crabs = $total_calorie > 0 ? round(((($total_calorie - 1000) * 0.5) / 4), 2) : 0;
-                $user->protein = $total_calorie > 0 ? round(((($total_calorie - 1000) * 0.3) / 4), 2) : 0;
-                $user->fat = $total_calorie > 0 ? round(((($total_calorie - 1000) * 0.2) / 9), 2) : 0;
+                $user->crabs = $total_calorie > 0 ? round(((($total_calorie - $weekly_value) * 0.5) / 4), 2) : 0;
+                $user->protein = $total_calorie > 0 ? round(((($total_calorie - $weekly_value) * 0.3) / 4), 2) : 0;
+                $user->fat = $total_calorie > 0 ? round(((($total_calorie - $weekly_value) * 0.2) / 9), 2) : 0;
 
-                $user->calories = round($total_calorie - 1000);
+                $user->calories = round($total_calorie - $weekly_value);
             }
             if ($request->get('goal') == 'Build muscle') {
-                $user->crabs = $total_calorie > 0 ? round(((($total_calorie + 1000) * 0.5) / 4), 2) : 0;
-                $user->protein = $total_calorie > 0 ? round(((($total_calorie + 1000) * 0.3) / 4), 2) : 0;
-                $user->fat = $total_calorie > 0 ? round(((($total_calorie + 1000) * 0.2) / 9), 2) : 0;
+                $user->crabs = $total_calorie > 0 ? round(((($total_calorie + $weekly_value) * 0.5) / 4), 2) : 0;
+                $user->protein = $total_calorie > 0 ? round(((($total_calorie + $weekly_value) * 0.3) / 4), 2) : 0;
+                $user->fat = $total_calorie > 0 ? round(((($total_calorie + $weekly_value) * 0.2) / 9), 2) : 0;
 
-                $user->calories = round($total_calorie + 1000);
+                $user->calories = round($total_calorie + $weekly_value);
             }
 
             $user->save();
@@ -307,14 +319,10 @@ class ProfileController extends Controller
             }
 
             if ($request->get('daily_activity_level') == 'Lightly Active') {
-                $activity_level = 1.375;
-            }
-
-            if ($request->get('daily_activity_level') == 'Moderately Active') {
                 $activity_level = 1.55;
             }
 
-            if ($request->get('daily_activity_level') == 'Very Active') {
+            if ($request->get('daily_activity_level') == 'Moderately Active') {
                 $activity_level = 1.725;
             }
 
@@ -328,8 +336,13 @@ class ProfileController extends Controller
             //     $current_weight = $request->get('current_weight');
             // }
 
-            if ($user->height_unit == 'in') {
-                $height = $user->height * 2.54;
+            if ($user->height_unit == 'ft') {
+                $get_height = explode('.', $user->height);
+
+                $height_ft = ($get_height[0] * 12) * 2.54;
+                $height_in = $get_height[1] * 2.54;
+
+                $height = $height_ft + $height_in;
             } else {
                 $height = $user->height;
             }
@@ -352,6 +365,17 @@ class ProfileController extends Controller
             $user->target_weight = $request->get('target_weight');
             $user->target_weight_unit = 'lbs';
 
+            $weekly_goal = $user->weekly_goal;
+            if ($weekly_goal == 1) {
+                $weekly_value = 250;
+            }if ($weekly_goal == 2) {
+                $weekly_value = 500;
+            }if ($weekly_goal == 3) {
+                $weekly_value = 750;
+            }if ($weekly_goal == 4) {
+                $weekly_value = 1000;
+            }
+
             if ($request->get('goal') == 'Maintain weight') {
                 $user->crabs = $total_calorie > 0 ? round((($total_calorie * 0.5) / 4), 2) : 0;
                 $user->protein = $total_calorie > 0 ? round((($total_calorie * 0.3) / 4), 2) : 0;
@@ -360,18 +384,18 @@ class ProfileController extends Controller
                 $user->calories = round($total_calorie);
             }
             if ($request->get('goal') == 'Lose weight') {
-                $user->crabs = $total_calorie > 0 ? round(((($total_calorie - 1000) * 0.5) / 4), 2) : 0;
-                $user->protein = $total_calorie > 0 ? round(((($total_calorie - 1000) * 0.3) / 4), 2) : 0;
-                $user->fat = $total_calorie > 0 ? round(((($total_calorie - 1000) * 0.2) / 9), 2) : 0;
+                $user->crabs = $total_calorie > 0 ? round(((($total_calorie - $weekly_value) * 0.5) / 4), 2) : 0;
+                $user->protein = $total_calorie > 0 ? round(((($total_calorie - $weekly_value) * 0.3) / 4), 2) : 0;
+                $user->fat = $total_calorie > 0 ? round(((($total_calorie - $weekly_value) * 0.2) / 9), 2) : 0;
 
-                $user->calories = round($total_calorie - 1000);
+                $user->calories = round($total_calorie - $weekly_value);
             }
             if ($request->get('goal') == 'Build muscle') {
-                $user->crabs = $total_calorie > 0 ? round(((($total_calorie + 1000) * 0.5) / 4), 2) : 0;
-                $user->protein = $total_calorie > 0 ? round(((($total_calorie + 1000) * 0.3) / 4), 2) : 0;
-                $user->fat = $total_calorie > 0 ? round(((($total_calorie + 1000) * 0.2) / 9), 2) : 0;
+                $user->crabs = $total_calorie > 0 ? round(((($total_calorie + $weekly_value) * 0.5) / 4), 2) : 0;
+                $user->protein = $total_calorie > 0 ? round(((($total_calorie + $weekly_value) * 0.3) / 4), 2) : 0;
+                $user->fat = $total_calorie > 0 ? round(((($total_calorie + $weekly_value) * 0.2) / 9), 2) : 0;
 
-                $user->calories = round($total_calorie + 1000);
+                $user->calories = round($total_calorie + $weekly_value);
             }
 
             $user->save();

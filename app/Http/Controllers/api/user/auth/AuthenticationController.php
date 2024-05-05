@@ -119,6 +119,7 @@ class AuthenticationController extends Controller
         $user->birth_date = $request->get('birth_date');
         $user->measurements = $request->get('measurements');
         $user->measurements_unit = $request->get('measurements_unit');
+        $user->weekly_goal = $request->get('weekly_goal');
 
         $weekly_goal = $request->get('weekly_goal');
         if ($weekly_goal == 1) {

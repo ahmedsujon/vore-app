@@ -28,8 +28,9 @@ return new class extends Migration
             $table->enum('current_weight_unit', ['lbs','kg'])->default('kg');
             $table->double('target_weight', 20,2)->default(0);
             $table->enum('target_weight_unit', ['lbs','kg'])->default('kg');
-            $table->double('height', 20,2)->default(0);
+            $table->string('height')->default(0);
             $table->enum('height_unit', ['cm', 'ft'])->default('ft');
+            $table->integer('weekly_goal')->nullable();
             $table->string('birth_date')->nullable();
             $table->longText('measurements')->nullable();
             $table->enum('measurements_unit', ['in','cm'])->default('in');
