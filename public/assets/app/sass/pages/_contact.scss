@@ -1,0 +1,186 @@
+/* Question Section */
+.question_wrapper {
+  .accordion {
+    max-width: 900px;
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .accordion-item {
+    border: none;
+    box-shadow: none;
+    outline: none;
+    margin-bottom: 24px;
+  }
+  .accordion-button {
+    color: #000;
+    font-size: 28px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+    padding: 30px;
+    padding-right: 50px;
+    border-radius: 14px !important;
+    -webkit-border-radius: 14px !important;
+    -moz-border-radius: 14px !important;
+    -ms-border-radius: 14px !important;
+    -o-border-radius: 14px !important;
+    border: 0.8px solid #c5c5c5 !important;
+    box-shadow: none;
+    @include media-break-width(992, 1199) {
+      font-size: 24px;
+      padding: 24px;
+      padding-right: 50px;
+    }
+    @include media-break-width(768, 991) {
+      font-size: 20px;
+      padding: 20px;
+      padding-right: 50px;
+    }
+    @include max-media-width(767) {
+      font-size: 18px;
+      padding: 16px;
+      padding-right: 40px;
+    }
+    &::before,
+    &::after {
+      content: "";
+      position: absolute;
+      top: 50%;
+      right: 34px;
+      transform: translateY(-50%);
+      -webkit-transform: translateY(-50%);
+      -moz-transform: translateY(-50%);
+      -ms-transform: translateY(-50%);
+      -o-transform: translateY(-50%);
+      width: 2px;
+      height: 30px;
+      background-color: #000000;
+      @include hover-transition();
+      @include media-break-width(992, 1199) {
+        height: 24px;
+        right: 31px;
+      }
+
+      @include max-media-width(991) {
+        height: 20px;
+        right: 28px;
+      }
+    }
+    &::after {
+      right: 20px;
+      width: 30px;
+      height: 2px;
+      background-image: none;
+      @include media-break-width(992, 1199) {
+        width: 24px;
+      }
+      @include max-media-width(991) {
+        width: 20px;
+      }
+    }
+    &:not(.collapsed) {
+      &::before {
+        right: 0;
+        opacity: 0;
+        visibility: hidden;
+      }
+    }
+  }
+  .accordion-body {
+    p {
+      font-size: 18px;
+      line-height: 32px;
+      margin-bottom: 15px;
+      @include max-media-width(767) {
+        font-size: 16px;
+        line-height: 26px;
+      }
+    }
+    ul {
+      padding-left: 20px;
+      list-style-type: disc;
+    }
+    li {
+      font-size: 18px;
+      line-height: 32px;
+      list-style-type: disc;
+      margin-bottom: 10px;
+      @include max-media-width(767) {
+        font-size: 16px;
+        line-height: 26px;
+      }
+    }
+  }
+}
+
+/* Contact Form Section */
+.contact_form_wrapper {
+  padding-top: 165px;
+  padding-bottom: 112px;
+  background-color: #154d6e;
+  @include media-break-width(992, 1199) {
+    padding-top: 130px;
+    padding-bottom: 80px;
+  }
+  @include media-break-width(768, 991) {
+    padding-top: 60px;
+    padding-bottom: 40px;
+  }
+  @include max-media-width(767) {
+    padding-top: 30px;
+    padding-bottom: 30px;
+  }
+  .contact_grid {
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    align-items: start;
+    gap: 30px 150px;
+    @include media-break-width(992, 1199) {
+      gap: 20px 100px;
+    }
+    @include media-break-width(768, 991) {
+      gap: 20px 20px;
+    }
+    @include max-media-width(767) {
+      grid-template-columns: repeat(1, minmax(0, 1fr));
+    }
+  }
+  .contact_form_area {
+    margin-top: 80px;
+    @include media-break-width(992, 1199) {
+      margin-top: 50px;
+    }
+    @include media-break-width(768, 991) {
+      margin-top: 40px;
+    }
+    @include max-media-width(767) {
+      grid-row: 1;
+      margin-top: 30px;
+    }
+  }
+  .form_area {
+    max-width: 626px;
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    .page_title {
+      color: white;
+    }
+    ::placeholder {
+      color: #fff !important;
+    }
+  }
+  .contact_form_shape {
+    position: absolute;
+    top: 150px;
+    left: 50%;
+    transform: translateX(-50%);
+    max-width: 153px;
+    max-height: 153px;
+    @include max-media-width(991) {
+      display: none;
+    }
+  }
+}

@@ -1,0 +1,424 @@
+//Title
+.page_title {
+  color: #000;
+  font-size: 60px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 80px;
+  @include media-break-width(992, 1199) {
+    font-size: 50px;
+    line-height: 70px;
+  }
+  @include media-break-width(768, 991) {
+    font-size: 36px;
+    line-height: 58px;
+  }
+  @include max-media-width(767) {
+    font-size: 34px;
+    line-height: 54px;
+  }
+}
+.page_title2 {
+  color: #134e6f;
+  font-size: 80px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 80px;
+  @include media-break-width(992, 1199) {
+    font-size: 60px;
+    line-height: 65px;
+  }
+  @include media-break-width(768, 991) {
+    font-size: 50px;
+    line-height: 65px;
+  }
+  @include max-media-width(767) {
+    font-size: 38px;
+    line-height: 45px;
+  }
+  .work_color {
+    color: rgba(26, 26, 26, 0.4);
+  }
+}
+.features_title {
+  color: #000;
+  font-size: 75px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 80px;
+  @include media-break-width(992, 1199) {
+    font-size: 65px;
+    line-height: 70px;
+  }
+  @include media-break-width(768, 991) {
+    font-size: 45px;
+    line-height: 50px;
+  }
+  @include max-media-width(767) {
+    font-size: 35px;
+    line-height: 40px;
+  }
+}
+.features_pera {
+  color: #000;
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 34px;
+  @include media-break-width(992, 1199) {
+    font-size: 18px;
+    line-height: 32px;
+  }
+  @include media-break-width(768, 991) {
+    font-size: 16px;
+    line-height: 30px;
+  }
+  @include max-media-width(767) {
+    font-size: 14px;
+    line-height: 28px;
+  }
+}
+
+//Button
+.default_btn {
+  position: relative;
+  padding: 13px 60px;
+  border-radius: 30px;
+  overflow: hidden;
+  background: #8eb056;
+  @include media-break-width(992, 1199) {
+    padding: 13px 50px;
+  }
+  @include media-break-width(768, 991) {
+    padding: 13px 40px;
+  }
+  @include max-media-width(767) {
+    padding: 10px 30px;
+  }
+  &::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    transform: scaleX(0);
+    -webkit-transform: scaleX(0);
+    -moz-transform: scaleX(0);
+    -ms-transform: scaleX(0);
+    -o-transform: scaleX(0);
+    transform-origin: right center;
+    background: #addc63;
+    transition: transform 0.3s ease-in;
+    -webkit-transition: transform 0.3s ease-in;
+    -moz-transition: transform 0.3s ease-in;
+    -ms-transition: transform 0.3s ease-in;
+    -o-transition: transform 0.3s ease-in;
+  }
+  &:hover {
+    &::before {
+      transform: scaleX(1);
+      -webkit-transform: scaleX(1);
+      -moz-transform: scaleX(1);
+      -ms-transform: scaleX(1);
+      -o-transform: scaleX(1);
+      transform-origin: left center;
+    }
+  }
+  span {
+    position: relative;
+    z-index: 2;
+    color: #f9fbf7;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 600;
+
+    @include media-break-width(768, 991) {
+      font-size: 16px;
+    }
+    @include max-media-width(767) {
+      font-size: 14px;
+    }
+  }
+  &.goal_btn {
+    background-color: #134e6f;
+  }
+}
+.header_btn {
+  position: relative;
+  padding: 8px 24px;
+  border-radius: 20px;
+  overflow: hidden;
+  background: #134e6f;
+  @include max-media-width(767) {
+    padding: 8px 20px;
+  }
+  &::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    transform: scaleY(0);
+    -webkit-transform: scaleY(0);
+    -moz-transform: scaleY(0);
+    -ms-transform: scaleY(0);
+    -o-transform: scaleY(0);
+    transform-origin: bottom center;
+    background: #196e9f;
+    transition: transform 0.3s ease-in;
+    -webkit-transition: transform 0.3s ease-in;
+    -moz-transition: transform 0.3s ease-in;
+    -ms-transition: transform 0.3s ease-in;
+    -o-transition: transform 0.3s ease-in;
+  }
+  &:hover {
+    &::before {
+      transform: scaleY(1);
+      -webkit-transform: scaleY(1);
+      -moz-transform: scaleY(1);
+      -ms-transform: scaleY(1);
+      -o-transform: scaleY(1);
+      transform-origin: top center;
+    }
+  }
+  span {
+    position: relative;
+    z-index: 2;
+    color: #f9fbf7;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 500;
+
+    @include max-media-width(991) {
+      font-size: 14px;
+    }
+  }
+}
+.submit_btn {
+  padding: 13px 60px;
+  border-radius: 30px;
+  background: #8eb056;
+  @include media-break-width(992, 1199) {
+    padding: 12px 60px;
+  }
+  @include media-break-width(768, 991) {
+    padding: 12px 50px;
+  }
+  @include max-media-width(767) {
+    padding: 10px 40px;
+  }
+  &:hover {
+    opacity: 0.8;
+  }
+  span {
+    color: #f9fbf7;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 600;
+
+    @include media-break-width(768, 991) {
+      font-size: 18px;
+    }
+    @include max-media-width(767) {
+      font-size: 16px;
+    }
+  }
+}
+
+//Header area
+.header_area {
+  margin-bottom: 80px;
+  @include media-break-width(992, 1199) {
+    margin-bottom: 70px;
+  }
+  @include media-break-width(768, 991) {
+    margin-bottom: 40px;
+  }
+  @include max-media-width(767) {
+    margin-bottom: 30px;
+  }
+  p {
+    color: #333;
+    font-size: 24px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 34px;
+    margin-top: 40px;
+    @include media-break-width(992, 1199) {
+      font-size: 20px;
+      line-height: 30px;
+    }
+    @include media-break-width(768, 991) {
+      font-size: 18px;
+      line-height: 28px;
+      margin-top: 30px;
+    }
+    @include max-media-width(767) {
+      font-size: 16px;
+      line-height: 26px;
+      margin-top: 20px;
+    }
+  }
+  h5 {
+    color: #333;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 34px;
+    margin-top: 40px;
+    @include media-break-width(992, 1199) {
+      font-size: 18px;
+      line-height: 32px;
+    }
+    @include media-break-width(768, 991) {
+      font-size: 16px;
+      line-height: 30px;
+      margin-top: 30px;
+    }
+    @include max-media-width(767) {
+      font-size: 14px;
+      line-height: 28px;
+      margin-top: 20px;
+    }
+  }
+}
+
+//App store icon
+.app_area {
+  gap: 10px 30px;
+  margin-top: 20px;
+  @include media-break-width(768, 991) {
+    gap: 10px 20px;
+  }
+  @include max-media-width(767) {
+    gap: 10px 10px;
+    margin-top: 10px;
+  }
+  a {
+    &:hover {
+      opacity: 0.8;
+    }
+  }
+  img {
+    max-width: 190px;
+    max-height: 56px;
+
+    @include media-break-width(768, 991) {
+      max-width: 160px;
+      max-height: 50px;
+    }
+    @include max-media-width(767) {
+      max-width: 120px;
+      max-height: 40px;
+    }
+  }
+}
+
+//Breadcrumb
+.breadcrumb_area {
+  position: relative;
+  top: -118px;
+
+  @include media-break-width(768, 991) {
+    top: -55px;
+  }
+  @include max-media-width(767) {
+    top: -40px;
+  }
+  .breadcrumb-item {
+    color: #333;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 34px;
+
+    @include media-break-width(768, 991) {
+      font-size: 18px;
+    }
+    @include max-media-width(767) {
+      font-size: 16px;
+    }
+    &.active {
+      color: #8eb056;
+    }
+  }
+  a {
+    color: #333;
+    &:hover {
+      opacity: 0.8;
+    }
+  }
+}
+
+//Form Area
+.form_area {
+  .page_title {
+    margin-bottom: 56px;
+    @include media-break-width(768, 991) {
+      margin-bottom: 40px;
+    }
+    @include max-media-width(767) {
+      margin-bottom: 30px;
+    }
+  }
+  .input_row {
+    position: relative;
+    margin-bottom: 24px;
+    @include media-break-width(768, 991) {
+      margin-bottom: 20px;
+    }
+    @include max-media-width(767) {
+      margin-bottom: 16px;
+    }
+    .icon {
+      position: absolute;
+      top: 23px;
+      left: 24px;
+
+      @include max-media-width(991) {
+        top: 13px;
+        left: 10px;
+      }
+      img {
+        max-width: 22px;
+        max-height: 22px;
+        @include max-media-width(991) {
+          max-width: 18px;
+          max-height: 18px;
+        }
+      }
+    }
+    textarea {
+      padding: 24px;
+      border-radius: 12px;
+      width: 100%;
+      border: 0.8px solid #9c9c9c;
+      background-color: transparent;
+    }
+  }
+  .input_filed {
+    width: 100%;
+    height: 72px;
+    padding-left: 60px;
+    padding-right: 24px;
+    border-radius: 12px;
+    border: 0.8px solid #9c9c9c;
+    background-color: transparent;
+    @include max-media-width(991) {
+      height: 56px;
+      padding-left: 34px;
+    }
+  }
+  .submit_btn {
+    margin-top: 56px;
+
+    @include media-break-width(768, 991) {
+      margin-top: 40px;
+    }
+    @include max-media-width(767) {
+      margin-top: 30px;
+    }
+  }
+}

@@ -29,11 +29,7 @@ class ContactComponent extends Component
         $mailData['email'] = $this->email;
         $mailData['phone'] = $this->phone;
         $mailData['description'] = $this->description;
-        Mail::send('emails.contact-message', $mailData, function ($message) use ($mailData) {
-            $message->to('admin@voreapp.co')
-                ->subject('Vore Contact Message');
-        });
-
+ 
         $data->save();
         session()->flash('message', 'Thank you for your message. We will contact with you soon !');
     }

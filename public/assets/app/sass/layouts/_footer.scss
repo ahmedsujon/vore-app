@@ -1,0 +1,123 @@
+.footer_wrapper {
+  margin-top: 80px;
+  padding-bottom: 30px;
+  @include media-break-width(768, 991) {
+    margin-top: 50px;
+  }
+  @include max-media-width(767) {
+    margin-top: 20px;
+    padding-bottom: 20px;
+  }
+  .logo_area,
+  .footer_menu_item {
+    margin-top: 40px;
+    @include max-media-width(767) {
+      margin-top: 30px;
+    }
+  }
+  .logo_area {
+    a {
+      &:hover {
+        opacity: 0.8;
+      }
+    }
+    img {
+      max-width: 240px;
+      max-height: 80px;
+
+      @include media-break-width(768, 991) {
+        max-width: 180px;
+        max-height: 60px;
+      }
+      @include max-media-width(767) {
+        max-width: 150px;
+        max-height: 50px;
+      }
+    }
+  }
+  .footer_menu_item {
+    h3 {
+      color: #1a1a1a;
+      font-size: 20px;
+      font-style: normal;
+      font-weight: 400;
+      line-height: 150%;
+
+      @include max-media-width(991) {
+        font-size: 18px;
+      }
+    }
+    ul {
+      margin-top: 20px;
+      li {
+        margin-top: 16px;
+        @include max-media-width(991) {
+          margin-top: 10px;
+        }
+      }
+      a {
+        color: rgba(26, 26, 26, 0.6);
+        font-size: 16px;
+        font-style: normal;
+        font-weight: 400;
+        line-height: 150%;
+        @include max-media-width(767) {
+          font-size: 14px;
+        }
+        &:hover {
+          opacity: 0.8;
+        }
+      }
+    }
+  }
+
+  .copy_right_wrapper {
+    margin-top: 120px;
+    @include media-break-width(768, 991) {
+      margin-top: 80px;
+    }
+    @include max-media-width(767) {
+      margin-top: 50px;
+    }
+    .container {
+      padding-top: 32px;
+      border-top: 1px solid #e5e5e5;
+      @include max-media-width(991) {
+        padding-top: 20px;
+      }
+    }
+    h4 {
+      color: rgba(26, 26, 26, 0.5);
+      font-size: 16px;
+      font-style: normal;
+      font-weight: 400;
+      line-height: 150%;
+      @include max-media-width(767) {
+        font-size: 14px;
+      }
+    }
+  }
+  .social_list {
+    gap: 10px 20px;
+    a {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      -webkit-border-radius: 50%;
+      -moz-border-radius: 50%;
+      -ms-border-radius: 50%;
+      -o-border-radius: 50%;
+      @include hover-transition();
+      &:hover {
+        background-color: #b0afaf;
+      }
+    }
+    img {
+      max-width: 23px;
+      max-height: 23px;
+    }
+  }
+}
