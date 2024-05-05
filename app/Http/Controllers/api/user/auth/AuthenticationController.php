@@ -2,17 +2,17 @@
 
 namespace App\Http\Controllers\api\user\auth;
 
-use Exception;
-use Carbon\Carbon;
-use App\Models\User;
-use Illuminate\Support\Str;
-use App\Models\WaterSetting;
-use Illuminate\Http\Request;
-use App\Models\UserMeasurement;
 use App\Http\Controllers\Controller;
+use App\Models\User;
+use App\Models\UserMeasurement;
+use App\Models\WaterSetting;
+use Carbon\Carbon;
+use Exception;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
 
 class AuthenticationController extends Controller
 {
@@ -55,146 +55,168 @@ class AuthenticationController extends Controller
 
     public function makeProfile(Request $request)
     {
-        //Calorie Calculations
-        $total_calorie = 0;
-        $activity_level = 1;
-
-        if ($request->get('daily_activity_level') == 'Couch Potato') {
-            $activity_level = 1.2;
+        $rules = [
+            'gender' => 'required',
+            'goal' => 'required',
+            'daily_activity_level' => 'required',
+            'current_weight' => 'required',
+            'current_weight_unit' => 'required',
+            'target_weight' => 'required',
+            'target_weight_unit' => 'required',
+            'height' => 'required',
+            'height_unit' => 'required',
+            'weekly_goal' => 'required',
+            'birth_date' => 'required',
+        ];
+        $validator = Validator::make($request->all(), $rules);
+        if ($validator->fails()) {
+            return response()->json($validator->errors(), 400);
         }
 
-        if ($request->get('daily_activity_level') == 'Lightly Active') {
-            $activity_level = 1.55;
-        }
+        try {
+            //Calorie Calculations
+            $total_calorie = 0;
+            $activity_level = 1;
 
-        if ($request->get('daily_activity_level') == 'Moderately Active') {
-            $activity_level = 1.725;
-        }
-
-        // if ($request->get('daily_activity_level') == 'Very Active') {
-        //     $activity_level = 1.725;
-        // }
-
-        if ($request->get('daily_activity_level') == 'Extremely Active') {
-            $activity_level = 1.9;
-        }
-
-        if ($request->get('current_weight_unit') == 'lbs') {
-            $current_weight = $request->get('current_weight') * 0.45;
-        } else {
-            $current_weight = $request->get('current_weight');
-        }
-
-        if ($request->get('height_unit') == 'ft') {
-            $get_height = explode('.', $request->get('height'));
-
-            $height_ft = ($get_height[0] * 12) * 2.54;
-            $height_in = $get_height[1] * 2.54;
-
-            $height = $height_ft + $height_in;
-        } else {
-            $height = $request->get('height');
-        }
-
-        $age = $this->calculateAge($request->get('birth_date'));
-
-        if ($request->get('gender') == 'Male') {
-            $total_calorie = round((88.362 + (13.397 * $current_weight) + (4.799 * $height) - (5.677 * $age)) * $activity_level, 2);
-        } else {
-            $total_calorie = round((447.593 + (9.247 * $current_weight) + (3.098 * $height) - (4.33 * $age)) * $activity_level, 2);
-        }
-
-        $user = User::find(Auth::guard('user-api')->user()->id);
-        $user->gender = $request->get('gender');
-        $user->goal = $request->get('goal');
-        $user->daily_activity_level = $request->get('daily_activity_level');
-        $user->starting_weight = $request->get('current_weight');
-        $user->starting_weight_unit = $request->get('current_weight_unit');
-        $user->current_weight = $request->get('current_weight');
-        $user->current_weight_unit = $request->get('current_weight_unit');
-        $user->target_weight = $request->get('target_weight');
-        $user->target_weight_unit = $request->get('target_weight_unit');
-        $user->height = $request->get('height');
-        $user->height_unit = $request->get('height_unit');
-        $user->birth_date = $request->get('birth_date');
-        $user->measurements = $request->get('measurements');
-        $user->measurements_unit = $request->get('measurements_unit');
-        $user->weekly_goal = $request->get('weekly_goal');
-
-        $weekly_goal = $request->get('weekly_goal');
-        if ($weekly_goal == 1) {
-            $weekly_value = 250;
-        }if ($weekly_goal == 2) {
-            $weekly_value = 500;
-        }if ($weekly_goal == 3) {
-            $weekly_value = 750;
-        }if ($weekly_goal == 4) {
-            $weekly_value = 1000;
-        }
-
-        if ($request->get('goal') == 'Maintain weight') {
-            $user->crabs = $total_calorie > 0 ? round((($total_calorie * 0.5) / 4), 2) : 0;
-            $user->protein = $total_calorie > 0 ? round((($total_calorie * 0.3) / 4), 2) : 0;
-            $user->fat = $total_calorie > 0 ? round((($total_calorie * 0.2) / 9), 2) : 0;
-
-            $user->calories = round($total_calorie);
-        }
-        if ($request->get('goal') == 'Lose weight') {
-            $user->crabs = $total_calorie > 0 ? round(((($total_calorie - $weekly_value) * 0.5) / 4), 2) : 0;
-            $user->protein = $total_calorie > 0 ? round(((($total_calorie - $weekly_value) * 0.3) / 4), 2) : 0;
-            $user->fat = $total_calorie > 0 ? round(((($total_calorie - $weekly_value) * 0.2) / 9), 2) : 0;
-
-            $user->calories = round($total_calorie - $weekly_value);
-        }
-        if ($request->get('goal') == 'Build muscle') {
-            $user->crabs = $total_calorie > 0 ? round(((($total_calorie + $weekly_value) * 0.5) / 4), 2) : 0;
-            $user->protein = $total_calorie > 0 ? round(((($total_calorie + $weekly_value) * 0.3) / 4), 2) : 0;
-            $user->fat = $total_calorie > 0 ? round(((($total_calorie + $weekly_value) * 0.2) / 9), 2) : 0;
-
-            $user->calories = round($total_calorie + $weekly_value);
-        }
-        $user->save();
-
-        // return $user;
-
-        $water_setting = new WaterSetting();
-        $water_setting->user_id = $user->id;
-        $water_setting->pot_capacity = 8;
-        $water_setting->pot_type = 'glass';
-        $water_setting->goal = 80;
-        $water_setting->save();
-
-        $measurements = ["Chest", "Hips", "Waist", "Thighs", "Upper Arms", "Body Fat", "Muscle Mass"];
-        //"Blood Glucose", "Blood Pressure",
-        $units = ["in", "in", "in", "in", "in", "%", "lbs"];
-        foreach ($measurements as $key => $value) {
-            $getMes = UserMeasurement::where('name', $value)->where('user_id', api_user()->id)->first();
-            if (!$getMes) {
-                $mes = new UserMeasurement();
-                $mes->user_id = $user->id;
-                $mes->name = $value;
-                $mes->unit = $units[$key];
-                $mes->value = 0;
-                if ($key == 0) {
-                    $mes->icon = 'assets/app/measurements/chest.png';
-                } else if ($key == 1) {
-                    $mes->icon = 'assets/app/measurements/hips.png';
-                } else if ($key == 2) {
-                    $mes->icon = 'assets/app/measurements/waist.png';
-                } else if ($key == 3) {
-                    $mes->icon = 'assets/app/measurements/thigh.png';
-                } else if ($key == 4) {
-                    $mes->icon = 'assets/app/measurements/muscle.png';
-                } else if ($key == 5) {
-                    $mes->icon = 'assets/app/measurements/body_fat.png';
-                } else if ($key == 6) {
-                    $mes->icon = 'assets/app/measurements/muscle_mass.png';
-                }
-                $mes->save();
+            if ($request->get('daily_activity_level') == 'Couch Potato') {
+                $activity_level = 1.2;
             }
-        }
 
-        return response()->json(['result' => 'true', 'message' => 'Data updated successfully']);
+            if ($request->get('daily_activity_level') == 'Lightly Active') {
+                $activity_level = 1.55;
+            }
+
+            if ($request->get('daily_activity_level') == 'Moderately Active') {
+                $activity_level = 1.725;
+            }
+
+            // if ($request->get('daily_activity_level') == 'Very Active') {
+            //     $activity_level = 1.725;
+            // }
+
+            if ($request->get('daily_activity_level') == 'Extremely Active') {
+                $activity_level = 1.9;
+            }
+
+            if ($request->get('current_weight_unit') == 'lbs') {
+                $current_weight = $request->get('current_weight') * 0.45;
+            } else {
+                $current_weight = $request->get('current_weight');
+            }
+
+            if ($request->get('height_unit') == 'ft') {
+                $get_height = explode('.', $request->get('height'));
+
+                $height_ft = ($get_height[0] * 12) * 2.54;
+                $height_in = $get_height[1] * 2.54;
+
+                $height = $height_ft + $height_in;
+            } else {
+                $height = $request->get('height');
+            }
+
+            $age = $this->calculateAge($request->get('birth_date'));
+
+            if ($request->get('gender') == 'Male') {
+                $total_calorie = round((88.362 + (13.397 * $current_weight) + (4.799 * $height) - (5.677 * $age)) * $activity_level, 2);
+            } else {
+                $total_calorie = round((447.593 + (9.247 * $current_weight) + (3.098 * $height) - (4.33 * $age)) * $activity_level, 2);
+            }
+
+            $user = User::find(Auth::guard('user-api')->user()->id);
+            $user->gender = $request->get('gender');
+            $user->goal = $request->get('goal');
+            $user->daily_activity_level = $request->get('daily_activity_level');
+            $user->starting_weight = $request->get('current_weight');
+            $user->starting_weight_unit = $request->get('current_weight_unit');
+            $user->current_weight = $request->get('current_weight');
+            $user->current_weight_unit = $request->get('current_weight_unit');
+            $user->target_weight = $request->get('target_weight');
+            $user->target_weight_unit = $request->get('target_weight_unit');
+            $user->height = $request->get('height');
+            $user->height_unit = $request->get('height_unit');
+            $user->birth_date = $request->get('birth_date');
+            $user->measurements = $request->get('measurements');
+            $user->measurements_unit = $request->get('measurements_unit');
+            $user->weekly_goal = $request->get('weekly_goal');
+
+            $weekly_goal = $request->get('weekly_goal');
+            if ($weekly_goal == 1) {
+                $weekly_value = 250;
+            }if ($weekly_goal == 2) {
+                $weekly_value = 500;
+            }if ($weekly_goal == 3) {
+                $weekly_value = 750;
+            }if ($weekly_goal == 4) {
+                $weekly_value = 1000;
+            }
+
+            if ($request->get('goal') == 'Maintain weight') {
+                $user->crabs = $total_calorie > 0 ? round((($total_calorie * 0.5) / 4), 2) : 0;
+                $user->protein = $total_calorie > 0 ? round((($total_calorie * 0.3) / 4), 2) : 0;
+                $user->fat = $total_calorie > 0 ? round((($total_calorie * 0.2) / 9), 2) : 0;
+
+                $user->calories = round($total_calorie);
+            }
+            if ($request->get('goal') == 'Lose weight') {
+                $user->crabs = $total_calorie > 0 ? round(((($total_calorie - $weekly_value) * 0.5) / 4), 2) : 0;
+                $user->protein = $total_calorie > 0 ? round(((($total_calorie - $weekly_value) * 0.3) / 4), 2) : 0;
+                $user->fat = $total_calorie > 0 ? round(((($total_calorie - $weekly_value) * 0.2) / 9), 2) : 0;
+
+                $user->calories = round($total_calorie - $weekly_value);
+            }
+            if ($request->get('goal') == 'Build muscle') {
+                $user->crabs = $total_calorie > 0 ? round(((($total_calorie + $weekly_value) * 0.5) / 4), 2) : 0;
+                $user->protein = $total_calorie > 0 ? round(((($total_calorie + $weekly_value) * 0.3) / 4), 2) : 0;
+                $user->fat = $total_calorie > 0 ? round(((($total_calorie + $weekly_value) * 0.2) / 9), 2) : 0;
+
+                $user->calories = round($total_calorie + $weekly_value);
+            }
+            $user->save();
+
+            // return $user;
+
+            $water_setting = new WaterSetting();
+            $water_setting->user_id = $user->id;
+            $water_setting->pot_capacity = 8;
+            $water_setting->pot_type = 'glass';
+            $water_setting->goal = 80;
+            $water_setting->save();
+
+            $measurements = ["Chest", "Hips", "Waist", "Thighs", "Upper Arms", "Body Fat", "Muscle Mass"];
+            //"Blood Glucose", "Blood Pressure",
+            $units = ["in", "in", "in", "in", "in", "%", "lbs"];
+            foreach ($measurements as $key => $value) {
+                $getMes = UserMeasurement::where('name', $value)->where('user_id', api_user()->id)->first();
+                if (!$getMes) {
+                    $mes = new UserMeasurement();
+                    $mes->user_id = $user->id;
+                    $mes->name = $value;
+                    $mes->unit = $units[$key];
+                    $mes->value = 0;
+                    if ($key == 0) {
+                        $mes->icon = 'assets/app/measurements/chest.png';
+                    } else if ($key == 1) {
+                        $mes->icon = 'assets/app/measurements/hips.png';
+                    } else if ($key == 2) {
+                        $mes->icon = 'assets/app/measurements/waist.png';
+                    } else if ($key == 3) {
+                        $mes->icon = 'assets/app/measurements/thigh.png';
+                    } else if ($key == 4) {
+                        $mes->icon = 'assets/app/measurements/muscle.png';
+                    } else if ($key == 5) {
+                        $mes->icon = 'assets/app/measurements/body_fat.png';
+                    } else if ($key == 6) {
+                        $mes->icon = 'assets/app/measurements/muscle_mass.png';
+                    }
+                    $mes->save();
+                }
+            }
+
+            return response()->json(['result' => 'true', 'message' => 'Data updated successfully']);
+        } catch (Exception $ex) {
+            return response($ex->getMessage());
+        }
     }
 
     private function calculateAge($dateOfBirth)
@@ -208,7 +230,6 @@ class AuthenticationController extends Controller
 
         return $age;
     }
-
 
     public function login(Request $request)
     {
