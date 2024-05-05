@@ -301,6 +301,7 @@ class ProfileController extends Controller
             'goal' => 'required',
             'current_weight' => 'required',
             'target_weight' => 'required',
+            'weekly_goal' => 'required',
         ];
         $validator = Validator::make($request->all(), $rules);
         if ($validator->fails()) {
@@ -364,8 +365,9 @@ class ProfileController extends Controller
             $user->current_weight_unit = 'lbs';
             $user->target_weight = $request->get('target_weight');
             $user->target_weight_unit = 'lbs';
+            $user->weekly_goal = $request->get('weekly_goal');
 
-            $weekly_goal = $user->weekly_goal;
+            $weekly_goal = $request->get('weekly_goal');
             if ($weekly_goal == 1) {
                 $weekly_value = 250;
             }if ($weekly_goal == 2) {
