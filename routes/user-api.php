@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\api\user\DashboardController;
 use App\Http\Controllers\api\user\auth\AuthenticationController;
 use App\Http\Controllers\api\user\auth\UserResetPasswordController;
+use App\Http\Controllers\api\user\ContactController;
 use App\Http\Controllers\api\user\FoodController;
 use App\Http\Controllers\api\user\MealController;
 use App\Http\Controllers\api\user\MeasurementController;
@@ -94,5 +95,8 @@ Route::group(['middleware' => ['jwtUser:user-api', 'jwt.auth'], 'prefix' => 'v1/
     Route::post('my-measurements/add', [MeasurementController::class, 'addMeasurement']);
     Route::get('my-measurements/edit', [MeasurementController::class, 'editMeasurement']);
     Route::post('my-measurements/update', [MeasurementController::class, 'updateMeasurement']);
+
+    // contact
+    Route::post('contact-us', [ContactController::class, 'contactUs']);
 
 });
