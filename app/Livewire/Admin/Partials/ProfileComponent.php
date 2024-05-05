@@ -11,14 +11,13 @@ use Illuminate\Support\Facades\Hash;
 class ProfileComponent extends Component
 {
     use WithFileUploads;
-    public $name, $email, $phone, $password, $avatar, $uploadedAvatar;
+    public $name, $email, $password, $avatar, $uploadedAvatar;
 
     public function mount()
     {
         $admin = Admin::find(admin()->id);
         $this->name = $admin->name;
         $this->email = $admin->email;
-        $this->phone = $admin->phone;
         $this->uploadedAvatar = $admin->avatar;
     }
 
@@ -28,14 +27,12 @@ class ProfileComponent extends Component
             $this->validateOnly($fields, [
                 'name' => 'required',
                 'email' => 'required|email',
-                'phone' => 'required|numeric',
                 'password' => 'min:8|max:25',
             ]);
         } else {
             $this->validateOnly($fields, [
                 'name' => 'required',
                 'email' => 'required|email',
-                'phone' => 'required|numeric',
             ]);
         }
     }
@@ -46,21 +43,18 @@ class ProfileComponent extends Component
             $this->validate([
                 'name' => 'required',
                 'email' => 'required|email',
-                'phone' => 'required|numeric',
                 'password' => 'min:8|max:25',
             ]);
         } else {
             $this->validate([
                 'name' => 'required',
                 'email' => 'required|email',
-                'phone' => 'required|numeric',
             ]);
         }
 
         $user = Admin::find(admin()->id);
         $user->name = $this->name;
         $user->email = $this->email;
-        $user->phone = $this->phone;
 
         if ($this->password) {
             $user->password = Hash::make($this->password);

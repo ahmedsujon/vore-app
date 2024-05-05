@@ -35,7 +35,7 @@
                     @endif
 
                     @if (isAdminPermitted('admins_manage'))
-                        <li class="menu-title" key="t-user">Admin</li>
+                        <li class="menu-title" key="t-user">Customer</li>
                     @endif
                     @if (isAdminPermitted('admins_manage'))
                         <li>
@@ -46,6 +46,17 @@
                         </li>
                     @endif
 
+                    @if (isAdminPermitted('admins_manage'))
+                        <li class="menu-title" key="t-user">Message</li>
+                    @endif
+                    @if (isAdminPermitted('admins_manage'))
+                        <li>
+                            <a href="{{ route('admin.contact.message') }}" class="waves-effect">
+                                <i class="bx bx-message-alt-dots"></i>
+                                <span key="t-chat">Messages</span>
+                            </a>
+                        </li>
+                    @endif
 
                     @if (isAdminPermitted('admins_manage'))
                         <li class="menu-title" key="t-user">Admin</li>

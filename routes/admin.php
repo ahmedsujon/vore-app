@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\LogoutController;
 use App\Livewire\Admin\DashboardComponent;
 use App\Livewire\Admin\Auth\LoginComponent;
+use App\Livewire\Admin\Contact\ContactComponent;
 use App\Livewire\Admin\Customers\CustomerComponent;
 use App\Livewire\Admin\Users\UserComponent;
 use App\Livewire\Admin\Users\UsersComponent;
@@ -31,6 +32,7 @@ Route::prefix('admin/')->name('admin.')->middleware('auth:admin')->group(functio
 
     Route::get('dashboard', DashboardComponent::class)->name('dashboard');
     Route::get('customers', CustomerComponent::class)->name('customers');
+    Route::get('contact/message', ContactComponent::class)->name('contact.message');
 
     //user management
     Route::get('all-users', UsersComponent::class)->name('allUsers')->middleware('adminPermission:users_manage');

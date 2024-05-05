@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Admin;
 
+use App\Models\Admin;
 use App\Models\User;
 use Livewire\Component;
 use Livewire\WithPagination;
@@ -82,8 +83,11 @@ class DashboardComponent extends Component
     #[Title('Dashboard')]
     public function render()
     {
+        $users = User::count();
+        $admins = Admin::count();
+
         $customers = User::orderBy('id', 'DESC')->take(5)->get();
         $this->dispatch('reload_scripts');
-        return view('livewire.admin.dashboard-component', ['customers'=>$customers])->layout('livewire.admin.layouts.base');
+        return view('livewire.admin.dashboard-component', ['customers'=>$customers, 'users'=>$users, 'admins'=>$admins])->layout('livewire.admin.layouts.base');
     }
 }
