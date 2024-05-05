@@ -10,6 +10,7 @@ use App\Http\Controllers\api\user\FoodController;
 use App\Http\Controllers\api\user\MealController;
 use App\Http\Controllers\api\user\MeasurementController;
 use App\Http\Controllers\api\user\ProfileController;
+use App\Http\Controllers\api\user\TeamController;
 use App\Http\Controllers\api\user\WaterController;
 
 Route::post('v1/login', [AuthenticationController::class, 'login']);
@@ -98,5 +99,8 @@ Route::group(['middleware' => ['jwtUser:user-api', 'jwt.auth'], 'prefix' => 'v1/
 
     // contact
     Route::post('contact-us', [ContactController::class, 'contactUs']);
+
+    // team
+    Route::get('our-team', [TeamController::class, 'index']);
 
 });
