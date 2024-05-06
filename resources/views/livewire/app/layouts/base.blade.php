@@ -13,6 +13,7 @@
     <link rel="stylesheet" href="{{ asset('assets/app/plugins/css/magnific-popup.css') }}" />
     <link rel="stylesheet" href="{{ asset('assets/app/plugins/css/aos/aos.css') }}" />
     <link rel="stylesheet" href="{{ asset('assets/app/sass/style.css') }}" />
+    @livewireStyles
 </head>
 
 <body>
@@ -34,6 +35,7 @@
     <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
     <script src="https://kit.fontawesome.com/46f35fbc02.js" crossorigin="anonymous"></script>
     <script src="{{ asset('assets/app/js/main.js') }}"></script>
+    @livewireScripts
 </body>
 
 </html>
