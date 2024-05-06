@@ -10,10 +10,8 @@
     <link rel="shortcut icon" href="assets/images/header/logo.png" type="image/x-icon" />
     <link rel="stylesheet" href="{{ asset('assets/app/plugins/css/bootstrap.min.css') }}" />
     <link rel="stylesheet" href="{{ asset('assets/app/plugins/css/swiper-bundle.min.css') }}" />
-
     <link rel="stylesheet" href="{{ asset('assets/app/plugins/css/magnific-popup.css') }}" />
     <link rel="stylesheet" href="{{ asset('assets/app/plugins/css/aos/aos.css') }}" />
-
     <link rel="stylesheet" href="{{ asset('assets/app/sass/style.css') }}" />
 </head>
 
