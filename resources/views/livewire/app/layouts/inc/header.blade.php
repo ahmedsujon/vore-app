@@ -1,4 +1,4 @@
-    <!-- Header Section  -->
+<div>
     <header class="header_wrapper" id="headerWrapper">
         <div class="container">
             <div class="row">
@@ -37,3 +37,4 @@
             </div>
         </div>
     </header>
+</div>
