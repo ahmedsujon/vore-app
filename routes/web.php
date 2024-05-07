@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AppController;
 use App\Livewire\App\Contact\ContactComponent;
 use App\Livewire\App\HomeComponent;
 use App\Livewire\App\Pages\AboutComponent;
@@ -29,6 +30,9 @@ Route::get('contact-us', ContactComponent::class)->name('app.contact.us');
 
 // About us Route
 Route::get('about-us', AboutComponent::class)->name('app.aboutus');
+
+// Email Verify
+Route::get('email-verification', [AppController::class, 'verifyEmail']);
 
 //Call Route Files
 require __DIR__ . '/admin.php';
