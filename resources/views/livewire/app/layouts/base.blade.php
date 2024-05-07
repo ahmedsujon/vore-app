@@ -7,13 +7,12 @@
     <title>Home</title>
     <meta name="description" content="" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link rel="shortcut icon" href="assets/images/header/logo.png" type="image/x-icon" />
+    <link rel="shortcut icon" href="{{ asset('assets/app/images/header/logo.png') }}" type="image/x-icon" />
     <link rel="stylesheet" href="{{ asset('assets/app/plugins/css/bootstrap.min.css') }}" />
     <link rel="stylesheet" href="{{ asset('assets/app/plugins/css/swiper-bundle.min.css') }}" />
     <link rel="stylesheet" href="{{ asset('assets/app/plugins/css/magnific-popup.css') }}" />
     <link rel="stylesheet" href="{{ asset('assets/app/plugins/css/aos/aos.css') }}" />
     <link rel="stylesheet" href="{{ asset('assets/app/sass/style.css') }}" />
-    @livewireStyles
 </head>
 
 <body>
@@ -22,7 +21,7 @@
         <i class="fas fa-chevron-up"></i>
     </div>
 
-
+    <!-- Header Section  -->
     <header class="header_wrapper" id="headerWrapper">
         <div class="container">
             <div class="row">
@@ -40,6 +39,7 @@
                                         <a href="{{ route('app.aboutus') }}"
                                             class="{{ request()->is('about-us') ? 'active_menu' : '' }}">About</a>
                                     </li>
+
                                     <li>
                                         <a href="{{ route('app.contact.us') }}"
                                             class="{{ request()->is('contact-us') ? 'active_menu' : '' }}">Contact
@@ -48,9 +48,6 @@
                                 </ul>
                             </nav>
                             <div class="header_btn_area d-flex align-items-center justify-content-end flex-wrap g-lg">
-                                <a href="#" class="header_btn">
-                                    <span>Download Vore</span>
-                                </a>
                                 <button type="button" class="menu_toggle_btn" id="menuToggleBtn">
                                     <i class="fa-solid fa-bars"></i>
                                 </button>
@@ -61,7 +58,11 @@
             </div>
         </div>
     </header>
-    {{ $slot }}
+
+    <main>
+        {{ $slot }}
+    </main>
+
     <!-- Footer Section  -->
     <footer class="footer_wrapper">
         <div class="container">
@@ -131,16 +132,12 @@
             </div>
         </div>
     </footer>
+
     <!-- navigation drawaer from left start -->
     <div class="mobile_menu_area">
         <div class="mobile_menu_overlay"></div>
         <div class="menu_close_icon text-end">
             <i class="fas fa-times close_icon"></i>
-        </div>
-        <div class="mobile_language_login_area d-flex justify-content-between flex-wrap">
-            <div class="header_button_area">
-                <a href="#" class="header_btn"><span>Download Vore</span> </a>
-            </div>
         </div>
 
         <div class="accordion" id="accordionMenu">
@@ -155,7 +152,7 @@
             </div>
         </div>
     </div>
-
+    <!-- navigation drawaer from left end -->
     <!-- JS Here -->
     <script src="{{ asset('assets/app/plugins/js/jquery-3.6.0.min.js') }}"></script>
     <script src="{{ asset('assets/app/plugins/js/bootstrap.bundle.min.js') }}"></script>
@@ -164,7 +161,6 @@
     <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
     <script src="https://kit.fontawesome.com/46f35fbc02.js" crossorigin="anonymous"></script>
     <script src="{{ asset('assets/app/js/main.js') }}"></script>
-    @livewireScripts
 </body>
 
 </html>
