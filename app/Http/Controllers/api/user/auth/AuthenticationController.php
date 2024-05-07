@@ -2,17 +2,18 @@
 
 namespace App\Http\Controllers\api\user\auth;
 
-use App\Http\Controllers\Controller;
-use App\Models\User;
-use App\Models\UserMeasurement;
-use App\Models\WaterSetting;
-use Carbon\Carbon;
 use Exception;
+use Carbon\Carbon;
+use App\Models\User;
+use Illuminate\Support\Str;
+use App\Models\WaterSetting;
 use Illuminate\Http\Request;
+use App\Models\UserMeasurement;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Str;
 
 class AuthenticationController extends Controller
 {
@@ -43,6 +44,7 @@ class AuthenticationController extends Controller
                 $ttl = 1440;
                 $credentials = $request->only('email', 'password');
                 if ($token = $this->guard()->attempt($credentials)) {
+                    $this->sendEmailVerificationMail($request->email);
                     return $this->respondWithToken($token, $ttl);
                 }
             } else {
@@ -291,6 +293,23 @@ class AuthenticationController extends Controller
             'expires_in' => $ttl,
             'user' => $this->guard()->user(),
         ]);
+    }
+
+    public function sendEmailVerificationMail($email)
+    {
+        $token = Str::lower(Str::random(40)) . api_user()->id . time();
+
+        $user = User::find(api_user()->id);
+        $user->email_verification_token = $token;
+        $user->save();
+
+        $data['email'] = $email;
+        $data['token'] = $token;
+
+        Mail::send('emails.api.email-verification', $data, function ($message) use ($data) {
+            $message->to($data['email'])
+                ->subject('Email Verification');
+        });
     }
 
     public function guard()

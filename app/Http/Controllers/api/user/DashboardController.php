@@ -112,6 +112,7 @@ class DashboardController extends Controller
             $calories_left = $total_calories - $calories_eaten;
 
             return response()->json([
+                'email_verified' => api_user()->email_verified_at != null ? true : false,
                 'total_calories' => round($total_calories),
                 'target_calories' => round($total_calories),
                 'target_crabs' => round($total_crabs),
