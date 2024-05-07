@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\api\user\DashboardController;
 use App\Http\Controllers\api\user\auth\AuthenticationController;
 use App\Http\Controllers\api\user\auth\UserResetPasswordController;
+use App\Http\Controllers\api\user\auth\VerificationController;
 use App\Http\Controllers\api\user\ContactController;
 use App\Http\Controllers\api\user\FoodController;
 use App\Http\Controllers\api\user\MealController;
@@ -21,6 +22,8 @@ Route::post('v1/change-password', [UserResetPasswordController::class, 'changePa
 //Authenticated user
 Route::group(['middleware' => ['jwtUser:user-api', 'jwt.auth'], 'prefix' => 'v1/user'], function () {
     Route::post('logout', [AuthenticationController::class, 'userLogout']);
+    Route::post('send-verification-mail', [VerificationController::class, 'sendEmailVerificationMail']);
+    Route::get('verification-status', [VerificationController::class, 'getVerificationStatus']);
 
     //User Profile
     Route::post('make-profile', [AuthenticationController::class, 'makeProfile']);
