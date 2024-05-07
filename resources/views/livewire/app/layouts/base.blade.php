@@ -4,7 +4,9 @@
 <head>
     <meta charset="utf-8" />
     <meta http-equiv="x-ua-compatible" content="ie=edge" />
-    <title>Home</title>
+    <title>{{ $title ?? config('app.name', 'Vore') }}</title>
+    <link rel="shortcut icon" href="{{ asset('assets/images/app_favicon.png') }}">
+
     <meta name="description" content="" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="shortcut icon" href="{{ asset('assets/app/images/header/logo.png') }}" type="image/x-icon" />
@@ -79,7 +81,7 @@
                         <h3>Company</h3>
                         <ul>
                             <li><a href="{{ route('app.aboutus') }}">About</a></li>
-                            <li><a href="#">Company</a></li>
+                            <li><a href="{{ route('app.contact.us') }}">Contact Us</a></li>
                         </ul>
                     </div>
                 </div>
@@ -88,7 +90,6 @@
                         <h3>Legal</h3>
                         <ul>
                             <li><a href="{{ route('terms.conditions') }}">Terms of Service</a></li>
-                            <li><a href="#">Company</a></li>
                         </ul>
                     </div>
                 </div>
@@ -96,7 +97,7 @@
                     <div class="footer_menu_item">
                         <h3>Career</h3>
                         <ul>
-                            <li><a href="#">Coming soon</a></li>
+                            <li><a href="javascript: void(0);">Coming soon</a></li>
                         </ul>
                     </div>
                 </div>

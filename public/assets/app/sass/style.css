@@ -393,7 +393,7 @@
 .mobile_menu_area .accordion-item button,
 .mobile_menu_area .accordion-item li a {
     font-weight: 500;
-    font-size: 14px;
+    font-size: 16px;
     line-height: 16px;
     color: #333333;
     background-color: transparent !important;
@@ -531,7 +531,7 @@
 @media all and (max-width: 767px) {
     .hero_wrapper .hero_content_area h4 {
         transition: 0.5s;
-        font-size: 18px;
+        font-size: 19px;
         line-height: 28px;
         margin-top: 20px;
     }
@@ -2464,6 +2464,14 @@
         margin-top: 10px;
     }
 }
+
+@media all and (max-width: 767px) {
+    .app_area {
+        display: flex;
+        justify-content: center;
+    }
+}
+
 .app_area a:hover {
     opacity: 0.8;
 }
@@ -2588,6 +2596,7 @@
 .form_area .input_row textarea {
     padding: 24px;
     border-radius: 12px;
+    color: #fff;
     width: 100%;
     border: 0.8px solid #9c9c9c;
     background-color: transparent;
@@ -2598,6 +2607,7 @@
     padding-left: 60px;
     padding-right: 24px;
     border-radius: 12px;
+    color: #fff;
     border: 0.8px solid #9c9c9c;
     background-color: transparent;
 }
@@ -2624,11 +2634,11 @@
     }
 }
 
-.hero_social_list {
-    gap: 6px;
+.social-share-button .hero_social_list {
+    /* gap: 6px; */
     margin-top: 10px;
 }
-.hero_social_list li a {
+.social-share-button .hero_social_list li a {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -2646,50 +2656,62 @@
     -o-transition: all 0.5s ease-in-out;
 }
 @media (min-width: 992px) and (max-width: 1199px) {
-    .hero_social_list li a {
+    .social-share-button .hero_social_list li a {
         transition: 0.5s;
         width: 34px;
         height: 34px;
     }
 }
 @media (min-width: 768px) and (max-width: 991px) {
-    .hero_social_list li a {
+    .social-share-button .hero_social_list li a {
         transition: 0.5s;
         width: 32px;
         height: 32px;
     }
 }
+
 @media all and (max-width: 767px) {
-    .hero_social_list li a {
+    .hero_social_list {
+        display: flex;
+        justify-content: center;
+    }
+
+    .hero_social_list li {
+        margin: 0 5px;
+    }
+}
+
+@media all and (max-width: 767px) {
+    .social-share-button .hero_social_list li a {
         transition: 0.5s;
         width: 28px;
         height: 28px;
     }
 }
-.hero_social_list li a:hover {
-    background-color: #196e9f;
+.social-share-button .hero_social_list li a:hover {
+    background-color: #8eb056;
 }
-.hero_social_list li a:hover i {
-    color: white;
+.social-share-button .hero_social_list li a:hover i {
+    color: #fff;
 }
-.hero_social_list li i {
+.social-share-button .hero_social_list li i {
     font-size: 24px;
     color: #8eb056;
 }
 @media (min-width: 992px) and (max-width: 1199px) {
-    .hero_social_list li i {
+    .social-share-button .hero_social_list li i {
         transition: 0.5s;
         font-size: 22px;
     }
 }
 @media (min-width: 768px) and (max-width: 991px) {
-    .hero_social_list li i {
+    .social-share-button .hero_social_list li i {
         transition: 0.5s;
         font-size: 20px;
     }
 }
 @media all and (max-width: 767px) {
-    .hero_social_list li i {
+    .social-share-button .hero_social_list li i {
         transition: 0.5s;
         font-size: 18px;
     }

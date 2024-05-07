@@ -4,6 +4,7 @@ namespace App\Livewire\App\Contact;
 
 use App\Models\Contact;
 use Livewire\Component;
+use Livewire\Attributes\Title;
 use Illuminate\Support\Facades\Mail;
 
 class ContactComponent extends Component
@@ -29,11 +30,12 @@ class ContactComponent extends Component
         $mailData['email'] = $this->email;
         $mailData['phone'] = $this->phone;
         $mailData['description'] = $this->description;
- 
+
         $data->save();
         session()->flash('message', 'Thank you for your message. We will contact with you soon !');
     }
 
+    #[Title('Vore - Contact Us')]
     public function render()
     {
         return view('livewire.app.contact.contact-component')->layout('livewire.app.layouts.base');
