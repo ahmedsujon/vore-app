@@ -422,3 +422,55 @@
     }
   }
 }
+
+//Hero social area
+.hero_social_list {
+  gap: 6px;
+  margin-top: 10px;
+  li {
+    a {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      -webkit-border-radius: 50%;
+      -moz-border-radius: 50%;
+      -ms-border-radius: 50%;
+      -o-border-radius: 50%;
+      @include hover-transition();
+      @include media-break-width(992, 1199) {
+        width: 34px;
+        height: 34px;
+      }
+      @include media-break-width(768, 991) {
+        width: 32px;
+        height: 32px;
+      }
+      @include max-media-width(767) {
+        width: 28px;
+        height: 28px;
+      }
+      &:hover {
+        background-color: #196e9f;
+        i {
+          color: white;
+        }
+      }
+    }
+    i {
+      font-size: 24px;
+      color: #8eb056;
+      @include media-break-width(992, 1199) {
+        font-size: 22px;
+      }
+      @include media-break-width(768, 991) {
+        font-size: 20px;
+      }
+      @include max-media-width(767) {
+        font-size: 18px;
+      }
+    }
+  }
+}
