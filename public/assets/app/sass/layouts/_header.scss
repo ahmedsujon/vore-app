@@ -67,6 +67,12 @@
       gap: 10px 50px;
     }
   }
+  .header_btn_area {
+    display: none !important;
+    @include max-media-width(991) {
+      display: flex !important;
+    }
+  }
   .menu_toggle_btn {
     display: none;
     i {
