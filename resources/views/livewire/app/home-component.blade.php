@@ -238,10 +238,10 @@
                             <span class="work_color">work towards your goal.</span>
                         </h2>
                         <div class="app_area d-flex align-items-center flex-wrap">
-                            <a href="#" target="_blank">
+                            <a href="https://apps.apple.com/sa/app/vore/id6480172276" target="_blank">
                                 <img src="{{ asset('assets/app/icons/app_store.png') }}" alt="app store icon" />
                             </a>
-                            <a href="#" target="_blank">
+                            <a href="https://play.google.com/store/apps/details?id=com.vore.app.vore&hl=en&gl=US" target="_blank">
                                 <img src="{{ asset('assets/app/icons/google_play.png') }}" alt="google play icon" />
                             </a>
                         </div>
