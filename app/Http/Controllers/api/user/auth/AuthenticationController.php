@@ -220,17 +220,16 @@ class AuthenticationController extends Controller
                 }
             }
 
+            // Journey Calculation Starts
             if ($request->get('target_weight_unit') == 'lbs') {
                 $target_weight = $request->get('target_weight') * 0.45;
             } else {
                 $target_weight = $request->get('target_weight');
             }
 
-            // $current_weight, $target_weight, $weekly_goal_value, $request->get('goal')
-
             $journey = [];
             if ($request->get('goal') == 'Maintain weight') {
-                
+
             }
             if ($request->get('goal') == 'Lose weight') {
                 $split_number = ($current_weight - $target_weight) / $weekly_goal_value;
