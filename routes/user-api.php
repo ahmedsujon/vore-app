@@ -28,6 +28,7 @@ Route::group(['middleware' => ['jwtUser:user-api', 'jwt.auth'], 'prefix' => 'v1/
     //User Profile
     Route::post('make-profile', [AuthenticationController::class, 'makeProfile']);
     Route::get('profile', [AuthenticationController::class, 'userProfile']);
+    Route::get('journey', [AuthenticationController::class, 'userJourney']);
 
     //Dashboard
     Route::get('dashboard', [DashboardController::class, 'index']);
