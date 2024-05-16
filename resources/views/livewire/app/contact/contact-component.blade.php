@@ -53,9 +53,9 @@
                                     data-bs-parent="#accordionFlushExample">
                                     <div class="accordion-body">
                                         <p>
-                                            Once you set your goal during onboarding, the Diary page will show you the
+                                            Once you set your goal during onboarding, the <strong>Diary</strong> page will show you the
                                             amount of calories you need to consume on a daily basis to achieve your
-                                            goal. Under the Meals section of the Diary page, you will be able to log
+                                            goal. Under the <strong>Meals</strong> section of the <strong>Diary</strong> page, you will be able to log
                                             your meals and Vore will automatically subtract from your daily intake.
                                             Ideally, you would be at, or as close as possible to, zero calories
                                             remaining.
@@ -75,9 +75,9 @@
                                     data-bs-parent="#accordionFlushExample">
                                     <div class="accordion-body">
                                         <p>
-                                            Yes. We have a partnership with FatSecret for our food and nutrition
-                                            database. FatSecret containts over 1.5 million verified food items,
-                                            including branded foods. FatSecret’s Platform API is the largest data set of
+                                            Yes. We have a partnership with <strong>FatSecret</strong> for our food and nutrition
+                                            database. <strong>FatSecret</strong> containts over 1.5 million verified food items,
+                                            including branded foods. <strong>FatSecret’s</strong> Platform API is the largest data set of
                                             global food nutrition information for more than 55 countries. This makes it
                                             easier for our users globally to search for food items or simply scan
                                             branded foods to log them within the app. In order to deliver the best, we
@@ -173,7 +173,7 @@
                                         <input type="text" wire:model='name' placeholder="Full Name"
                                             class="input_filed" />
                                         @error('name')
-                                            <p class="text-danger" style="font-size: 11.5px;">{{ $message }}</p>
+                                            <p class="text-danger" style="font-size: 16px;">{{ $message }}</p>
                                         @enderror
                                     </div>
                                     <div class="input_row">
@@ -183,7 +183,7 @@
                                         <input type="number" wire:model='phone' placeholder="Phone Number"
                                             class="input_filed" />
                                         @error('phone')
-                                            <p class="text-danger" style="font-size: 11.5px;">{{ $message }}</p>
+                                            <p class="text-danger" style="font-size: 16px;">{{ $message }}</p>
                                         @enderror
                                     </div>
                                     <div class="input_row">
@@ -193,13 +193,13 @@
                                         <input type="email" wire:model='email' placeholder="Email Address"
                                             class="input_filed" />
                                         @error('email')
-                                            <p class="text-danger" style="font-size: 11.5px;">{{ $message }}</p>
+                                            <p class="text-danger" style="font-size: 16px;">{{ $message }}</p>
                                         @enderror
                                     </div>
                                     <div class="input_row">
                                         <textarea wire:model='description' cols="30" rows="4" placeholder="Message"></textarea>
                                         @error('description')
-                                            <p class="text-danger" style="font-size: 11.5px;">{{ $message }}</p>
+                                            <p class="text-danger" style="font-size: 16px;">{{ $message }}</p>
                                         @enderror
                                     </div>
                                     <div style="text-align: center;">
