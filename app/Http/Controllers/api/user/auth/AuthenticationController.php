@@ -287,11 +287,14 @@ class AuthenticationController extends Controller
 
     protected function respondWithToken($token, $ttl)
     {
+        $user = $this->guard()->user();
+        $user->height = (float) $user->height;
+
         return response()->json([
             'access_token' => $token,
             'token_type' => 'bearer',
             'expires_in' => $ttl,
-            'user' => $this->guard()->user(),
+            'user' => $user,
         ]);
     }
 
