@@ -76,6 +76,7 @@ class ProfileController extends Controller
                 'height' => $user->height,
                 'height_unit' => $user->height_unit,
                 'birthdate' => $user->birth_date,
+                'weekly_goal' => $user->weekly_goal,
             ];
 
             return response()->json($data);
@@ -95,6 +96,7 @@ class ProfileController extends Controller
             'height' => 'required',
             'height_unit' => 'required',
             'birthdate' => 'required',
+            'weekly_goal' => 'required',
             // 'avatar' => 'required',
         ];
         $validator = Validator::make($request->all(), $rules);
@@ -158,8 +160,9 @@ class ProfileController extends Controller
             $user->height = $request->get('height');
             $user->height_unit = $request->get('height_unit');
             $user->birth_date = $request->get('birthdate');
+            $user->weekly_goal = $request->get('weekly_goal');
 
-            $weekly_goal = $user->weekly_goal;
+            $weekly_goal = $request->get('weekly_goal');
             if ($weekly_goal == 1) {
                 $weekly_value = 250;
             }if ($weekly_goal == 2) {
@@ -282,7 +285,7 @@ class ProfileController extends Controller
                 'current_weight' => $current_weight . ' lb',
                 'goal_weight' => $goal_weight . ' lb',
                 'activity_level' => $user->daily_activity_level,
-                'weekly_goal' => 0 . ' lb',
+                'weekly_goal' => $user->weekly_goal,
                 'calorie_goal' => $user->calories,
                 'steps' => 0,
                 'nutrient_goals' => 'Default',

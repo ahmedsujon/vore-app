@@ -11,6 +11,7 @@ use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 
@@ -43,6 +44,7 @@ class AuthenticationController extends Controller
                 $ttl = 1440;
                 $credentials = $request->only('email', 'password');
                 if ($token = $this->guard()->attempt($credentials)) {
+                    $this->sendEmailVerificationMail($request->email);
                     return $this->respondWithToken($token, $ttl);
                 }
             } else {
@@ -141,13 +143,18 @@ class AuthenticationController extends Controller
             $user->weekly_goal = $request->get('weekly_goal');
 
             $weekly_goal = $request->get('weekly_goal');
+            $weekly_goal_value = 0;
             if ($weekly_goal == 1) {
+                $weekly_goal_value = 0.2; //in kg
                 $weekly_value = 250;
             }if ($weekly_goal == 2) {
+                $weekly_goal_value = 0.5; //in kg
                 $weekly_value = 500;
             }if ($weekly_goal == 3) {
+                $weekly_goal_value = 0.7; //in kg
                 $weekly_value = 750;
             }if ($weekly_goal == 4) {
+                $weekly_goal_value = 1; //in kg
                 $weekly_value = 1000;
             }
 
@@ -213,7 +220,48 @@ class AuthenticationController extends Controller
                 }
             }
 
-            return response()->json(['result' => 'true', 'message' => 'Data updated successfully']);
+            // Journey Calculation Starts
+            if ($request->get('target_weight_unit') == 'lbs') {
+                $target_weight = $request->get('target_weight') * 0.45;
+            } else {
+                $target_weight = $request->get('target_weight');
+            }
+
+            $journey = [];
+            if ($request->get('goal') == 'Maintain weight') {
+
+            }
+            if ($request->get('goal') == 'Lose weight') {
+                $split_number = ($current_weight - $target_weight) / $weekly_goal_value;
+                $total_days = round($split_number * 7);
+
+                $journey[] = [
+                    'start_from' => 'Today',
+                    'start_date' => Carbon::parse(now())->format('F d, Y'),
+                    'end_date' => Carbon::parse(now()->addDays($total_days))->format('F d, Y'),
+                    'goal' => 'Lose Weight',
+                    'current_weight' => $request->get('current_weight') . ' ' . $request->get('current_weight_unit'),
+                    'target_weight' => $request->get('target_weight') . ' ' . $request->get('target_weight_unit'),
+                    'graph_type' => 'top-to-bottom',
+                ];
+
+            }
+            if ($request->get('goal') == 'Build muscle') {
+                $split_number = ($target_weight - $current_weight) / $weekly_goal_value;
+                $total_days = round($split_number * 7);
+
+                $journey[] = [
+                    'start_from' => 'Today',
+                    'start_date' => Carbon::parse(now())->format('F d, Y'),
+                    'end_date' => Carbon::parse(now()->addDays($total_days))->format('F d, Y'),
+                    'goal' => 'Build Muscle',
+                    'current_weight' => $request->get('current_weight') . ' ' . $request->get('current_weight_unit'),
+                    'target_weight' => $request->get('target_weight') . ' ' . $request->get('target_weight_unit'),
+                    'graph_type' => 'bottom-to-top',
+                ];
+            }
+
+            return response()->json(['result' => 'true', 'message' => 'Data updated successfully', 'journey' => $journey]);
         } catch (Exception $ex) {
             return response($ex->getMessage());
         }
@@ -285,12 +333,32 @@ class AuthenticationController extends Controller
 
     protected function respondWithToken($token, $ttl)
     {
+        $user = $this->guard()->user();
+        $user->height = (float) $user->height;
+
         return response()->json([
             'access_token' => $token,
             'token_type' => 'bearer',
             'expires_in' => $ttl,
-            'user' => $this->guard()->user(),
+            'user' => $user,
         ]);
+    }
+
+    public function sendEmailVerificationMail($email)
+    {
+        $token = Str::lower(Str::random(40)) . api_user()->id . time();
+
+        $user = User::find(api_user()->id);
+        $user->email_verification_token = $token;
+        $user->save();
+
+        $data['email'] = $email;
+        $data['token'] = $token;
+
+        Mail::send('emails.api.email-verification', $data, function ($message) use ($data) {
+            $message->to($data['email'])
+                ->subject('Email Verification');
+        });
     }
 
     public function guard()
