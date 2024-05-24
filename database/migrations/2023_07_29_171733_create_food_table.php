@@ -25,6 +25,7 @@ return new class extends Migration
             $table->longText('nutrations')->nullable();
             $table->string('barcode')->nullable();
             $table->longText('images')->nullable();
+            $table->longText('api_image')->nullable();
             $table->tinyInteger('is_fat_secret')->default(0);
             $table->tinyInteger('status')->default(1);
             $table->timestamps();

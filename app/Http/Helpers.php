@@ -24,7 +24,7 @@ function api_user(){
 }
 
 function get_meals_food($food, $meal){
-    $getFood = Food::select('id', 'food_unique_id', 'is_fat_secret', 'name', 'slug', 'nutrations', 'barcode', 'images')->find($food['food_id']);
+    $getFood = Food::select('id', 'food_unique_id', 'is_fat_secret', 'name', 'slug', 'nutrations', 'barcode', 'images', 'api_image')->find($food['food_id']);
 
     $imgs = [];
 
@@ -41,14 +41,21 @@ function get_meals_food($food, $meal){
         $img = url('/').'/assets/images/dinner.jpeg';
     }
 
-    if(count($getFood->images) > 0){
-        foreach ($getFood->images as $image) {
-            $imgs[] = url('/').'/'.$image;
+    if ($getFood->is_fat_secret == 1) {
+        if($getFood->api_image){
+            $imgs[] = $getFood->api_image;
+        } else {
+            $imgs[] = $img;
         }
     } else {
-        $imgs[] = $img;
+        if(count($getFood->images) > 0){
+            foreach ($getFood->images as $image) {
+                $imgs[] = url('/').'/'.$image;
+            }
+        } else {
+            $imgs[] = $img;
+        }
     }
-
 
     $getFood->id = $food['id'];
     $getFood->name = $food['name'];
@@ -64,7 +71,7 @@ function get_meals_food($food, $meal){
 }
 
 function get_dashboard_meals_food($food_id, $meal){
-    $getFood = Food::select('id', 'name', 'images')->find($food_id);
+    $getFood = Food::select('id', 'name', 'images', 'is_fat_secret', 'api_image')->find($food_id);
 
     if($meal == 'breakfast'){
         $img = url('/').'/assets/images/breakfast.jpeg';
@@ -80,14 +87,20 @@ function get_dashboard_meals_food($food_id, $meal){
     }
 
     $imgs = [];
-    if(count($getFood->images) > 0){
-        foreach ($getFood->images as $image) {
-            $imgs[] = url('/').'/'.$image;
+    if ($getFood->is_fat_secret == 1) {
+        if($getFood->api_image){
+            $imgs[] = $getFood->api_image;
+        } else {
+            $imgs[] = $img;
         }
-        $getFood->images = $imgs;
     } else {
-        $imgs[] = $img;
-        $getFood->images = $imgs;
+        if(count($getFood->images) > 0){
+            foreach ($getFood->images as $image) {
+                $imgs[] = url('/').'/'.$image;
+            }
+        } else {
+            $imgs[] = $img;
+        }
     }
 
 
