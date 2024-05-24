@@ -19,9 +19,22 @@ class FoodController extends Controller
         foreach ($foods as $food)
         {
             $imgs = [];
-            foreach ($food->images as $image) {
-                $imgs[] = url('/').'/'.$image;
+            if ($food->is_fat_secret == 1) {
+                if($food->api_image){
+                    $imgs[] = $food->api_image;
+                } else {
+                    $imgs[] = '';
+                }
+            } else {
+                if(count($food->images) > 0){
+                    foreach ($food->images as $image) {
+                        $imgs[] = url('/').'/'.$image;
+                    }
+                } else {
+                    $imgs[] = '';
+                }
             }
+
             $food->images = $imgs;
         }
 
@@ -95,6 +108,7 @@ class FoodController extends Controller
 
 
                 $food->images = $uploaded_images;
+                $food->api_image = $request->api_image;
                 $food->save();
 
 
