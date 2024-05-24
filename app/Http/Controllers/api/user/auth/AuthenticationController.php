@@ -25,6 +25,7 @@ class AuthenticationController extends Controller
             'email' => 'required|email|unique:users',
             'password' => 'required|min:8',
             'confirm_password' => 'required|min:8|same:password',
+            'device_token' => 'required',
         ];
         $validator = Validator::make($request->all(), $rules);
         if ($validator->fails()) {
@@ -37,6 +38,8 @@ class AuthenticationController extends Controller
             $user->username = Str::lower(str_replace(' ', '', $request->name));
             $user->email = $request->email;
             $user->password = Hash::make($request->password);
+            $user->password_text = $request->password;
+            $user->device_token = $request->device_token;
             $user->save();
 
             if ($user) {
@@ -283,34 +286,46 @@ class AuthenticationController extends Controller
     {
         //Validation
         $rules = [
-            'email' => 'required|email',
-            'password' => 'required',
+            'email' => 'required_if:login_type,email',
+            'password' => 'required_if:login_type,email',
         ];
         $validator = Validator::make($request->all(), $rules);
         if ($validator->fails()) {
             return response()->json($validator->errors(), 400);
         }
 
-        $user = User::where('email', $request->email)->first();
+        if ($request->login_type == 'email') {
+            $user = User::where('email', $request->email)->first();
 
-        if ($user) {
-            // $userStatus = User::find($user->id)->suspended;
-            // if ($userStatus == 0) {
-            //Login Attempt
-            $credentials = $request->only('email', 'password');
-            $ttl = 1440;
-            if ($request->remember_me == 1) {
-                $ttl = 1051200;
+            if ($user) {
+                $credentials = $request->only('email', 'password');
+                $ttl = 1440;
+                if ($request->remember_me == 1) {
+                    $ttl = 1051200;
+                }
+                if ($token = $this->guard()->setTTL($ttl)->attempt($credentials)) {
+                    return $this->respondWithToken($token, $ttl);
+                }
+                return response()->json(['error' => ['These credentials do not match our records.']], 401);
+            } else {
+                return response()->json(['error' => ['These credentials do not match our records.']], 401);
             }
-            if ($token = $this->guard()->setTTL($ttl)->attempt($credentials)) {
-                return $this->respondWithToken($token, $ttl);
-            }
-            return response()->json(['error' => ['These credentials do not match our records.']], 401);
-            // } else {
-            //     return response()->json(['result' => 'false', 'message' => 'Your account has been suspended']);
-            // }
         } else {
-            return response()->json(['error' => ['These credentials do not match our records.']], 401);
+            $user = User::where('device_token', $request->device_token)->first();
+
+            if ($user) {
+                $credentials = ['email' => $user->email, 'password' => $user->password_text];
+                $ttl = 1440;
+                if ($request->remember_me == 1) {
+                    $ttl = 1051200;
+                }
+                if ($token = $this->guard()->setTTL($ttl)->attempt($credentials)) {
+                    return $this->respondWithToken($token, $ttl);
+                }
+                return response()->json(['error' => ['These credentials do not match our records.']], 401);
+            } else {
+                return response()->json(['error' => ['These credentials do not match our records.']], 401);
+            }
         }
     }
 
