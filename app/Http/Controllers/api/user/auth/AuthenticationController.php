@@ -47,7 +47,7 @@ class AuthenticationController extends Controller
                 $ttl = 1440;
                 $credentials = $request->only('email', 'password');
                 if ($token = $this->guard()->attempt($credentials)) {
-                    $this->sendEmailVerificationMail($request->email);
+                    $this->sendEmailVerificationMail($request->email, $request->name);
                     return $this->respondWithToken($token, $ttl);
                 }
             } else {
@@ -359,7 +359,7 @@ class AuthenticationController extends Controller
         ]);
     }
 
-    public function sendEmailVerificationMail($email)
+    public function sendEmailVerificationMail($email, $name)
     {
         $token = Str::lower(Str::random(40)) . api_user()->id . time();
 
@@ -367,8 +367,10 @@ class AuthenticationController extends Controller
         $user->email_verification_token = $token;
         $user->save();
 
+
         $data['email'] = $email;
         $data['token'] = $token;
+        $data['name'] = $name;
 
         Mail::send('emails.api.email-verification', $data, function ($message) use ($data) {
             $message->to($data['email'])
