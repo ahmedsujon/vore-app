@@ -264,7 +264,7 @@ class AuthenticationController extends Controller
                 ];
             }
 
-            $this->emailVerificationReminder(api_user()->id);
+            // $this->emailVerificationReminder(api_user()->id);
 
             return response()->json(['result' => 'true', 'message' => 'Data updated successfully', 'journey' => $journey]);
         } catch (Exception $ex) {
