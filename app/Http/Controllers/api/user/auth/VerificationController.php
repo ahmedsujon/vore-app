@@ -21,6 +21,7 @@ class VerificationController extends Controller
 
         $data['email'] = api_user()->email;
         $data['token'] = $token;
+        $data['name'] = api_user()->name;
 
         Mail::send('emails.api.email-verification', $data, function ($message) use ($data) {
             $message->to($data['email'])

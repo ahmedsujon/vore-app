@@ -16,7 +16,7 @@ class UserTableSeeder extends Seeder
      */
     public function run(): void
     {
-        $emails = ["user@example.com", "user01@example.com", "user02@example.com", "user03@example.com", "user04@example.com", "user05@example.com", "user06@example.com", "user07@example.com", "user08@example.com", "user09@example.com"];
+        $emails = ["user@example.com", "user01@example.com"];
 
         foreach ($emails as $key => $email) {
             $getUser = User::where('email', $email)->first();

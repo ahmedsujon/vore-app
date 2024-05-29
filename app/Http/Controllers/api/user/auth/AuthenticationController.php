@@ -47,7 +47,7 @@ class AuthenticationController extends Controller
                 $ttl = 1440;
                 $credentials = $request->only('email', 'password');
                 if ($token = $this->guard()->attempt($credentials)) {
-                    $this->sendEmailVerificationMail($request->email);
+                    $this->sendEmailVerificationMail($request->email, $request->name);
                     return $this->respondWithToken($token, $ttl);
                 }
             } else {
@@ -264,6 +264,8 @@ class AuthenticationController extends Controller
                 ];
             }
 
+            $this->emailVerificationReminder(api_user()->id);
+
             return response()->json(['result' => 'true', 'message' => 'Data updated successfully', 'journey' => $journey]);
         } catch (Exception $ex) {
             return response($ex->getMessage());
@@ -359,7 +361,7 @@ class AuthenticationController extends Controller
         ]);
     }
 
-    public function sendEmailVerificationMail($email)
+    public function sendEmailVerificationMail($email, $name)
     {
         $token = Str::lower(Str::random(40)) . api_user()->id . time();
 
@@ -367,13 +369,35 @@ class AuthenticationController extends Controller
         $user->email_verification_token = $token;
         $user->save();
 
+
         $data['email'] = $email;
         $data['token'] = $token;
+        $data['name'] = $name;
 
         Mail::send('emails.api.email-verification', $data, function ($message) use ($data) {
             $message->to($data['email'])
                 ->subject('Email Verification');
         });
+    }
+
+    public function emailVerificationReminder($user_id)
+    {
+        dispatch(function () use ($user_id) {
+            $user = User::find($user_id);
+
+            $mailData['email'] = $user->email;
+            $mailData['token'] = $user->email_verification_token;
+            $mailData['name'] = $user->name;
+
+            if ($user->email_verified_at == NULL) {
+                Mail::send('emails.api.email-verification-reminder', $mailData, function ($message) use ($mailData) {
+                    $message->to($mailData['email'])
+                        ->subject('Email Verification');
+                });
+
+                $this->emailVerificationReminder($user->id);
+            }
+        })->delay(Carbon::now()->addDays(7));
     }
 
     public function guard()
