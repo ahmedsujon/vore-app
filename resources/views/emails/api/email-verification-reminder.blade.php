@@ -38,7 +38,7 @@
             <tr>
                 <td style="padding-top: 24px; padding-bottom: 24px; text-align: center">
                     <a href="https://www.voreapp.co/">
-                        <img src="{{ asset('assets/app/images/header/email_logo.png') }}" alt="email logo"
+                        <img src="{{ url('/') }}/assets/app/images/header/email_logo.png" alt="email logo"
                             style="max-width: 200px; max-height: 60px" />
                     </a>
                 </td>
@@ -47,7 +47,7 @@
             <tr>
                 <td
                     style="
-              background-image: url('{{ asset('assets/app/images/email/email_shape.png') }}');
+              background-image: url('{{ url('/') }}/assets/app/images/email/email_shape.png');
               background-position: center center;
               background-size: cover;
               padding: 48px 30px 71px 30px;
@@ -58,7 +58,7 @@
                                 <table style="width: 100%; border-collapse: collapse">
                                     <tr>
                                         <td style="text-align: center">
-                                            <img src="{{ asset('assets/app/icons/like.png') }}" alt="logo"
+                                            <img src="{{ url('/') }}/assets/app/icons/like.png" alt="logo"
                                                 style="max-width: 47px; max-height: 41px" />
                                             <h4
                                                 style="
@@ -69,7 +69,7 @@
                             line-height: normal;
                             margin-top: 16px;
                           ">
-                                                Thank you for signing up!
+                                                You are almost there!
                                             </h4>
                                             <h3
                                                 style="
@@ -80,7 +80,7 @@
                             line-height: 120%;
                             margin-top: 17px;
                           ">
-                                                Verify your email address
+                                                Verify email and activate your account
                                             </h3>
                                         </td>
                                     </tr>
@@ -119,12 +119,7 @@
                             line-height: normal;
                             margin-top: 20px;
                           ">
-                                                Thank you for joining Vore! To activate your account
-                                                and start your journey to a healthier lifestyle,
-                                                please click the verification button below Thank you
-                                                for joining Vore! To activate your account and start
-                                                your journey to a healthier lifestyle, please click
-                                                the verification button below
+                                                We noticed that you started the registration process on Vore, but we haven’t received your account verification yet. To fully activate your account and dive into the Vore experience, please click the button below to verify your email address:
                                             </p>
                                             <div style="text-align: center; margin-top: 64px">
                                                 <a href="{{ url('/') }}/email-verification?token={{ $token }}"
@@ -191,7 +186,7 @@
                                     <tr>
                                         <td style="text-align: start">
                                             <a href="https://www.voreapp.co/" target="_blank">
-                                                <img src="{{ asset('assets/app/images/header/email_logo.png') }}" alt="logo"
+                                                <img src="{{ url('/') }}/assets/app/images/header/email_logo.png" alt="logo"
                                                     style="max-width: 104px; max-height: 44px" />
                                             </a>
                                             <div style="margin-top: 30px">
@@ -203,7 +198,7 @@
                               margin-top: 6px;
                               display: inline-block;
                             ">
-                                                    <img src="{{ asset('assets/app/icons/instagram.png') }}" alt="facebook"
+                                                    <img src="{{ url('/') }}/assets/app/icons/instagram.png" alt="facebook"
                                                         style="width: 24px; height: 24px" />
                                                 </a>
                                                 <a href="https://www.facebook.com/voreapp" target="_blank"
@@ -216,7 +211,7 @@
                               display: inline-block;
                               margin-right: 16px;
                             ">
-                                                    <img src="{{ asset('assets/app/icons/facebook.png') }}" alt="facebook"
+                                                    <img src="{{ url('/') }}/assets/app/icons/facebook.png" alt="facebook"
                                                         style="width: 24px; height: 24px" />
                                                 </a>
                                                 <a href="https://www.linkedin.com/company/vore" target="_blank"
@@ -225,7 +220,7 @@
                               display: inline-block;
                               margin-top: 6px;
                             ">
-                                                    <img src="{{ asset('assets/app/icons/linkdine.png') }}" alt="facebook"
+                                                    <img src="{{ url('/') }}/assets/app/icons/linkdine.png" alt="facebook"
                                                         style="width: 24px; height: 24px" />
                                                 </a>
                                             </div>
@@ -262,7 +257,7 @@
                                 margin-top: 6px;
                                 margin-right: 10px;
                               ">
-                                                        <img src="{{ asset('assets/app/icons/app_store.png') }}" alt="app store icon"
+                                                        <img src="{{ url('/') }}/assets/app/icons/app_store.png" alt="app store icon"
                                                             style="max-width: 125px; max-height: 32px" />
                                                     </a>
                                                     <a href="https://apps.apple.com/sa/app/vore/id6480172276" target="_blank"
@@ -271,7 +266,7 @@
                                 display: inline-block;
                                 margin-top: 6px;
                               ">
-                                                        <img src="{{ asset('assets/app/icons/google_play.png') }}" alt="google icon"
+                                                        <img src="{{ url('/') }}/assets/app/icons/google_play.png" alt="google icon"
                                                             style="max-width: 125px; max-height: 32px" />
                                                     </a>
                                                 </div>

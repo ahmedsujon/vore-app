@@ -264,6 +264,8 @@ class AuthenticationController extends Controller
                 ];
             }
 
+            $this->emailVerificationReminder(api_user()->id);
+
             return response()->json(['result' => 'true', 'message' => 'Data updated successfully', 'journey' => $journey]);
         } catch (Exception $ex) {
             return response($ex->getMessage());
@@ -376,6 +378,26 @@ class AuthenticationController extends Controller
             $message->to($data['email'])
                 ->subject('Email Verification');
         });
+    }
+
+    public function emailVerificationReminder($user_id)
+    {
+        dispatch(function () use ($user_id) {
+            $user = User::find($user_id);
+
+            $mailData['email'] = $user->email;
+            $mailData['token'] = $user->email_verification_token;
+            $mailData['name'] = $user->name;
+
+            if ($user->email_verified_at == NULL) {
+                Mail::send('emails.api.email-verification-reminder', $mailData, function ($message) use ($mailData) {
+                    $message->to($mailData['email'])
+                        ->subject('Email Verification');
+                });
+
+                $this->emailVerificationReminder($user->id);
+            }
+        })->delay(Carbon::now()->addDays(7));
     }
 
     public function guard()
