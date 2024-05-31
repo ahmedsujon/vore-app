@@ -6,6 +6,7 @@ use App\Livewire\App\HomeComponent;
 use App\Livewire\App\Pages\AboutComponent;
 use App\Livewire\App\Pages\PrivacyPolicyComponent;
 use App\Livewire\App\Pages\TermsConditionComponent;
+use App\Livewire\App\Pages\UnsubscribeComponent;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -21,6 +22,7 @@ use Illuminate\Support\Facades\Route;
 
 
 Route::get('/', HomeComponent::class)->name('app.home');
+Route::get('/unsubscribe', UnsubscribeComponent::class)->name('app.unsubscribe');
 
 Route::get('privacy-policy', PrivacyPolicyComponent::class)->name('privacy.policy');
 Route::get('terms-and-conditions', TermsConditionComponent::class)->name('terms.conditions');
@@ -33,6 +35,7 @@ Route::get('about-us', AboutComponent::class)->name('app.aboutus');
 
 // Email Verify
 Route::get('email-verification', [AppController::class, 'verifyEmail']);
+
 
 //Call Route Files
 require __DIR__ . '/admin.php';
