@@ -120,10 +120,10 @@ class MealController extends Controller
                     $foods[] = get_meals_food($food, 'breakfast');
                 }
 
-                $breakfast->total_calories = $breakfast_foods->sum('calories');
-                $breakfast->total_protein = $breakfast_foods->sum('protein');
-                $breakfast->total_crabs = $breakfast_foods->sum('crabs');
-                $breakfast->total_fat = $breakfast_foods->sum('fat');
+                $breakfast->total_calories = round($breakfast_foods->sum('calories'), 1);
+                $breakfast->total_protein = round($breakfast_foods->sum('protein'), 1);
+                $breakfast->total_crabs = round($breakfast_foods->sum('crabs'), 1);
+                $breakfast->total_fat = round($breakfast_foods->sum('fat'), 1);
                 $breakfast->foods = $foods;
 
                 return response()->json($breakfast);
@@ -335,10 +335,10 @@ class MealController extends Controller
                     $foods[] = get_meals_food($food, 'lunch');
                 }
 
-                $lunch->total_calories = $lunch_foods->sum('calories');
-                $lunch->total_protein = $lunch_foods->sum('protein');
-                $lunch->total_crabs = $lunch_foods->sum('crabs');
-                $lunch->total_fat = $lunch_foods->sum('fat');
+                $lunch->total_calories = round($lunch_foods->sum('calories'), 1);
+                $lunch->total_protein = round($lunch_foods->sum('protein'), 1);
+                $lunch->total_crabs = round($lunch_foods->sum('crabs'), 1);
+                $lunch->total_fat = round($lunch_foods->sum('fat'), 1);
                 $lunch->foods = $foods;
 
                 return response()->json($lunch);
@@ -467,10 +467,10 @@ class MealController extends Controller
                     $foods[] = get_meals_food($food, 'snacks');
                 }
 
-                $snack->total_calories = $snack_foods->sum('calories');
-                $snack->total_protein = $snack_foods->sum('protein');
-                $snack->total_crabs = $snack_foods->sum('crabs');
-                $snack->total_fat = $snack_foods->sum('fat');
+                $snack->total_calories = round($snack_foods->sum('calories'), 1);
+                $snack->total_protein = round($snack_foods->sum('protein'), 1);
+                $snack->total_crabs = round($snack_foods->sum('crabs'), 1);
+                $snack->total_fat = round($snack_foods->sum('fat'), 1);
                 $snack->foods = $foods;
 
                 return response()->json($snack);
@@ -641,10 +641,10 @@ class MealController extends Controller
                     $foods[] = get_meals_food($food, 'dinner');
                 }
 
-                $dinner->total_calories = $dinner_foods->sum('calories');
-                $dinner->total_protein = $dinner_foods->sum('protein');
-                $dinner->total_crabs = $dinner_foods->sum('crabs');
-                $dinner->total_fat = $dinner_foods->sum('fat');
+                $dinner->total_calories = round($dinner_foods->sum('calories'), 1);
+                $dinner->total_protein = round($dinner_foods->sum('protein'), 1);
+                $dinner->total_crabs = round($dinner_foods->sum('crabs'), 1);
+                $dinner->total_fat = round($dinner_foods->sum('fat'), 1);
                 $dinner->foods = $foods;
 
                 return response()->json($dinner);
