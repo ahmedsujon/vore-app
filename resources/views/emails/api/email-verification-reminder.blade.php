@@ -305,24 +305,6 @@
                     <table style="width: 100%; border-collapse: collapse">
                         <tr>
                             <td>
-                                <p
-                                    style="
-                      color: #4c4c4c;
-                      font-size: 14px;
-                      font-style: normal;
-                      font-weight: 400;
-                      line-height: 17.325px;
-                      margin-top: 16px;
-                    ">
-                                    Nation Remit Limited, LK.309, 7 Corsican Square, London E3
-                                    3YD
-                                </p>
-                            </td>
-                        </tr>
-                    </table>
-                    <table style="width: 100%; border-collapse: collapse">
-                        <tr>
-                            <td>
                                 <div style="margin-top: 19px">
                                     <a href="https://www.voreapp.co/terms-and-conditions"
                                         style="
@@ -383,7 +365,7 @@
                       line-height: 17.325px;
                       margin-top: 16px;
                     ">
-                                    This message was sent to name@doamin.com. If you don't want
+                                    This message was sent to admin@voreapp.co. If you don't want
                                     to receive these emails from Nation Remit in the future, you
                                     can
                                     <a href="https://www.voreapp.co"
