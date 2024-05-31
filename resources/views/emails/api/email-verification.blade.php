@@ -377,9 +377,9 @@
                                     or
                                     <a href="http://vore-app.test/unsubscribe" type="button"
                                         style="
-                        color: #4c4c4c;
+                        color: rgb(26, 93, 209);
                         font-weight: 700;
-                        text-decoration: none;
+                        text-decoration: underline;
                         padding: 0;
                         border: none;
                       ">
