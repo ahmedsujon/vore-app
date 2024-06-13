@@ -11,7 +11,7 @@ use Livewire\Attributes\Title;
 class DashboardComponent extends Component
 {
     use WithPagination;
-    public $sortingValue = 10, $searchTerm;
+    public $sortingValue = 5, $searchTerm;
     public $edit_id, $delete_id;
     public $name, $email, $gender, $goal, $avatar, $uploadedAvatar, $daily_activity_level,
         $starting_weight, $starting_weight_unit, $current_weight, $current_weight_unit, $target_weight,
@@ -86,8 +86,8 @@ class DashboardComponent extends Component
         $users = User::count();
         $admins = Admin::count();
 
-        $customers = User::orderBy('id', 'DESC')->take(5)->get();
+        $customers = User::orderBy('id', 'DESC')->take(1)->paginate($this->sortingValue);
         $this->dispatch('reload_scripts');
-        return view('livewire.admin.dashboard-component', ['customers'=>$customers, 'users'=>$users, 'admins'=>$admins])->layout('livewire.admin.layouts.base');
+        return view('livewire.admin.dashboard-component', ['customers' => $customers, 'users' => $users, 'admins' => $admins])->layout('livewire.admin.layouts.base');
     }
 }

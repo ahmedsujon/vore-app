@@ -64,9 +64,14 @@
                                     </thead>
                                     <tbody>
                                         @if ($customers->count() > 0)
+                                            @php
+                                                $sl =
+                                                    $customers->perPage() * $customers->currentPage() -
+                                                    ($customers->perPage() - 1);
+                                            @endphp
                                             @foreach ($customers as $customer)
                                                 <tr>
-                                                    <td>{{ $customer->id }}</td>
+                                                    <td>{{ $sl++ }}</td>
                                                     <td>{{ $customer->name }}</td>
                                                     <td>{{ $customer->email }}</td>
                                                     <td>{{ $customer->gender }}</td>
@@ -152,25 +157,32 @@
                                     </div>
 
                                     <div class="col-md-6">
-                                        <label for="example-number-input" class="col-form-label">Daily Activity Level</label>
-                                        <input class="form-control mb-2" type="text" wire:model="daily_activity_level"
-                                            placeholder="Enter phone">
+                                        <label for="example-number-input" class="col-form-label">Daily Activity
+                                            Level</label>
+                                        <input class="form-control mb-2" type="text"
+                                            wire:model="daily_activity_level" placeholder="Enter phone">
                                     </div>
                                     <div class="col-md-6">
-                                        <label for="example-number-input" class="col-form-label">Starting Weight</label>
-                                        <input class="form-control mb-2" type="text" value="{{ $starting_weight }} {{ $starting_weight_unit }}">
+                                        <label for="example-number-input" class="col-form-label">Starting
+                                            Weight</label>
+                                        <input class="form-control mb-2" type="text"
+                                            value="{{ $starting_weight }} {{ $starting_weight_unit }}">
                                     </div>
                                     <div class="col-md-6">
-                                        <label for="example-number-input" class="col-form-label">Current Weight</label>
-                                        <input class="form-control mb-2" type="text" value="{{ $current_weight }} {{ $current_weight_unit }}">
+                                        <label for="example-number-input" class="col-form-label">Current
+                                            Weight</label>
+                                        <input class="form-control mb-2" type="text"
+                                            value="{{ $current_weight }} {{ $current_weight_unit }}">
                                     </div>
                                     <div class="col-md-6">
                                         <label for="example-number-input" class="col-form-label">Target Weight</label>
-                                        <input class="form-control mb-2" type="text" value="{{ $target_weight }} {{ $target_weight_unit }}">
+                                        <input class="form-control mb-2" type="text"
+                                            value="{{ $target_weight }} {{ $target_weight_unit }}">
                                     </div>
                                     <div class="col-md-6">
                                         <label for="example-number-input" class="col-form-label">Height</label>
-                                        <input class="form-control mb-2" type="text" value="{{ $height }} {{ $height_unit }}">
+                                        <input class="form-control mb-2" type="text"
+                                            value="{{ $height }} {{ $height_unit }}">
                                     </div>
                                     <div class="col-md-6">
                                         <label for="example-number-input" class="col-form-label">Date Of Birth</label>
