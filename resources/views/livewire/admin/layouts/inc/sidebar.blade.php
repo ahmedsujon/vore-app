@@ -32,6 +32,12 @@
                                 <span key="t-chat">Coach List</span>
                             </a>
                         </li>
+                        <li>
+                            <a href="{{ route('admin.activities') }}" class="waves-effect">
+                                <i class="bx bx-customize"></i>
+                                <span key="t-chat">Activity List</span>
+                            </a>
+                        </li>
                     @endif
 
                     @if (isAdminPermitted('admins_manage'))
