@@ -44,7 +44,7 @@ class AuthenticationController extends Controller
 
             if ($user) {
                 //Login Attempt
-                $ttl = 1440;
+                $ttl = 5256000;
                 $credentials = $request->only('email', 'password');
                 if ($token = $this->guard()->attempt($credentials)) {
                     $this->sendEmailVerificationMail($request->email, $request->name);
@@ -301,10 +301,10 @@ class AuthenticationController extends Controller
 
             if ($user) {
                 $credentials = $request->only('email', 'password');
-                $ttl = 1440;
-                if ($request->remember_me == 1) {
-                    $ttl = 1051200;
-                }
+                $ttl = 5256000;
+                // if ($request->remember_me == 1) {
+                //     $ttl = 1051200;
+                // }
                 if ($token = $this->guard()->setTTL($ttl)->attempt($credentials)) {
                     return $this->respondWithToken($token, $ttl);
                 }
@@ -317,10 +317,10 @@ class AuthenticationController extends Controller
 
             if ($user) {
                 $credentials = ['email' => $user->email, 'password' => $user->password_text];
-                $ttl = 1440;
-                if ($request->remember_me == 1) {
-                    $ttl = 1051200;
-                }
+                $ttl = 5256000;
+                // if ($request->remember_me == 1) {
+                //     $ttl = 1051200;
+                // }
                 if ($token = $this->guard()->setTTL($ttl)->attempt($credentials)) {
                     return $this->respondWithToken($token, $ttl);
                 }

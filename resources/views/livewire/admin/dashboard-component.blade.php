@@ -193,9 +193,14 @@
                                     </thead>
                                     <tbody>
                                         @if ($customers->count() > 0)
+                                            @php
+                                                $sl =
+                                                    $customers->perPage() * $customers->currentPage() -
+                                                    ($customers->perPage() - 1);
+                                            @endphp
                                             @foreach ($customers as $customer)
                                                 <tr>
-                                                    <td>{{ $customer->id }}</td>
+                                                    <td>{{ $sl++ }}</td>
                                                     <td>{{ $customer->name }}</td>
                                                     <td>{{ $customer->email }}</td>
                                                     <td>{{ $customer->gender }}</td>
