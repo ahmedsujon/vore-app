@@ -20,7 +20,7 @@ Route::post('v1/reset-password', [UserResetPasswordController::class, 'sendEmail
 Route::post('v1/change-password', [UserResetPasswordController::class, 'changePassword']);
 
 //Authenticated user
-Route::group(['middleware' => ['jwtUser:user-api', 'jwt.auth'], 'prefix' => 'v1/user'], function () {
+Route::group(['middleware' => ['jwtUser:user-api', 'ValidateJwtToken'], 'prefix' => 'v1/user'], function () {
     Route::post('logout', [AuthenticationController::class, 'userLogout']);
     Route::post('send-verification-mail', [VerificationController::class, 'sendEmailVerificationMail']);
     Route::get('verification-status', [VerificationController::class, 'getVerificationStatus']);
