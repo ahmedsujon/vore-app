@@ -55,6 +55,7 @@
                                         <tr>
                                             <th class="align-middle">ID</th>
                                             <th class="align-middle">Name</th>
+                                            <th class="align-middle">Device Token</th>
                                             <th class="align-middle">Email</th>
                                             <th class="align-middle">Gender</th>
                                             <th class="align-middle">Date Of Birth</th>
@@ -73,6 +74,7 @@
                                                 <tr>
                                                     <td>{{ $sl++ }}</td>
                                                     <td>{{ $customer->name }}</td>
+                                                    <td>{{ $customer->device_token }}</td>
                                                     <td>{{ $customer->email }}</td>
                                                     <td>{{ $customer->gender }}</td>
                                                     <td>{{ $customer->birth_date }}</td>

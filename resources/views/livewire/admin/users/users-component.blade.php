@@ -64,7 +64,7 @@
                                         @if ($customers->count() > 0)
                                             @foreach ($customers as $customer)
                                                 <tr>
-                                                    <td>{{ $customer->device_token }}</td>
+                                                    <td>{{ $customer->id }}</td>
                                                     <td>{{ $customer->name }}</td>
                                                     <td>{{ $customer->email }}</td>
                                                     <td>{{ $customer->gender }}</td>
