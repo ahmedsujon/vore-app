@@ -7,6 +7,7 @@ use App\Livewire\Admin\DashboardComponent;
 use App\Livewire\Admin\Auth\LoginComponent;
 use App\Livewire\Admin\Contact\ContactComponent;
 use App\Livewire\Admin\Customers\CustomerComponent;
+use App\Livewire\Admin\FatSecret\FatSecretComponent;
 use App\Livewire\Admin\Users\UserComponent;
 use App\Livewire\Admin\Users\UsersComponent;
 use App\Livewire\Admin\Users\AdminsComponent;
@@ -38,6 +39,9 @@ Route::prefix('admin/')->name('admin.')->middleware('auth:admin')->group(functio
     Route::get('team/members', TeamComponent::class)->name('team.members');
     // Activity Routes
     Route::get('activities', ActivityComponent::class)->name('activities');
+
+
+    Route::get('developer/fat-secret', FatSecretComponent::class)->name('fatSecretApi')->middleware('adminPermission:developer_console');
 
     //user management
     Route::get('all-users', UsersComponent::class)->name('allUsers')->middleware('adminPermission:users_manage');

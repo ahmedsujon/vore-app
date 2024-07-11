@@ -13,7 +13,7 @@ class PermissionTableSeeder extends Seeder
      */
     public function run(): void
     {
-        $permissions = ["users_manage", "admins_manage", "settings_manage","profile_update"];
+        $permissions = ["developer_console", "users_manage", "admins_manage", "settings_manage","profile_update"];
 
         foreach ($permissions as $key => $permission) {
             $getData = Permission::where('value', $permission)->first();

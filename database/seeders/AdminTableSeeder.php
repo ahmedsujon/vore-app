@@ -24,20 +24,20 @@ class AdminTableSeeder extends Seeder
             $admin->password = Hash::make('vore@2024');
             $admin->avatar = 'assets/images/avatar.png';
             $admin->type = 'super_admin';
-            $admin->permissions = json_encode(array(1, 2, 3, 4));
+            $admin->permissions = json_encode(array(2, 3, 4, 5));
             $admin->save();
         }
 
-        $getAdmin = Admin::where('email', 'admin01@example.com')->first();
+        $getAdmin = Admin::where('email', 'developer@voreapp.co')->first();
 
         if (!$getAdmin) {
             $admin = new Admin();
             $admin->name = 'Developer';
-            $admin->email = 'admin@example.com';
-            $admin->password = Hash::make('12345678');
+            $admin->email = 'developer@voreapp.co';
+            $admin->password = Hash::make('dev@vore');
             $admin->avatar = 'assets/images/avatar.png';
             $admin->type = 'admin';
-            $admin->permissions = json_encode(array(2, 3));
+            $admin->permissions = json_encode(array(1, 2, 3, 4, 5));
             $admin->added_by = '1';
             $admin->save();
         }

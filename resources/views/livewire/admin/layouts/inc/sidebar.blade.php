@@ -92,6 +92,16 @@
                         </li>
                     @endif
 
+                    @if (isAdminPermitted('developer_console'))
+                        <li class="menu-title" key="t-setting">Developer Console</li>
+                        <li>
+                            <a href="{{ route('admin.fatSecretApi') }}" class="waves-effect">
+                                <i class="bx bx-lock"></i>
+                                <span key="t-chat">Fat Secret API</span>
+                            </a>
+                        </li>
+                    @endif
+
                     {{-- <li>
                         <a href="javascript: void(0);" class="has-arrow waves-effect">
                             <i class="bx bx-share-alt"></i>
