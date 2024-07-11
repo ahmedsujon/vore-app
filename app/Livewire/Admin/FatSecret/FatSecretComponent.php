@@ -8,7 +8,7 @@ use Livewire\Component;
 class FatSecretComponent extends Component
 {
 
-    public $search_value = 'egg', $foods;
+    public $search_value, $foods;
 
     public function mount()
     {
