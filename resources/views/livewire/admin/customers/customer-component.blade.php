@@ -75,7 +75,15 @@
                                                     <td>{{ $sl++ }}</td>
                                                     <td>{{ $customer->name }}</td>
                                                     <td>{{ $customer->device_token }}</td>
-                                                    <td>{{ $customer->email }}</td>
+                                                    @if ($customer->email_verified_at == null)
+                                                        <td>{{ $customer->email }} <span
+                                                                class="badge badge-pill badge-soft-warning font-size-11">Unverified</span>
+                                                        </td>
+                                                    @else
+                                                        <td>{{ $customer->email }} <span
+                                                                class="badge badge-pill badge-soft-success font-size-11">Verified</span>
+                                                        </td>
+                                                    @endif
                                                     <td>{{ $customer->gender }}</td>
                                                     <td>{{ $customer->birth_date }}</td>
                                                     <td>{{ $customer->created_at }}</td>
