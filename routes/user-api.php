@@ -71,6 +71,9 @@ Route::group(['middleware' => ['jwtUser:user-api', 'ValidateJwtToken'], 'prefix'
     //foods api
     Route::get('foods', [FoodController::class, 'getFoods']);
     Route::post('foods/add', [FoodController::class, 'addFood']);
+    Route::get('foods/recent', [FoodController::class, 'recentFoods']);
+    Route::get('foods/favorite', [FoodController::class, 'favoriteFoods']);
+    Route::post('foods/favorite/add-remove', [FoodController::class, 'addRemoveFavorite']);
 
     //Water apis
     Route::get('water/setting', [WaterController::class, 'getWaterSetting']);

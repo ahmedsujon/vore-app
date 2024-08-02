@@ -5,6 +5,7 @@ use App\Models\Food;
 use App\Models\Admin;
 use App\Models\Setting;
 use App\Models\Permission;
+use App\Models\UserRecentFood;
 use Illuminate\Support\Facades\Auth;
 
 
@@ -115,6 +116,22 @@ function uploadFile($file, $folder)
 
     $file_name = 'uploads/'.$folder.'/'.$fileName;
     return $file_name;
+}
+
+function add_to_recent_food($user_id, $food_id)
+{
+    $getData = UserRecentFood::where('user_id', $user_id)->where('food_id', $food_id)->first();
+
+    if ($getData) {
+        $getData->count += 1;
+        $getData->save();
+    } else {
+        $data = new UserRecentFood();
+        $data->user_id = $user_id;
+        $data->food_id = $food_id;
+        $data->count = 1;
+        $data->save();
+    }
 }
 
 //setting
